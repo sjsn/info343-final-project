@@ -37,16 +37,16 @@
 	<script src="js/app.js"></script>
 
 </head>
+<div ui-view></div>
 <body ng-controller="ChirperCtrl">
 
 <header class="container-fluid">
-
 	<div class="logout" ng-if="userId">
 		<span>{{users[userId].handle}}</span>
 		<button ng-click="signOut()" class="btn btn-warning">Sign Out</button>
 	</div>
 
-	<div class="navbar-wrapper">
+	<div class="navbar-wrapper" ng-hide="true">
 	<nav role="navigation" class="navbar navbar-inverse navbar-static-top">
 		<div class="container-fluid">
     		<div class="navbar-header">
@@ -62,7 +62,6 @@
 		</div>
 	</nav>
 	</div>
-
 </header>	
 
 <main class="container">
@@ -75,6 +74,7 @@
 	<div ng-show="userId && leaderboards.click()" ng-include="'partials/leaderboards.html'"></div>
 	<div ng-show="userId && store.click()" ng-include="'partials/store.html'"></div>
 </main>
+</div>
 
 </body>
 </html>
