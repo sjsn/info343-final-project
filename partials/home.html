@@ -1,0 +1,37 @@
+
+<!-- Sign-in/sign-up form: show if userId isn't defined -->
+<form name="signupForm" novalidate>
+
+	<!-- Bind model "handle" to this input -->
+	<div class="form-group">
+		<label for="handle">User Name:</label>
+		<input id="handle" name="handle" class="form-control" ng-model="newUser.handle" ng-minlength="3" required>
+		<!-- Show error messages if the length is too short -->	
+		<p class="help-block" ng-if="signupForm.handle.$touched && signupForm.handle.$error.required">Required!</p>
+		<p class="help-block" ng-if="signupForm.handle.$error.minlength">Too short!</p>
+	</div>	
+
+	<!-- Bind model "email" to this input -->
+	<div class="form-group">
+		<label for="email">Email:</label>
+		<input type="email" id="email" name="email" class="form-control" ng-model="newUser.email" required></input>
+		<!-- Show error messages if the email is not valid -->	
+		<p class="help-block" ng-if="signupForm.email.$touched && signupForm.email.$error.required">Required!</p>
+		<p class="help-block" ng-if="signupForm.email.$error.email">Not an email!</p>
+	</div>
+
+	<!-- Bind model "password" to this input -->
+	<div class="form-group">
+		<label for="pw">Password:</label>
+		<input id="pw" name="password" type="password" class="form-control" ng-model="newUser.password" ng-minlength="6" required></input>
+		<!-- Show error messages if the password is invalid -->	
+		<p class="help-block" ng-if="signupForm.password.$touched && signupForm.password.$error.required">Required!</p>
+		<p class="help-block" ng-if="signupForm.password.$error.minlength">Must be at least 6 characters.</p>
+	</div>
+
+	<!-- Submit buttons -->
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary" ng-click="signUp()" ng-disabled="signupForm.$invalid" >Sign-up</button> 
+		<button type="submit" class="btn btn-primary" ng-click="signIn()" ng-disabled="signupForm.email.$invalid || signupForm.password.$invalid" >Sign-in</button>
+	</div>
+</form>
