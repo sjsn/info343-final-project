@@ -1,8 +1,8 @@
 "use strict";
 
 var app = angular.module("MarvelCards", ["ui.router", "ui.bootstrap", "firebase"]);
-/*
-app.config("$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+
+app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
 
 	$stateProvider
 	// The home page where the user signs in or signs up
@@ -17,16 +17,16 @@ app.config("$stateProvider", "$urlRouterProvider", function($stateProvider, $url
 		templateUrl: "partials/cards.html",
 		controller: "CardsCtrl"
 	})
-	// The card page
+	// The card details page
 	.state("cards.details", {
-		url: "/cards",
+		url: "/cards/details",
 		templateUrl: "partials/details.html",
 		controller: "DetailsCtrl"
 	})
-	// The card page
+	// The card store page
 	.state("cards.store", {
-		url: "/cards",
-		templateUrl: "store.html",
+		url: "/cards/store",
+		templateUrl: "partials/store.html",
 		controller: "StoreCtrl"
 	})
 	// The game page
@@ -42,9 +42,9 @@ app.config("$stateProvider", "$urlRouterProvider", function($stateProvider, $url
 		controller: "LeaderboardsCtrl"
 	});
 
-});
-*/
-app.controller('MarvelCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$firebaseObject', function($scope, $firebaseAuth, $firebaseArray, $firebaseObject) {
+}]);
+
+app.controller('HomeCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$firebaseObject', function($scope, $firebaseAuth, $firebaseArray, $firebaseObject) {
 
 		var baseRef = firebase.database().ref();
 
@@ -104,6 +104,17 @@ app.controller('MarvelCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$fir
 		
 }]);
 
+app.controller("CardsCtrl", ["$scope", "CharService", function($scope, CharService) {
+
+}]);
+
+app.controller("DetailsCtrl", ["$scope", "CharService", function($scope, CharService) {
+
+}]);
+
+app.controller("StoreCtrl", ["$scope", "CharService", function($scope, CharService) {
+
+}]);
 
 // Controller for the game
 app.controller("GameCtrl", ["$scope", "UserService", "CharService", function($scope, UserService, CharService) {
