@@ -11,6 +11,24 @@ app.config("$stateProvider", "$urlRouterProvider", function($stateProvider, $url
 		templateUrl: "partials/home.html",
 		controller: "HomeCtrl"
 	})
+	// The card page
+	.state("cards", {
+		url: "/cards"
+		templateUrl: "partials/cards.html",
+		controller: "CardsCtrl"
+	})
+	// The card page
+	.state("cards.details", {
+		url: "/cards"
+		templateUrl: "partials/details.html",
+		controller: "DetailsCtrl"
+	})
+	// The card page
+	.state("cards.store", {
+		url: "/cards"
+		templateUrl: "store.html",
+		controller: "StoreCtrl"
+	})
 	// The game page
 	.state("game", {
 		url: "/game",
