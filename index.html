@@ -14,7 +14,7 @@
 	<script src="https://use.fontawesome.com/1db56cea2f.js"></script>
 
 	<!-- Angular -->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.js"></script>
 	<script src="js/ui-bootstrap-tpls-1.3.3.min.js"></script>
 	<!-- Firebase -->
@@ -46,15 +46,22 @@
 		<button ng-click="signOut()" class="btn btn-warning">Sign Out</button>
 	</div>
 
-	<nav role="navigation">
-		<ul class="container list-unstyled list-inline">
+	<div class="navbar-wrapper">
+	<nav role="navigation" class="navbar navbar-inverse navbar-static-top">
+		<div class="container-fluid">
+    		<div class="navbar-header">
+      		<a class="navbar-brand active" href="#">Home</a>
+    	</div>
+		<ul class="list-unstyled list-inline nav navbar-nav"">
 			<li ng-model="cards"><a href="partials/cards.html">My Cards</a></li>
 			<li ng-model="details"><a href="partials/details.html">Details</a></li>
 			<li ng-model="game"><a href="partials/game.html">Game</a></li>
 			<li ng-model="leaderboards"><a href="partials/leaderboards.html">Leaderboards</a></li>
 			<li ng-model="store"><a href="partials/store.html">Store</a></li>
 		</ul>
+		</div>
 	</nav>
+	</div>
 
 </header>	
 
