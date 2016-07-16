@@ -44,7 +44,7 @@ app.config("$stateProvider", "$urlRouterProvider", function($stateProvider, $url
 
 });
 */
-app.controller('ChirperCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$firebaseObject', function($scope, $firebaseAuth, $firebaseArray, $firebaseObject) {
+app.controller('MarvelCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$firebaseObject', function($scope, $firebaseAuth, $firebaseArray, $firebaseObject) {
 
 		var baseRef = firebase.database().ref();
 
@@ -101,37 +101,7 @@ app.controller('ChirperCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$fi
 		// Create a firebaseObject of your users, and store this as part of $scope
 		$scope.users = $firebaseObject(usersRef);		
 
-		//binding: whiteboard
-		$scope.whiteBoard = {};
-		$scope.whiteBoard.text = "Enter text here!";
-		var whiteBoardObj = $firebaseObject(whiteboardRef);
-		whiteBoardObj.$bindTo($scope, "whiteboard")
-
-		//chirps
-		// Create a firebaseArray of your tweets, and store this as part of $scope
-		$scope.chirps = $firebaseArray(chirpsRef);
-
-		$scope.newChirp = {};
-		$scope.postChirp = function() {
-			var newChirp = {
-				text:$scope.newChirp.text, 
-				userId:$scope.userId, 
-				likes:0, 
-				time:firebase.database.ServerValue.TIMESTAMP //MAGIC!
-			};
-			console.log(newChirp);
-			$scope.chirps.$add(newChirp).then(function() {
-				$scope.newChirp.text = ''; //once chirp is saved
-			});
-		};
-
-		// Function to like a tweet
-		$scope.like = function(chirp) {
-			if($scope.userId) {
-				chirp.likes += 1;
-				$scope.chirps.$save(chirp);
-			}
-		};
+		
 }]);
 
 
