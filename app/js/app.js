@@ -132,12 +132,10 @@ app.controller("GameCtrl", ["$scope", "UserService", "$http", function($scope, U
 				getChar();
 			} else {
 				character = results.data.results[0];
-				console.log(character);
 			}
 		});
 	};
 
-	getChar();
 
 }]);
 
