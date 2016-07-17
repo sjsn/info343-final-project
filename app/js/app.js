@@ -99,8 +99,7 @@ app.controller('HomeCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$fireb
 		var whiteboardRef = baseRef.child('whiteboard');
 		var chirpsRef = baseRef.child('chirps');
 
-		// Create a firebaseObject of your users, and store this as part of $scope
-		$scope.users = $firebaseObject(usersRef);		
+
 
 
 }]);
@@ -113,65 +112,62 @@ app.controller("DetailsCtrl", ["$scope", function($scope) {
 
 }]);
 
-app.controller("StoreCtrl", ["$scope", "CharService", function($scope, CharService) {
+app.controller("StoreCtrl", ["$scope", function($scope) {
 
 }]);
 
 // Controller for the game
-app.controller("GameCtrl", ["$scope", "UserService", "$http", function($scope, UserService, $http) {
+app.controller("GameCtrl", ["$scope", "$http", function($scope, $http) {
 
-	// Index of current character in Marvel API
-	var charNum = Math.floor((Math.random() * 1500)) + 1;
-	var character;
 	// Gets character from Marvel API
-	var getChar = function() {
+	function getChar() {
+		// Index of current character in Marvel API (1483 max)
+		var charNum = Math.floor((Math.random() * 1483)) + 1;
 		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
 			+ "&limit=1&offset=" + charNum).success(function(results) {
-			if (results.data.results[0].thumbnail.path == "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available") {
+			// Not a valid character without a name & description
+			if (results.data.results[0].thumbnail.path == "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" ||
+				results.data.results[0].description == "") {
 			charNum = Math.floor((Math.random() * 1500)) + 1;
 				getChar();
 			} else {
-				character = results.data.results[0];
+				var name = formatName(results.data.results[0].name);
+				var desc = results.data.results[0].description;
+				var img = results.data.results[0].thumbnail.path + "." + results.data.results[0].thumbnail.extension;
+				return {name: name, desc: desc, img: img};
 			}
 		});
 	};
 
+	// Marvel API returns names as strings with context to what series their from
+	// Helper function that formats names into arrays (for game) and removes context (anything wrapped in parens)
+	function formatName(name) {
+		// Example name: Cable (Ultimate)
+		var name = name.split("");
+		var isContext = false;
+		for (var i = 0; i < name.length; i++) {
+			if (name[i] == "(" || isContext) {
+				name[i] = "";
+			}
+		}
+		// Returns an array of letters of the name
+		return name.join("").split("");
+	}
+	
+	$scope.chooseGame = function(game) {
+		if (game == "guess") {
+			$scope.gameType = "Guess the Character!";
+		} else if (game == "scramble") {
+			$scope.gameType = "Character Scramble!"
+		}
+	};
 
 }]);
 
 // Controller for the leaderboard
-app.controller("LeaderboardsCtrl", ["$scope", "UserService", function($scope, UserService) {
+app.controller("LeaderboardsCtrl", ["$scope", function($scope) {
 
 
 
 }]);
 
-// // A service to keep track of all possible characters in the game.
-// // Loads on initial page load to reduce laggy loads / number of API calls while using app
-// app.factory("CharService", ["$http", function($http) {
-
-// 	var service = {};
-
-// 	// Instantiates the characters array in the service 
-// 	service.characters = [];
-// 	for (var i = 0; i < 10; i++) {
-// 		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
-// 			+ "&limit=100&offset=" + (i * 100))
-// 		.success(function(results) {
-// 			// An array of character information. 
-// 			// Name is .name, description is .description, image is .thumbnail.path + "." + .thumbnail.extension
-// 			_(results.data.results).forEach(function(character) {
-// 				// Only add characters with a thumbnail available
-// 				if (character.thumbnail.path != "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available") {
-// 					service.characters.push(character);
-// 				}
-// 			});
-// 			console.log(service.characters);
-// 		});
-// 	}
-
-
-// 	return service;
-
-
-// }]);

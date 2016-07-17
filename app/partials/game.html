@@ -1,1 +1,23 @@
-<h1>Game</h1>
+<main role="main" class="main-content container">
+
+	<!-- Menu for choosing game type -->
+	<section role="region" ng-if="gameType == undefined">
+		<header class="container" role="title">
+			<h2 id="choose-title">Choose your game!</h2>
+		</header>
+		<div class="container" id="choose-holder">
+				<button class="btn btn-default" type="button" role="button" ng-click="chooseGame('guess')">
+					Guess the name!
+				</button>
+				<button class="btn btn-default" type="button" role="butotn" ng-click="chooseGame('scramble')">
+					Name Scramble!
+				</button>
+		</div>
+	</section>
+
+	<!-- Character guessing game -->
+	<section role="region">
+		
+	</section>
+</main>
+

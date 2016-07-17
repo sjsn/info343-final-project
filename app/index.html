@@ -37,9 +37,9 @@
 	<script src="js/app.js"></script>
 
 </head>
-<body ng-app="MarvelCards" ng-controller="HomeCtrl">
+<body ng-app="MarvelCards">
 
-<header class="container-fluid">
+<header class="container-fluid" ng-controller="HomeCtrl">
 	<div class="logout" ng-if="userId">
 		<span>{{users[userId].handle}}</span>
 		<button ng-click="signOut()" class="btn btn-warning">Sign Out</button>
