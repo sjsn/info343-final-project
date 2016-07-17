@@ -271,7 +271,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 			}
 		}
 		$scope.hint = hint.join(" ");
-		console.log(answer);
 
 		$scope.incorrect = false;
 		$scope.guess = {};
@@ -284,10 +283,10 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 					$scope.notGuess = true;
 				}, 1000);
 				guess = guess.toUpperCase().split("");
-				console.log(guess);
 				if (_.isEqual(guess, answer)) {
 					$scope.roundWin = true;
 					$scope.incorrect = false;
+					
 					$timeout(function() {
 						$scope.roundWin = false;
 						playScramble(next.char);
