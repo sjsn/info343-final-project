@@ -3,21 +3,50 @@
 	<!-- Menu for choosing game type -->
 	<section role="region" ng-if="gameType == undefined">
 		<header class="container" role="title">
-			<h2 id="choose-title">Choose your game!</h2>
+			<h1 class="title">Choose your game!</h1>
 		</header>
 		<div class="container" id="choose-holder">
-				<button class="btn btn-default" type="button" role="button" ng-click="chooseGame('guess')">
+				<button class="btn btn-default" type="button" role="button" ng-click="chooseGame('Guess the Character')">
 					Guess the name!
 				</button>
-				<button class="btn btn-default" type="button" role="butotn" ng-click="chooseGame('scramble')">
+				<button class="btn btn-default" type="button" role="butotn" ng-click="chooseGame('Character Scramble')">
 					Name Scramble!
 				</button>
 		</div>
 	</section>
 
-	<!-- Character guessing game -->
-	<section role="region">
-		
+	<!-- Loading message if character is not loaded -->
+	<section role="region" ng-if="gameType != undefined &amp;&amp; !charLoaded" aria-describedby="aria-loading">
+		<p id="aria-loading">Loading next character!</p>
+		<div class="container">
+			<p>The next character is getting ready!</p>
+		</div>
 	</section>
+
+	<!-- Character guessing game -->
+	<section role="region" ng-if="gameType == 'Guess the Character' &amp;&amp; charLoaded" aria-live="polite">
+		<header>
+			<h1 class="title">{{gameType}}</h1>
+		</header>
+		<div class="container">
+			<div class="img-holder">
+				<!-- Disabled people play with description of character -->
+				<img ng-src="{{character.img}}" alt="Character Image" class="char-img" />
+			</div>
+		</div>
+	</section>
+
+	<!-- Character scramble game -->
+	<section role="region" ng-if="gameType == 'Character Scramble' &amp;&amp; !charLoaded" aria-live="polite">
+		<header>
+			<h1 class="title">{{gameType}}</h1>
+		</header>
+		<div class="container">
+			<div class="img-holder">
+				<img ng-src="{{character.img}}" alt="Character Image" />
+			</div>
+		</div>
+	</section>
+
 </main>
 

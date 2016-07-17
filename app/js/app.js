@@ -117,24 +117,29 @@ app.controller("StoreCtrl", ["$scope", function($scope) {
 }]);
 
 // Controller for the game
-app.controller("GameCtrl", ["$scope", "$http", function($scope, $http) {
+app.controller("GameCtrl", ["$scope", "$http", "$interval", function($scope, $http, $interval) {
 
 	// Gets character from Marvel API
-	function getChar() {
+	function getChar(game) {
+		// Hold on game until character is pre-loaded
+		$scope.charLoaded = false;
 		// Index of current character in Marvel API (1483 max)
 		var charNum = Math.floor((Math.random() * 1483)) + 1;
 		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
-			+ "&limit=1&offset=" + charNum).success(function(results) {
+			+ "&limit=1&offset=" + charNum).then(function(results) {
 			// Not a valid character without a name & description
-			if (results.data.results[0].thumbnail.path == "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" ||
-				results.data.results[0].description == "") {
-			charNum = Math.floor((Math.random() * 1500)) + 1;
-				getChar();
+			var char = results.data.data.results[0];
+			if (char.thumbnail.path == "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" ||
+				char.description == "") {
+
+				charNum = Math.floor((Math.random() * 1500)) + 1;
+				getChar(game);
 			} else {
-				var name = formatName(results.data.results[0].name);
-				var desc = results.data.results[0].description;
-				var img = results.data.results[0].thumbnail.path + "." + results.data.results[0].thumbnail.extension;
-				return {name: name, desc: desc, img: img};
+				var name = formatName(char.name);
+				var desc = char.description;
+				var img = char.thumbnail.path + "." + char.thumbnail.extension;
+				$scope.charLoaded = true;
+				gameTransition(game, {name: name, desc: desc, img: img});
 			}
 		});
 	};
@@ -147,6 +152,7 @@ app.controller("GameCtrl", ["$scope", "$http", function($scope, $http) {
 		var isContext = false;
 		for (var i = 0; i < name.length; i++) {
 			if (name[i] == "(" || isContext) {
+				isContext = true;
 				name[i] = "";
 			}
 		}
@@ -154,13 +160,37 @@ app.controller("GameCtrl", ["$scope", "$http", function($scope, $http) {
 		return name.join("").split("");
 	}
 	
+	// Takes in passed in game type and activates the selected game
 	$scope.chooseGame = function(game) {
-		if (game == "guess") {
-			$scope.gameType = "Guess the Character!";
-		} else if (game == "scramble") {
-			$scope.gameType = "Character Scramble!"
+		if (game == "Guess the Character") {
+			$scope.gameType = game;
+			getChar('playGuess');
+		} else if (game == "Character Scramble") {
+			$scope.gameType = game
+			getChar('playScramble');
 		}
 	};
+
+	// Transitions into game once character loads
+	function gameTransition(game, character) {
+		if (game == 'playGuess') {
+			playGuess(character);
+		} else {
+			playScramble(character);
+		}
+	}
+
+	// 
+	var playGuess = function(character) {
+
+		$scope.character = character;
+
+
+	}
+
+	var playScramble = function(character) {
+
+	}
 
 }]);
 

@@ -22,7 +22,7 @@
 	margin-top: 55px;
 }
 
-#choose-title {
+.title {
 	font-size: 5rem;
 	text-align: center;
 	margin-top: 50px;
@@ -31,4 +31,15 @@
 
 #choose-holder {
 	text-align: center;
+}
+
+#aria-loading {
+	display: none;
+}
+
+.char-img {
+	height: 30%;
+	width: 30%;
+	border: 2px solid black;
+	border-radius: 50%;
 }
