@@ -248,7 +248,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				$scope.guess.letter = guess.toUpperCase();
 				$timeout(function() {
 					$scope.guess.letter = "";
-				}, 1000);
+				}, 500);
 				for (var i = 0; i < answer.length; i++) {
 					if (answer[i] == guess.toUpperCase()) {
 						hint[i] = guess.toUpperCase();
@@ -312,7 +312,17 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				}
 			}
 		};
+	};
 
+	// Takes the user back to the "choose game" menu
+	$scope.goBack = function() {
+		$scope.gameType = "";
+	};
+
+	// Skips the current character
+	$scope.skipChar = function(gameType) {
+		$scope.charLoaded = false;
+		$scope.chooseGame(gameType);
 	};
 
 }]);

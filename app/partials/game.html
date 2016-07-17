@@ -1,7 +1,7 @@
 <main role="main" class="main-content container">
 
 	<!-- Menu for choosing game type -->
-	<section role="region" ng-if="gameType == undefined">
+	<section role="region" ng-if="!gameType">
 		<header class="container" role="title">
 			<h1 class="title">Choose your game!</h1>
 		</header>
@@ -16,7 +16,7 @@
 	</section>
 
 	<!-- Loading message if character is not loaded -->
-	<section role="region" ng-if="gameType != undefined &amp;&amp; !charLoaded" aria-describedby="aria-loading">
+	<section role="region" ng-if="gameType &amp;&amp; !charLoaded" aria-describedby="aria-loading">
 		<p id="aria-loading">Loading next character!</p>
 		<!-- Temporary. Will change to loading gif or animation -->
 		<div class="container loading-icon">
@@ -30,6 +30,10 @@
 		<header>
 			<h1 class="title">Guess the Character</h1>
 		</header>
+		<div class="nav-buttons col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<p ng-click="goBack()" role="button" class="pull-left"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Exit Game</p>
+			<p ng-click="skipChar(gameType)" role="button" class="pull-right">Skip <i class="fa fa-forward" aria-hidden="true"></i></p>
+		</div>
 		<div class="container">
 			<div class="img-holder col-xs-12 col-sm-4 col-md-4 col-lg-4">
 				<!-- Disabled people play with description of character -->
@@ -55,6 +59,10 @@
 		<header>
 			<h1 class="title">Name Scramble</h1>
 		</header>
+		<div class="nav-buttons col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<p ng-click="goBack()" role="button" class="pull-left"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Exit Game</p>
+			<p ng-click="skipChar(gameType)" role="button" class="pull-right">Skip <i class="fa fa-forward" aria-hidden="true"></i></p>
+		</div>
 		<div class="container">
 			<div class="img-holder col-xs-12 col-sm-4 col-md-4 col-lg-4">
 				<!-- Disabled people play with description of character -->
