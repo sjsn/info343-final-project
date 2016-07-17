@@ -118,7 +118,8 @@ app.controller("StoreCtrl", ["$scope", function($scope) {
 
 // Controller for the game
 app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $http, $timeout) {
-
+	// Holder for the next character to reduce loading times
+	var next = {};
 	// Gets character from Marvel API
 	function getChar(game) {
 		// Hold on game until character is pre-loaded
@@ -137,7 +138,11 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				char.description == "") {
 
 				charNum = Math.floor((Math.random() * 1500)) + 1;
-				getChar(game);
+				if (game) {
+					getChar(game);
+				} else {
+					getChar();
+				}
 			} else {
 				var name = formatName(char.name);
 				var desc = char.description;
@@ -147,7 +152,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				if (game) {
 					gameTransition(game, {name: name, desc: desc, img: img});
 				} else {
-					return {name: name, desc: desc, img: img};
+					next.char = {name: name, desc: desc, img: img};
 				}
 			}
 		});
@@ -161,6 +166,9 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 		var isContext = false;
 		for (var i = 0; i < name.length; i++) {
 			if (name[i] == "(" || isContext) {
+				if (name[i - 1] == " ") {
+					name[i - 1] = "";
+				}
 				isContext = true;
 				name[i] = "";
 			}
@@ -192,7 +200,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 	// The guessing game logic
 	var playGuess = function(character) {
 		// Loads the next character in advance for less transition time
-		var nextChar = getChar();
+		getChar();
 
 		$scope.character = character;
 		$scope.roundWin = false;
@@ -207,7 +215,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 		// Produces hint string that the user sees when guessing
 		for (var i = 0; i < name.length; i++) {
 			var rand = Math.round(Math.random()); // 50% chance
-			if (name[i] == "-" || name[i] == "." || name[i] == " " || name[i] == ",") { 
+			if (name[i] == "-" || name[i] == "." || name[i] == "," || name[i] == " ") {
 				hint[i] = name[i];
 			} else if (rand && hints != 0) { // Randomly adds the hints
 				hints--;
@@ -216,16 +224,15 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				hint[i] = "_";
 			}
 		}
-		$scope.hint = hint.join("  ");
+		$scope.hint = hint.join(" ");
 
 		$scope.guess = {};
 		$scope.evalGuess = function(guess) {
 			if (guess) {
 				$scope.guess.letter = guess.toUpperCase();
-				console.log($scope.guessLetter);
 				$timeout(function() {
 					$scope.guess.letter = "";
-					console.log($scope.guessLetter);
+					console.log($scope.guess.letter);
 				}, 1000);
 				for (var i = 0; i < answer.length; i++) {
 					if (answer[i] == guess.toUpperCase()) {
@@ -235,14 +242,26 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				$scope.hint = hint.join(" ");
 				if (_.isEqual(hint, answer)) {
 					$scope.roundWin = true;
-					console.log("win");
+					$timeout(function() {
+						$scope.roundWin = false;
+						playGuess(next.char);
+					}, 2000);
 				}
 			}
 		};
 	};
 
 	var playScramble = function(character) {
+		// Loads the next character in advance for less transition time
+		getChar();
 
+		$scope.character = character;
+		$scope.roundWin = false;
+		var name = character.name;
+		var answer = name;
+		var shuffled = _.shuffle(name);
+		$scope.hint;
+		
 	};
 
 }]);

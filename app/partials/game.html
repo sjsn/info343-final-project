@@ -41,7 +41,10 @@
 				</p>
 			</div>
 			<div class="container guess-section col-xs-12 col-sm-12 col-md-12 col-lg-12 input-group">
-				<input type="text" name="guess" ng-model="guess.letter" ng-change="evalGuess(guess.letter)" placeholder="Type a letter to guess" maxlength="1" id="guess-letter" role="input"/>
+				<input type="text" name="guess" ng-model="guess.letter" ng-change="evalGuess(guess.letter)" placeholder="Type a letter to guess" maxlength="1" id="guess-letter" role="input" autofocus/>
+			</div>
+			<div ng-if="roundWin" id="win-msg-holder" aria-live="polite">
+				<p id="win-msg">Correct!</p>
 			</div>
 		</div>
 	</section>

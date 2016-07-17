@@ -93,3 +93,12 @@
 	padding: 10px;
 	text-align: center;
 }
+
+#win-msg {
+	font-size: 3rem;
+	color: green;
+}
+
+#win-msg-holder {
+	text-align: center;
+}
