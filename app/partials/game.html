@@ -6,11 +6,11 @@
 			<h1 class="title">Choose your game!</h1>
 		</header>
 		<div class="container" id="choose-holder">
-				<button class="btn btn-default" type="button" role="button" ng-click="chooseGame('Guess the Character')">
-					Guess the name!
+				<button class="btn btn-default" type="button" role="button" ng-click="chooseGame('guess')">
+					Guess the Character
 				</button>
-				<button class="btn btn-default" type="button" role="butotn" ng-click="chooseGame('Character Scramble')">
-					Name Scramble!
+				<button class="btn btn-default" type="button" role="butotn" ng-click="chooseGame('scramble')">
+					Name Scramble
 				</button>
 		</div>
 	</section>
@@ -18,28 +18,38 @@
 	<!-- Loading message if character is not loaded -->
 	<section role="region" ng-if="gameType != undefined &amp;&amp; !charLoaded" aria-describedby="aria-loading">
 		<p id="aria-loading">Loading next character!</p>
+		<!-- Temporary. Will change to loading gif or animation -->
 		<div class="container">
 			<p>The next character is getting ready!</p>
 		</div>
 	</section>
 
 	<!-- Character guessing game -->
-	<section role="region" ng-if="gameType == 'Guess the Character' &amp;&amp; charLoaded" aria-live="polite">
+	<section role="region" ng-if="gameType == 'guess' &amp;&amp; charLoaded" aria-live="polite">
 		<header>
-			<h1 class="title">{{gameType}}</h1>
+			<h1 class="title">Guess the Character</h1>
 		</header>
 		<div class="container">
-			<div class="img-holder">
+			<div class="img-holder col-xs-12 col-sm-4 col-md-4 col-lg-4">
 				<!-- Disabled people play with description of character -->
-				<img ng-src="{{character.img}}" alt="Character Image" class="char-img" />
+				<img ng-src="{{character.img}}" alt="Character Image" class="char-img" aria-describedby="desc"/>
+				<p id="desc">{{character.desc}}</p>
+			</div>
+			<div class="hint-section col-xs-12 col-sm-8 col-md-8 col-lg-8">
+				<p class="hint" aria-live="polite">
+					<span ng-repeat="letter in hint track by $index">{{letter}}</span>
+				</p>
+			</div>
+			<div class="container guess-section col-xs-12 col-sm-12 col-md-12 col-lg-12 input-group">
+				<input type="text" name="guess" ng-model="guess.letter" ng-change="evalGuess(guess.letter)" placeholder="Type a letter to guess" maxlength="1" id="guess-letter" role="input"/>
 			</div>
 		</div>
 	</section>
 
 	<!-- Character scramble game -->
-	<section role="region" ng-if="gameType == 'Character Scramble' &amp;&amp; !charLoaded" aria-live="polite">
+	<section role="region" ng-if="gameType == 'scramble' &amp;&amp; !charLoaded" aria-live="polite">
 		<header>
-			<h1 class="title">{{gameType}}</h1>
+			<h1 class="title">Name Scramble</h1>
 		</header>
 		<div class="container">
 			<div class="img-holder">

@@ -117,12 +117,16 @@ app.controller("StoreCtrl", ["$scope", function($scope) {
 }]);
 
 // Controller for the game
-app.controller("GameCtrl", ["$scope", "$http", "$interval", function($scope, $http, $interval) {
+app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $http, $timeout) {
 
 	// Gets character from Marvel API
 	function getChar(game) {
 		// Hold on game until character is pre-loaded
-		$scope.charLoaded = false;
+		if (game) {
+			$scope.charLoaded = false;
+		} else {
+			$scope.charLoaded = true;
+		}
 		// Index of current character in Marvel API (1483 max)
 		var charNum = Math.floor((Math.random() * 1483)) + 1;
 		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
@@ -139,16 +143,21 @@ app.controller("GameCtrl", ["$scope", "$http", "$interval", function($scope, $ht
 				var desc = char.description;
 				var img = char.thumbnail.path + "." + char.thumbnail.extension;
 				$scope.charLoaded = true;
-				gameTransition(game, {name: name, desc: desc, img: img});
+				// Prepares a game in advance if not first game
+				if (game) {
+					gameTransition(game, {name: name, desc: desc, img: img});
+				} else {
+					return {name: name, desc: desc, img: img};
+				}
 			}
 		});
 	};
 
 	// Marvel API returns names as strings with context to what series their from
 	// Helper function that formats names into arrays (for game) and removes context (anything wrapped in parens)
-	function formatName(name) {
+	function formatName(charName) {
 		// Example name: Cable (Ultimate)
-		var name = name.split("");
+		var name = charName.split("");
 		var isContext = false;
 		for (var i = 0; i < name.length; i++) {
 			if (name[i] == "(" || isContext) {
@@ -157,17 +166,17 @@ app.controller("GameCtrl", ["$scope", "$http", "$interval", function($scope, $ht
 			}
 		}
 		// Returns an array of letters of the name
-		return name.join("").split("");
+		return name.join("").toUpperCase().split("");
 	}
 	
 	// Takes in passed in game type and activates the selected game
 	$scope.chooseGame = function(game) {
-		if (game == "Guess the Character") {
+		if (game == "guess") {
 			$scope.gameType = game;
-			getChar('playGuess');
-		} else if (game == "Character Scramble") {
+			getChar('playGuess', false);
+		} else if (game == "scramble") {
 			$scope.gameType = game
-			getChar('playScramble');
+			getChar('playScramble', false);
 		}
 	};
 
@@ -180,17 +189,61 @@ app.controller("GameCtrl", ["$scope", "$http", "$interval", function($scope, $ht
 		}
 	}
 
-	// 
+	// The guessing game logic
 	var playGuess = function(character) {
+		// Loads the next character in advance for less transition time
+		var nextChar = getChar();
 
 		$scope.character = character;
+		$scope.roundWin = false;
+		var name = character.name;
+		var answer = name;
+		var hint = [];
+		var hints = Math.floor(name.length / 3);
+		// Guarentees at least one hint
+		if (hints == 0) {
+			hints = 1;
+		}
+		// Produces hint string that the user sees when guessing
+		for (var i = 0; i < name.length; i++) {
+			var rand = Math.round(Math.random()); // 50% chance
+			if (name[i] == "-" || name[i] == "." || name[i] == " " || name[i] == ",") { 
+				hint[i] = name[i];
+			} else if (rand && hints != 0) { // Randomly adds the hints
+				hints--;
+				hint[i] = name[i];
+			} else {
+				hint[i] = "_";
+			}
+		}
+		$scope.hint = hint.join("  ");
 
-
-	}
+		$scope.guess = {};
+		$scope.evalGuess = function(guess) {
+			if (guess) {
+				$scope.guess.letter = guess.toUpperCase();
+				console.log($scope.guessLetter);
+				$timeout(function() {
+					$scope.guess.letter = "";
+					console.log($scope.guessLetter);
+				}, 1000);
+				for (var i = 0; i < answer.length; i++) {
+					if (answer[i] == guess.toUpperCase()) {
+						hint[i] = guess.toUpperCase();
+					}
+				}
+				$scope.hint = hint.join(" ");
+				if (_.isEqual(hint, answer)) {
+					$scope.roundWin = true;
+					console.log("win");
+				}
+			}
+		};
+	};
 
 	var playScramble = function(character) {
 
-	}
+	};
 
 }]);
 
