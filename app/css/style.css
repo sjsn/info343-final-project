@@ -8,6 +8,9 @@
 	.hint-section {
 		margin-top: 50px;
 	}
+	#top {
+		margin-top: 18em;
+	}
 
 }
 
@@ -20,6 +23,9 @@
 
 	.hint-section {
 		margin-top: 100px;
+	}
+	#top {
+		margin-top: 2.5em;
 	}
 }
 
@@ -116,10 +122,6 @@
 .input-form {
 	margin-top: 40%;
 	text-align: center;
-}
-
-#top {
-	margin-top: 2.5em;
 }
 
 .loading-icon {
