@@ -281,12 +281,12 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				$timeout(function() {
 					$scope.guess.word = "";
 					$scope.notGuess = true;
-				}, 1000);
+				}, 500);
 				guess = guess.toUpperCase().split("");
 				if (_.isEqual(guess, answer)) {
 					$scope.roundWin = true;
 					$scope.incorrect = false;
-					
+
 					$timeout(function() {
 						$scope.roundWin = false;
 						playScramble(next.char);
@@ -304,7 +304,10 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 // Controller for the leaderboard
 app.controller("LeaderboardsCtrl", ["$scope", function($scope) {
 
-
+	// Searches for user inputted username
+	$scope.searchFor = function(username) {
+		// Loop through total users testing each username against passed in username
+	}
 
 }]);
 
