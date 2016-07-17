@@ -232,7 +232,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				$scope.guess.letter = guess.toUpperCase();
 				$timeout(function() {
 					$scope.guess.letter = "";
-					console.log($scope.guess.letter);
 				}, 1000);
 				for (var i = 0; i < answer.length; i++) {
 					if (answer[i] == guess.toUpperCase()) {
@@ -260,8 +259,45 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 		var name = character.name;
 		var answer = name;
 		var shuffled = _.shuffle(name);
-		$scope.hint;
-		
+		var hint = [];
+		for (var i = 0; i < name.length; i++) {
+			if (name[i] == "-" || name[i] == "." || name[i] == "," || name[i] == " ") {
+				hint[i] = name[i];
+			} else {
+				hint[i] = shuffled[i];
+				if (hint[i] == "-" || hint[i] == "." || hint[i] == "," || hint[i] == " ") {
+					hint[i] = name[i];
+				}
+			}
+		}
+		$scope.hint = hint.join(" ");
+		console.log(answer);
+
+		$scope.incorrect = false;
+		$scope.guess = {};
+		// Check to see if shuffled guess matches answer index
+		$scope.evalGuess = function(guess) {
+			if (guess) {
+				$scope.guess.word = guess.toUpperCase();
+				$timeout(function() {
+					$scope.guess.word = "";
+					$scope.notGuess = true;
+				}, 1000);
+				guess = guess.toUpperCase().split("");
+				console.log(guess);
+				if (_.isEqual(guess, answer)) {
+					$scope.roundWin = true;
+					$scope.incorrect = false;
+					$timeout(function() {
+						$scope.roundWin = false;
+						playScramble(next.char);
+					}, 2000);
+				} else {
+					$scope.incorrect = true;
+				}
+			}
+		};
+
 	};
 
 }]);
