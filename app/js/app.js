@@ -104,8 +104,23 @@ app.controller('HomeCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$fireb
 
 }]);
 
+var currentUser; 
+var currentCards; 
 app.controller("CardsCtrl", ["$scope", function($scope) {
-
+	function getUser(emailAddress){
+   	fb.child('users').orderByChild('emailAddress').equalTo(emailAddress).once('value', function(snap) {
+       currentUser = snap.val() 
+	   currentCards = currentUser.myCards});
+    };
+	
+	function getChar(){
+		_.forEach(id)
+		$http.get("http://gateway.marvel.com/v1/public/characters/" + id + "?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
+		).then(function(results) {
+			currentCardsArray.push(results.data);
+		}
+	)};
+	
 }]);
 
 app.controller("DetailsCtrl", ["$scope", function($scope) {
@@ -113,8 +128,9 @@ app.controller("DetailsCtrl", ["$scope", function($scope) {
 }]);
 
 app.controller("StoreCtrl", ["$scope", function($scope) {
-
+	// rootRef.update();
 }]);
+
 
 // Controller for the game
 app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $http, $timeout) {
