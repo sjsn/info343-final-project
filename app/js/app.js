@@ -18,13 +18,13 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 		controller: "CardsCtrl"
 	})
 	// The card details page
-	.state("cards.details", {
+	.state("details", {
 		url: "/details",
 		templateUrl: "partials/details.html",
 		controller: "DetailsCtrl"
 	})
 	// The card store page
-	.state("cards.store", {
+	.state("store", {
 		url: "/store",
 		templateUrl: "partials/store.html",
 		controller: "StoreCtrl"
