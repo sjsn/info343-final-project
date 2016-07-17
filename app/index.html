@@ -45,18 +45,18 @@
 		<button ng-click="signOut()" class="btn btn-warning">Sign Out</button>
 	</div>
 
-	<div class="navbar-wrapper" ng-hide="true">
+	<div class="navbar-wrapper" >
 	<nav role="navigation" class="navbar navbar-inverse navbar-static-top">
 		<div class="container-fluid">
     		<div class="navbar-header">
-      		<a class="navbar-brand active" href="#">Home</a>
+      		<a class="navbar-brand active" ui-sref="home">Home</a>
     	</div>
 		<ul class="list-unstyled list-inline nav navbar-nav">
-			<li><a ui-sref="partials/cards.html">My Cards</a></li>
-			<li><a ui-sref="partials/details.html">Details</a></li>
-			<li><a ui-sref="partials/game.html">Game</a></li>
-			<li><a ui-sref="partials/leaderboards.html">Leaderboards</a></li>
-			<li><a ui-sref="partials/store.html">Store</a></li>
+			<li><a ui-sref="cards">My Cards</a></li>
+			<li><a ui-sref="cards.details">Details</a></li>
+			<li><a ui-sref="game">Game</a></li>
+			<li><a ui-sref="leaderboards">Leaderboards</a></li>
+			<li><a ui-sref="cards.store">Store</a></li>
 		</ul>
 		</div>
 	</nav>
