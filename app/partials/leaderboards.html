@@ -1,1 +1,30 @@
-<h1>Leaderboards</h1>
+<main role="main" class="main-content container">
+	<header>
+		<h1>Leaderboards</h1>
+	</header>
+
+	<!-- Search -->
+	<section role="region" class="container">
+		<form name="searchForm" class="form-group">
+			<div class="input-group">
+				<input tpye="text" role="input" placeholder="Search by username" ng-model="search" class="form-control">
+				<div class="input-group-btn">
+					<button role="search" class="btn btn-default" ng-click="searchFor(search)"><i class="glyphicon glyphicon-search" aria-hidden></i></button>
+				</div>
+			</div>
+		</form>
+	</section>
+
+	<!-- Leaderboards table -->
+	<section role="region" class="container">
+		<table role="grid" class="table table-striped">
+			<tr><th></th><th>Username</th><th>Total # of Points</th><th>Total # of Cards</th></tr>
+			<tr ng-repeat="user in users">
+				<td>{{user.img}}</td>
+				<td>{{user.name}}</td>
+				<td>{{user.totalPoints}}</td>
+				<td>{{user.cards.length}}</td>
+			</tr>
+		</table>
+	</section>
+</main>

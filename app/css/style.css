@@ -8,6 +8,7 @@
 	.hint-section {
 		margin-top: 50px;
 	}
+
 }
 
 /* Styles for medium screens */
@@ -32,6 +33,11 @@
 	.hint-section{
 		margin-top:  100px;
 	}
+
+	.nav-buttons p {
+		font-size: 2rem;
+		margin-bottom: 15px;
+	}
 }
 
 .navbar-wrapper {
@@ -49,7 +55,7 @@
 .title {
 	font-size: 5rem;
 	text-align: center;
-	margin-top: 50px;
+	margin-top: 25px;
 	margin-bottom: 50px;
 }
 
@@ -87,13 +93,53 @@
 	text-align: center;
 }
 
-#guess-letter {
+#guess-letter, .submit {
 	height: 100px;
 	font-size: 2rem;
 	padding: 10px;
 	text-align: center;
 }
 
+#win-msg {
+	font-size: 3rem;
+	color: green;
+}
+
+#win-msg-holder {
+	text-align: center;
+}
+
+#invalid {
+	color: red;
+}
+
+.input-form {
+	margin-top: 40%;
+	text-align: center;
+}
+
 #top {
 	margin-top: 2.5em;
 }
+
+.loading-icon {
+	position: relative;
+	top: 50%;
+	transform: translateY(80%);
+	text-align: center;
+}
+
+.load {
+	animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+	100% {
+	-webkit-transform: rotate(360deg);
+	transform:rotate(360deg); 
+} 
+
+.nav-buttons p {
+	display: inline-block;
+}
+

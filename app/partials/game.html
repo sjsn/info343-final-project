@@ -1,7 +1,7 @@
 <main role="main" class="main-content container">
 
 	<!-- Menu for choosing game type -->
-	<section role="region" ng-if="gameType == undefined">
+	<section role="region" ng-if="!gameType">
 		<header class="container" role="title">
 			<h1 class="title">Choose your game!</h1>
 		</header>
@@ -16,11 +16,12 @@
 	</section>
 
 	<!-- Loading message if character is not loaded -->
-	<section role="region" ng-if="gameType != undefined &amp;&amp; !charLoaded" aria-describedby="aria-loading">
+	<section role="region" ng-if="gameType &amp;&amp; !charLoaded" aria-describedby="aria-loading">
 		<p id="aria-loading">Loading next character!</p>
 		<!-- Temporary. Will change to loading gif or animation -->
-		<div class="container">
-			<p>The next character is getting ready!</p>
+		<div class="container loading-icon">
+			<img src="img/shield.png" class="load" aria-hidden="true" />
+			<p>The next character is putting on their super suit!</p>
 		</div>
 	</section>
 
@@ -29,6 +30,10 @@
 		<header>
 			<h1 class="title">Guess the Character</h1>
 		</header>
+		<div class="nav-buttons col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<p ng-click="goBack()" role="button" class="pull-left"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Exit Game</p>
+			<p ng-click="skipChar(gameType)" role="button" class="pull-right">Skip <i class="fa fa-forward" aria-hidden="true"></i></p>
+		</div>
 		<div class="container">
 			<div class="img-holder col-xs-12 col-sm-4 col-md-4 col-lg-4">
 				<!-- Disabled people play with description of character -->
@@ -41,19 +46,48 @@
 				</p>
 			</div>
 			<div class="container guess-section col-xs-12 col-sm-12 col-md-12 col-lg-12 input-group">
-				<input type="text" name="guess" ng-model="guess.letter" ng-change="evalGuess(guess.letter)" placeholder="Type a letter to guess" maxlength="1" id="guess-letter" role="input"/>
+				<input type="text" name="guess" ng-model="guess.letter" ng-change="evalGuess(guess.letter)" placeholder="Type a letter to guess" maxlength="1" id="guess-letter" role="input" autofocus/>
+			</div>
+			<div ng-if="roundWin" id="win-msg-holder" aria-live="polite">
+				<p id="win-msg">Correct!</p>
 			</div>
 		</div>
 	</section>
 
 	<!-- Character scramble game -->
-	<section role="region" ng-if="gameType == 'scramble' &amp;&amp; !charLoaded" aria-live="polite">
+	<section role="region" ng-if="gameType == 'scramble' &amp;&amp; charLoaded" aria-live="polite">
 		<header>
 			<h1 class="title">Name Scramble</h1>
 		</header>
+		<div class="nav-buttons col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<p ng-click="goBack()" role="button" class="pull-left"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Exit Game</p>
+			<p ng-click="skipChar(gameType)" role="button" class="pull-right">Skip <i class="fa fa-forward" aria-hidden="true"></i></p>
+		</div>
 		<div class="container">
-			<div class="img-holder">
-				<img ng-src="{{character.img}}" alt="Character Image" />
+			<div class="img-holder col-xs-12 col-sm-4 col-md-4 col-lg-4">
+				<!-- Disabled people play with description of character -->
+				<img ng-src="{{character.img}}" alt="Character Image" class="char-img" aria-describedby="desc"/>
+				<p id="desc">{{character.desc}}</p>
+			</div>
+			<div class="hint-section col-xs-12 col-sm-8 col-md-8 col-lg-8">
+				<p class="hint" aria-live="polite">
+					<span ng-repeat="letter in hint track by $index">{{letter}}</span>
+				</p>
+			</div>
+			<form name="guessForm" class="form-inline input-form">
+				<div class="form-group">
+					<div class="container guess-section col-xs-12 col-sm-12 col-md-12 col-lg-12 input-group">
+						<input type="text" name="guess" ng-model="guess.word" placeholder="Unscramble the name" id="guess-letter" role="input" required autofocus/>
+						<div class="input-group-btn">
+							<button class="btn btn-default submit" name="submit" ng-click="evalGuess(guess.word)" ng-disabled="guessForm.guess.$dirty &amp;&amp; guessForm.$invalid">Submit</button>
+						</div>
+					</div>
+				</div>
+				<p id="invalid" ng-if="guessForm.guess.$dirty &amp;&amp; guessForm.$invalid &amp;&amp; !incorrect &amp;&amp; !roundWin" aria-live="polite">Please type in a guess</p>
+				<p id="invalid" ng-if="incorrect" aria-live="polite">Incorrect</p>
+			</form>
+			<div ng-if="roundWin" id="win-msg-holder" aria-live="polite">
+				<p id="win-msg">Correct!</p>
 			</div>
 		</div>
 	</section>
