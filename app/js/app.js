@@ -212,10 +212,10 @@ var tempArray = [
           "extension": "jpg"}
     }
 ]; 
-
 var currentUser; 
 var currentCards; 
-app.controller("CardsCtrl", ["$scope", function($scope) {
+var completeArray; 
+app.controller('CardsCtrl', ['$scope', '$http', function($scope,$http) {
 	function getUser(emailAddress){
    	fb.child('users').orderByChild('emailAddress').equalTo(emailAddress).once('value', function(snap) {
        currentUser = snap.val() 
@@ -223,22 +223,36 @@ app.controller("CardsCtrl", ["$scope", function($scope) {
     };
 	
 	function getChar(){
-		_.forEach(id)
+		_.forEach(currentCards,function(id){
 		$http.get("http://gateway.marvel.com/v1/public/characters/" + id + "?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
 		).then(function(results) {
-			currentCardsArray.push(results.data);
-		}
-	)};
+			$scope.completeArray.push(results.data);
+		});
+		});
+	};
+
+}]);
+
+app.controller('DetailsCtrl', ['$scope', '$http', function($scope, $http) {
+		var name = char.name;
+		var desc = char.description;
+		var img = char.thumbnail.path + "." + char.thumbnail.extension;
+}]);
+
+var allChar;
+app.controller('StoreCtrl', ['$scope', '$http', function($scope, $http) {
 	
+	function getStore(){
+		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
+			+ "&limit=1&offset=" + charNum).then(function(results) {
+				allChar.push(results);
+	}
+		$scope.store = _.difference($scope.completeArray, $scope.allChar);
+	}
+
+//rootref.update(); 
 }]);
 
-app.controller("DetailsCtrl", ["$scope", function($scope) {
-
-}]);
-
-app.controller("StoreCtrl", ["$scope", function($scope) {
-	// rootRef.update();
-}]);
 
 
 // Controller for the game
