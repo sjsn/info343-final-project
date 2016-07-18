@@ -285,7 +285,7 @@ app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', function($scop
 
 var allChar;
 app.controller('StoreCtrl', ['$scope', '$http', function($scope, $http) {
-	
+	$scope.allChars = [];
 	function getStore(){
 		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
 			+ "&limit=1&offset=" + charNum).then(function(results) {
@@ -293,6 +293,9 @@ app.controller('StoreCtrl', ['$scope', '$http', function($scope, $http) {
 		});
 		$scope.store = _.difference($scope.completeArray, $scope.allChar);
 	}
+	console.log($scope.allChars);
+	console.log($scope.store);
+	//getStore();
 
 //rootref.update(); 
 }]);
@@ -604,10 +607,4 @@ User firebase structure
 
 	}
 ]
-
-
-
-
-
-
 */
