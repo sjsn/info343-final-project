@@ -440,16 +440,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 		};
 	};
 
-
-	/******
-
-	TO DO:
-	- Fix for characters with spaces/dashes in name
-	- Add cursor:point for unclicked
-	- Add changecolor for clicked
-	- Fix styles for everything else
-
-	******/
 	var playScramble = function(character) {
 		// Loads the next character in advance for less transition time
 		getChar();
@@ -489,18 +479,14 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				}
 			} else {
 				$scope.hint.push({letter: shuffled[i], index: i, guessable: true});
-				$scope.$watch("hint[i]", function(newValue, oldValue) {
-					oldValue = newValue;
-				});
 				$scope.guessBoard.push("_");
-				$scope.$watch("guessBoard[i]", function(newValue, oldValue) {
-					oldValue = newValue;
-				});
 			}
 		}
 		// Saved for board clears
-		var curBoard = $scope.guessBoard;
-		var curScrambled = $scope.hint;
+		var curBoard = _.cloneDeep($scope.guessBoard, 1);
+		var permBoard = _.cloneDeep($scope.guessBoard, 1);
+		var curHint = _.cloneDeep($scope.hint, 1);
+		var permHint = _.cloneDeep($scope.hint, 1);
 
 		$scope.incorrect = false;
 		$scope.guess = {};
@@ -555,14 +541,18 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 		// Resets game board on failed guess
 		function clearBoard() {
 			$scope.clear = true;
-			// Keep answer up for an answer, then redraw
+			// Keep answer up for one second, then redraw
 			$timeout(function() {
 				for (var i = 0; i < $scope.guessBoard.length; i++) {
+					console.log(curBoard[i]);
 					$scope.guessBoard[i] = curBoard[i];
-					$scope.hint[i] = curScrambled[i];
-					// Apply changes through $watch listeners
-					$scope.$digest();
+					console.log(curHint[i]);
+					$scope.hint[i] = curHint[i];
 				}
+				curBoard = _.cloneDeep(permBoard, 1);
+				curHint = _.cloneDeep(permHint, 1);
+				console.log($scope.guessBoard);
+				console.log($scope.hint);
 				$scope.clear = false;				
 			}, 1000);
 		}
