@@ -1,12 +1,15 @@
 
 <main role="main" class="main-content container">
 	<header>
-		<h1>Details</h1>
+		<h1>{{currentChar.name}}</h1>
 	</header>
     <section role='goingBack'>
-		
+		<h1><a ui-sref="cards"><button class="btn btn-default">
+            Go Back to My Cards
+        </button></a></h1>
 	</section>
 	<section role="region" class="container" ng-controller="DetailsCtrl">
-        {{charName}}
+		<img src="{{currentChar.thumbnail.path}}.jpg" class="img-responsive">
+        {{currentChar.description}}
     </section>
 </main>
