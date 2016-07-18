@@ -246,7 +246,7 @@ app.controller('StoreCtrl', ['$scope', '$http', function($scope, $http) {
 		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
 			+ "&limit=1&offset=" + charNum).then(function(results) {
 				allChar.push(results);
-	}
+	})
 		$scope.store = _.difference($scope.completeArray, $scope.allChar);
 	}
 
