@@ -11,6 +11,11 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 		templateUrl: "partials/home.html",
 		controller: "HomeCtrl"
 	})
+	.state("account", {
+		url: "/account",
+		templateUrl: "partials/account.html",
+		controller: "AccountCtrl"
+	})
 	// The card page
 	.state("cards", {
 		url: "/cards",
@@ -62,8 +67,7 @@ app.controller('HomeCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$fireb
 	    		$scope.userId = firebaseUser.uid; //save userId
 				console.log(firebaseUser.uid);
 
-
-				var userData = {handle:$scope.newUser.handle, avatar:$scope.newUser.avatar,};
+				var userData = {handle:$scope.newUser.handle,};
 
 				var myRef = baseRef.child('users/'+firebaseUser.uid); //create new entry in object
 				myRef.set(userData); //save that data to the database;
@@ -97,12 +101,88 @@ app.controller('HomeCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$fireb
 		/* Data */
 		var usersRef = baseRef.child('users');
 		var whiteboardRef = baseRef.child('whiteboard');
-		var chirpsRef = baseRef.child('chirps');
+//		var chirpsRef = baseRef.child('chirps');
+}]);
 
+app.controller("AccountCtrl", ["$scope", '$firebaseAuth', '$firebaseArray', '$firebaseObject', "$http",
+	function($scope, $firebaseAuth, $firebaseArray, $firebaseObject, $http) {
 
+	var baseRef = firebase.database().ref();
+	$scope.currentUser = {}; //for sign-in
+	$scope.changeUser = {}; //for sign-in
 
+	$scope.changeAccount = function() {
+		console.log($scope.currentUser);
+		console.log($scope.changeUser);
+
+		var userRef = baseRef.child($scope.currentUser.currhandle);
+		userRef.update({
+			"handle":$scope.changeUser.newhandle,
+			"password":$scope.changeUser.password,
+			"email":$scope.changeUser.email
+		});
+		console.log(userRef);
+	};
 
 }]);
+
+app.controller("CameraCtrl", ["$scope",function($scope) {
+	'use strict';
+
+	//wait for document to load
+	
+	window.onload = function() {
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+		var localMediaStream;
+		var video = document.querySelector('video');
+		var canvas = document.querySelector('canvas');
+		var brush = canvas.getContext('2d');
+
+		document.querySelector('#record').addEventListener('click',function(){
+
+			navigator.getUserMedia({video:{mandatory:{
+				maxWidth:300, maxHeight:300}}}, 
+				function(mediaStream) {
+					localMediaStream = mediaStream;
+					video.src = window.URL.createObjectURL(mediaStream);
+				}, function(err) {
+				console.log(err)
+			});
+
+		})
+
+		document.querySelector('#stop').addEventListener('click',function() {
+			video.pause();
+
+		//get all tracks from the stream
+			var tracks = localMediaStream.getTracks();
+			tracks.forEach(function(track){
+				track.stop(); //stop each track
+			});
+		})
+
+		document.querySelector('#selfie').addEventListener('click',function() {
+			canvas.width = 300;
+			canvas.height = 300;
+			var ironmanImage = document.getElementById("ironman");
+			console.log(ironmanImage);
+			brush.drawImage(video, 0, 0);
+			brush.drawImage(ironmanImage, 80,80);
+			
+		});
+		document.querySelector('#save').addEventListener('click',function() {
+			var snapshot = canvas.toDataURL('image/png');
+			var link = document.createElement('a');
+			link.href = snapshot;
+			link.download = 'my-selfie.png';
+			link.click();    
+		});
+
+	};
+	
+}])
+
 
 var currentUser; 
 var currentCards; 

@@ -142,3 +142,16 @@
 .nav-buttons p {
 	display: inline-block;
 }
+
+#video_box{
+    position:relative;
+}
+#video_overlays {
+    position:absolute;
+    width:160px;
+    min-height:40px;
+    background-image: url('ironman.jpg');
+    z-index:300000;
+    bottom:10px;
+    left:10px;
+}
