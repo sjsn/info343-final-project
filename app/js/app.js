@@ -287,15 +287,32 @@ app.controller('StoreCtrl', ['$scope', '$http', function($scope, $http) {
 	$scope.allChars = [];
 	function getCards() {
 		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=52bc1f9f7dd809c3b85c35bc6c107953&hash=35482198cd607298376e396b611751e6"
-			+ "&limit=20&offset=0").then(function(response) {
+			+ "&limit=50&offset=0").then(function(response) {
 				var cards = response.data.data.results;
-				$scope.allChars = cards;
-		});
-	}
+
+				for(var j = 0; j < cards.length; j++) {
+					if(cards[j].thumbnail.path !== "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"
+					 || cards[j].description !== "") {
+						 //$scope.allChars.push(cards[j]);
+						 console.log(cards[j]);
+					}
+				}
+				console.log($scope.allChars);
+/*
+				_.forEach(cards,function(){
+						if (cards.thumbnail.path !== "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" ||
+						
+						char.description == "") {
+						$scope.cards = $scope.cards.next; 
+					} else {
+						$scope.allChars.push($scope.cards);
+					}
+
+				})*/			
+	});
 	getCards();
-	console.log($scope.allChars);
 
-
+	};
 //rootref.update(); 
 }]);
 
