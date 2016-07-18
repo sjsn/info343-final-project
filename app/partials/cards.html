@@ -1,7 +1,8 @@
 <div ng-controller="CardsCtrl">
-    <table ng-repeat="char in chars">
-        <tr>
-            <td>{{char.name}}</td>
-            <td class="cardDisplay"><img ng-src="{{char.thumbnail.path}}.jpg" style="max-width:200px"/></td>
-        </tr>
+    <div ng-repeat="char in chars" class="col-xs-12 col-s-12 col-m-3 col-lg-3">
+            <div class="cardDisplay">
+           <img src="{{char.thumbnail.path}}.jpg" style="max-width:300px"/>
+            <p>{{char.name}}</p>
+            </div>
+    </div>
 </div>
