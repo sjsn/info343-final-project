@@ -196,7 +196,9 @@ var tempArray = [
 	{
         "id": 1017100,
         "name": "A-Bomb (HAS)",
-        "description": "Rick Jones has been Hulk's best bud since day one, but now he's more than a friend...he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction! ",
+        "description": "Rick Jones has been Hulk's best bud since day one, but now he's more than a friend..." +
+        "he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong " +
+        "and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction! ",
         "modified": "2013-09-18T15:54:04-0400",
         "thumbnail": {
         "path": "http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16",
@@ -229,7 +231,10 @@ app.controller('CardsCtrl', ['$scope', '$http', function($scope,$http) {
 	{
         "id": 1017100,
         "name": "A-Bomb (HAS)",
-        "description": "Rick Jones has been Hulk's best bud since day one, but now he's more than a friend...he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction! ",
+        "description": "Rick Jones has been Hulk's best bud since day one, but now he's"+ 
+        " more than a friend...he's a teammate! Transformed by a Gamma energy explosion,"+
+        " A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And "+
+        "when he curls into action, he uses it like a giant bowling ball of destruction! ",
         "modified": "2013-09-18T15:54:04-0400",
         "thumbnail": {
         "path": "http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16",
@@ -253,7 +258,8 @@ app.controller('CardsCtrl', ['$scope', '$http', function($scope,$http) {
 	
 	function getChar(){
 		_.forEach(currentCards,function(id){
-		$http.get("http://gateway.marvel.com/v1/public/characters/" + id + "?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
+		$http.get("http://gateway.marvel.com/v1/public/characters/" + id + 
+			"?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
 		).then(function(results) {
 			$scope.completeArray.push(results.data);
 		});
@@ -321,6 +327,13 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				} else {
 					next.char = {name: name, desc: desc, img: img};
 				}
+			}
+		}, function() { // runs when promise fails to load
+			console.log("fail");
+			if (game) {
+				getChar(game);
+			} else {
+				getChar();
 			}
 		});
 	};
@@ -417,33 +430,97 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 		};
 	};
 
+
+	/******
+
+	TO DO:
+	- Fix for characters with spaces/dashes in name
+	- Add cursor:point for unclicked
+	- Add changecolor for clicked
+	- Fix styles for everything else
+
+	******/
 	var playScramble = function(character) {
 		// Loads the next character in advance for less transition time
 		getChar();
 
 		$scope.character = character;
+		// Variable tracking when board is cleared
+		$scope.clear = false;
 		$scope.roundWin = false;
-		var name = character.name;
-		var answer = name;
-		var shuffled = _.shuffle(name);
-		var hint = [];
-		for (var i = 0; i < name.length; i++) {
-			if (name[i] == "-" || name[i] == "." || name[i] == "," || name[i] == " ") {
-				hint[i] = name[i];
-			} else {
-				hint[i] = shuffled[i];
-				if (hint[i] == "-" || hint[i] == "." || hint[i] == "," || hint[i] == " ") {
-					hint[i] = name[i];
-				}
+		var answer = character.name;
+		console.log("answer: " + answer);
+		var shuffled = _.shuffle(answer);
+		// Keeps special chararcters in same spot after shuffle
+		for (var i = 0; i < answer.length; i++) {
+			// If current index is special char
+			if (shuffled[i] == "-" || shuffled[i] == "." || shuffled[i] == "," || shuffled[i] == "/" || shuffled[i] == " ") {
+				shuffled.splice(i, 1); // Remove it
+			}
+			if (answer[i] == "-" || answer[i] == "." || answer[i] == "," || answer[i] == " ") {
+				shuffled.splice(i, 0, answer[i]); // Insert it into the array at the appropriate index
 			}
 		}
-		$scope.hint = hint.join(" ");
+		$scope.hint = [];
+		$scope.guessBoard = [];
+		console.log("reshuffled: " + shuffled);
+		// Produces the scrambled up hint
+		for (var i = 0; i < answer.length; i++) {
+			if (answer[i] == "-" || answer[i] == "." || answer[i] == "," || answer[i] == "/" ||  answer[i] == " ") {
+				if (answer[i] == " ") {
+					// Replaces spaces with tabs for readability
+					$scope.guessBoard.push("[ ]");
+					$scope.hint.push({letter: "[ ]", index: i, guessable: false});
+					console.log("space");
+				} else {
+					$scope.guessBoard.push(answer[i]);
+					$scope.hint.push({letter: answer[i], index: i, guessable: false});
+					console.log(answer[i]);
+				}
+			} else {
+				$scope.hint.push({letter: shuffled[i], index: i, guessable: true});
+				$scope.$watch("hint[i]", function(newValue, oldValue) {
+					oldValue = newValue;
+				});
+				$scope.guessBoard.push("_");
+				$scope.$watch("guessBoard[i]", function(newValue, oldValue) {
+					oldValue = newValue;
+				});
+			}
+		}
+		// Saved for board clears
+		var curBoard = $scope.guessBoard;
+		var curScrambled = $scope.hint;
 
 		$scope.incorrect = false;
 		$scope.guess = {};
+		$scope.guess.word = "";
+
+		var boardIndex = 0;
+		$scope.chooseLetter = function(letter, index) {
+			if ($scope.hint[index].guessable) {
+				if ($scope.guessBoard[boardIndex] == "-" || 
+					$scope.guessBoard[boardIndex] == "." || 
+					$scope.guessBoard[boardIndex] == "," ||
+					$scope.guessBoard[boardIndex] == "/" || 
+					$scope.guessBoard[boardIndex] == "[ ]") {
+
+					boardIndex++;
+				} else {
+					$scope.hint[index].guessable = false;
+					$scope.guessBoard[boardIndex] = letter;
+					boardIndex++;
+				}
+			}
+			if (boardIndex == $scope.hint.length) {
+				evalGuess($scope.guessBoard.join(""));
+			}
+		};
+
 		// Check to see if shuffled guess matches answer index
-		$scope.evalGuess = function(guess) {
+		function evalGuess(guess) {
 			if (guess) {
+				console.log("checkWin");
 				$scope.guess.word = guess.toUpperCase();
 				$timeout(function() {
 					$scope.guess.word = "";
@@ -453,16 +530,32 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				if (_.isEqual(guess, answer)) {
 					$scope.roundWin = true;
 					$scope.incorrect = false;
-
 					$timeout(function() {
 						$scope.roundWin = false;
 						playScramble(next.char);
 					}, 2000);
 				} else {
 					$scope.incorrect = true;
+					clearBoard();
+					boardIndex = 0;
 				}
 			}
 		};
+
+		// Resets game board on failed guess
+		function clearBoard() {
+			$scope.clear = true;
+			// Keep answer up for an answer, then redraw
+			$timeout(function() {
+				for (var i = 0; i < $scope.guessBoard.length; i++) {
+					$scope.guessBoard[i] = curBoard[i];
+					$scope.hint[i] = curScrambled[i];
+					// Apply changes through $watch listeners
+					$scope.$digest();
+				}
+				$scope.clear = false;				
+			}, 1000);
+		}
 	};
 
 	// Takes the user back to the "choose game" menu
