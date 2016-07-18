@@ -265,9 +265,9 @@ var currentChar;
 app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', function($scope, $http, $stateParams) {
 	$scope.currentChar = _.find(completeArray, ['id', $stateParams.id]);
 	
-		var name = char.name;
-		var desc = char.description;
-		var img = char.thumbnail.path + "." + char.thumbnail.extension;
+	$scope.charName = char.name;
+	$scope.charDescr = char.description;
+	$scope.charImg = char.thumbnail.path + "." + char.thumbnail.extension;
 }]);
 
 var allChar;
