@@ -46,6 +46,10 @@
 	}
 }
 
+body {
+	padding-bottom: 70px;
+}
+
 .navbar-wrapper {
   position: absolute;
   top: 0;
