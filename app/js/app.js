@@ -585,3 +585,29 @@ app.controller("LeaderboardsCtrl", ["$scope", function($scope) {
 
 }]);
 
+/*
+User firebase structure
+
+[
+	{
+		"username": "",
+		"userThumbnail": "",
+		"totalPointns": "",
+		"spendablePoints": "",
+		"cards": [
+			{"id" = "",
+			 "name" = "",
+			 "thumbnail" = ""},
+			{},
+			{}	
+		]
+
+	}
+]
+
+
+
+
+
+
+*/
