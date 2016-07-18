@@ -263,7 +263,17 @@ app.controller('CardsCtrl', ['$scope', '$http', function($scope,$http) {
 }]);
 var currentChar; 
 app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', function($scope, $http, $stateParams) {
-	$scope.currentChar = _.find(completeArray, ['id', $stateParams.id]);
+	console.log($stateParams.id);
+	//$scope.currentChar = _.find(tempArray, ['id', $stateParams.id]);
+	var theIndex = -1;
+	var i = 0;
+	for(i =0; i < tempArray.length; i++) {
+		if (tempArray[i].id == $stateParams.id) {
+			theIndex = i;
+		}
+	}
+	$scope.thisChar = tempArray[theIndex];
+
 
 }]);
 
