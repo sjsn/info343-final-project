@@ -302,7 +302,7 @@ app.controller('StoreCtrl', ['$scope', '$http', function($scope, $http) {
 
 
 
-// Controller for the game
+// Controller for the games
 app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $http, $timeout) {
 	// Holder for the next character to reduce loading times
 	var next = {};
@@ -314,9 +314,13 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 		} else {
 			$scope.charLoaded = true;
 		}
+		// test hash: 35482198cd607298376e396b611751e6
+		// test key: 52bc1f9f7dd809c3b85c35bc6c107953
+		// real hash: 0151cc0f29d81edd53d5bc5e4ee1122b
+		// real key: fef7d5ab447d43d61cbb442f9c76073f
 		// Index of current character in Marvel API (1483 max)
 		var charNum = Math.floor((Math.random() * 1483)) + 1;
-		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
+		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=52bc1f9f7dd809c3b85c35bc6c107953&hash=35482198cd607298376e396b611751e6"
 			+ "&limit=1&offset=" + charNum).then(function(results) {
 			// Not a valid character without a name & description
 			var char = results.data.data.results[0];
@@ -443,6 +447,16 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 		};
 	};
 
+	/******
+
+	TO DO:
+	- Fix for characters with spaces/dashes in name
+	- Add cursor:point for unclicked
+	- Add changecolor for clicked
+	- Fix styles for everything else
+
+	******/
+	// The Scramble game logic
 	var playScramble = function(character) {
 		// Loads the next character in advance for less transition time
 		getChar();
@@ -554,8 +568,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 				}
 				curBoard = _.cloneDeep(permBoard, 1);
 				curHint = _.cloneDeep(permHint, 1);
-				console.log($scope.guessBoard);
-				console.log($scope.hint);
 				$scope.clear = false;				
 			}, 1000);
 		}
@@ -588,6 +600,60 @@ app.controller("LeaderboardsCtrl", ["$scope", function($scope) {
 
 }]);
 
+app.factory("FirebaseService", function($fireBaseAuth, $fireBaseObject) {
+
+	var service = {};
+
+	/*
+		Structure:
+
+		var obj = $firebaseObject( reference to firbase database );
+		obj.thing-to-update = newValue;
+		obj.save().then( function() {
+			Do something to let user know the value successfully updated
+		}, function() {
+			Do something to alert user that it failed
+		});
+	*/
+
+	// Takes in a user object and adds them to the firebase authorizor
+	service.createUser = function(user) {
+
+	};
+
+	// Signs user in with credentials stored in passed in user object
+	service.authorize = function(user) {
+
+	};
+
+	// Takes in newUsername string and updates it on firebase
+	service.updateUsername = function(newUsername) {
+
+	};
+
+	// Takes in newThumbnail string(?) and updates it on firebase	
+	service.updateThumbnail = function(newThumbnail) {
+
+	};
+
+	// Takes in newTotal int and updates it on firebase
+	service.updateTotalPoints = function(newTotal) {
+
+	};
+
+	// Takes in newTotal int and updates it on firebase
+	service.updateWallet = function(newTotal) {
+
+	};
+
+	// Takes in newCard object and updates it on firebase
+	// newCard structure: {name, thumbnail, description}
+	service.updateCards = function(newCard) {
+
+	};
+
+});
+
 /*
 User firebase structure
 
@@ -607,4 +673,5 @@ User firebase structure
 
 	}
 ]
+
 */
