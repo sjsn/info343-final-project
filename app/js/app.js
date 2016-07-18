@@ -347,7 +347,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 					next.char = {name: name, desc: desc, img: img};
 				}
 			}
-		}, function() { // runs when promise fails to load
+		}, function() { // runs again when promise fails to load
 			console.log("fail");
 			if (game) {
 				getChar(game);
