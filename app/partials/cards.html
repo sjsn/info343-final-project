@@ -6,8 +6,10 @@
       
 	<section role="region" class="container" ng-controller="CardsCtrl">
             <div ng-repeat="char in chars" class="cardDispla col-lg-4 col-md-4 col-s-12 col-xs-12">
-            <img src="{{char.thumbnail.path}}.jpg" ui-sref="cards.details({id:'{{char.id}}'})" style="max-width:300px" class="img-responsive">
+            <a ui-sref="details( {'id':char.id} )">
+            <img src="{{char.thumbnail.path}}.jpg" style="max-width:300px" class="img-responsive">
             <p>{{char.name}}</p>
+            </a>
             </div>
 
 </section>
