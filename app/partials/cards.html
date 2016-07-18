@@ -5,22 +5,10 @@
 	</header>
       
 	<section role="region" class="container" ng-controller="CardsCtrl">
-
- <div id="cardsNav" class="carousel slide">
-    <div class="carousel-inner">
-        <div class="item" ng-class="{active:!$index}" ng-repeat="char in chars">
-            <img src="{{char.thumbnail.path}}.jpg" class="img-responsive">
-        </div>
-    </div>
-    <a class="left carousel-control" href="#cardsNav" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-    </a>
-    <a class="right carousel-control" href="#cardsNav" data-slide="next">
-       <span class="glyphicon glyphicon-chevron-right"></span>
-    </a>
-</div>
+            <div ng-repeat="char in chars" class="cardDispla col-lg-4 col-md-4 col-s-12 col-xs-12">
+            <img src="{{char.thumbnail.path}}.jpg" ui-sref="cards.details({id:'{{char.id}}'})" style="max-width:300px" class="img-responsive">
+            <p>{{char.name}}</p>
+            </div>
 
 </section>
 </main>
-
- 
