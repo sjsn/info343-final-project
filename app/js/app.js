@@ -300,7 +300,7 @@ app.controller('StoreCtrl', ['$scope', '$http', function($scope, $http) {
 
 
 // Controller for the games
-app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $http, $timeout) {
+app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", function($scope, $http, $timeout, FirebaseService) {
 	// Holder for the next character to reduce loading times
 	var next = {};
 	// Gets character from Marvel API
@@ -311,10 +311,12 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 		} else {
 			$scope.charLoaded = true;
 		}
+
 		// test hash: 35482198cd607298376e396b611751e6
 		// test key: 52bc1f9f7dd809c3b85c35bc6c107953
 		// real hash: 0151cc0f29d81edd53d5bc5e4ee1122b
 		// real key: fef7d5ab447d43d61cbb442f9c76073f
+
 		// Index of current character in Marvel API (1483 max)
 		var charNum = Math.floor((Math.random() * 1483)) + 1;
 		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=52bc1f9f7dd809c3b85c35bc6c107953&hash=35482198cd607298376e396b611751e6"
@@ -584,7 +586,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 }]);
 
 // Controller for the leaderboard
-app.controller("LeaderboardsCtrl", ["$scope", function($scope) {
+app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope, FirebaseService) {
 	// Default ordering is total points
 	$scope.order = 'totalPoints';
 
@@ -597,8 +599,7 @@ app.controller("LeaderboardsCtrl", ["$scope", function($scope) {
 
 }]);
 
-<<<<<<< HEAD
-app.factory("FirebaseService", function($fireBaseAuth, $fireBaseObject) {
+app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($firebaseAuth, $firebaseObject) {
 
 	var service = {};
 
@@ -650,32 +651,14 @@ app.factory("FirebaseService", function($fireBaseAuth, $fireBaseObject) {
 
 	};
 
-});
-=======
-/*
-User firebase structure
+	service.getLeaders = function() {
 
-[
-	{
-		"username": "",
-		"userThumbnail": "",
-		"totalPointns": "",
-		"spendablePoints": "",
-		"cards": [
-			{"id" = "",
-			 "name" = "",
-			 "thumbnail" = ""},
-			{},
-			{}	
-		]
+	};
 
-	}
-]
+	service.updateLeaders = function(user) {
 
+	};
 
+	return service;
 
-
-
-
-*/
->>>>>>> 84a20c55b2bc43f3e303690ebc374917e0609199
+}]);
