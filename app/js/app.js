@@ -23,8 +23,8 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 		controller: "CardsCtrl"
 	})
 	// The card details page
-	.state("details", {
-		url: "/details",
+	.state("cards.details", {
+		url: "/:id",
 		templateUrl: "partials/details.html",
 		controller: "DetailsCtrl"
 	})
@@ -262,7 +262,8 @@ app.controller('CardsCtrl', ['$scope', '$http', function($scope,$http) {
 
 }]);
 
-app.controller('DetailsCtrl', ['$scope', '$http', function($scope, $http) {
+app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', function($scope, $http, $stateParams) {
+	$scope.completeArray = _.find(, ['id', $stateParams.id]);
 		var name = char.name;
 		var desc = char.description;
 		var img = char.thumbnail.path + "." + char.thumbnail.extension;
