@@ -280,23 +280,39 @@ app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', function($scop
 	}
 	$scope.thisChar = tempArray[theIndex];
 
-
 }]);
 
 var allChar;
 app.controller('StoreCtrl', ['$scope', '$http', function($scope, $http) {
 	$scope.allChars = [];
-	function getStore(){
-		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
-			+ "&limit=1&offset=" + charNum).then(function(results) {
-				allChar.push(results);
-		});
-		$scope.store = _.difference($scope.completeArray, $scope.allChar);
-	}
-	console.log($scope.allChars);
-	console.log($scope.store);
-	//getStore();
+	function getCards() {
+		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=52bc1f9f7dd809c3b85c35bc6c107953&hash=35482198cd607298376e396b611751e6"
+			+ "&limit=50&offset=0").then(function(response) {
+				var cards = response.data.data.results;
 
+				for(var j = 0; j < cards.length; j++) {
+					if(cards[j].thumbnail.path !== "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"
+					 || cards[j].description !== "") {
+						 //$scope.allChars.push(cards[j]);
+						 console.log(cards[j]);
+					}
+				}
+				console.log($scope.allChars);
+/*
+				_.forEach(cards,function(){
+						if (cards.thumbnail.path !== "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" ||
+						
+						char.description == "") {
+						$scope.cards = $scope.cards.next; 
+					} else {
+						$scope.allChars.push($scope.cards);
+					}
+
+				})*/			
+	});
+	getCards();
+
+	};
 //rootref.update(); 
 }]);
 
