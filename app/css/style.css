@@ -149,19 +149,16 @@ body {
 	display: inline-block;
 }
 
-<<<<<<< HEAD
 table.leader-table tr:hover th {
 	cursor: pointer;
 }
-
-=======
 
 .cardDisplay{
 	display: inline-block;
 	max-width:200px;
 }
+
 tr{
 	padding:1em 1em;
 	margin: 1em 1em;
 }
->>>>>>> f9c772d8b923933e9e1d2ac3375fbeb042f97a70
