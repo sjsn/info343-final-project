@@ -149,3 +149,12 @@ body {
 	display: inline-block;
 }
 
+
+.cardDisplay{
+	display: inline-block;
+	max-width:200px;
+}
+tr{
+	padding:1em 1em;
+	margin: 1em 1em;
+}
