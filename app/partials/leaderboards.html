@@ -17,9 +17,20 @@
 
 	<!-- Leaderboards table -->
 	<section role="region" class="container">
-		<table role="grid" class="table table-striped">
-			<tr><th></th><th>Username</th><th>Total # of Points</th><th>Total # of Cards</th></tr>
-			<tr ng-repeat="user in users">
+		<table role="grid" class="table table-striped leader-table" role="grid">
+			<tr role="row">
+				<th><!-- User Thumbnail --></th>
+				<th ng-click="order = 'name'">
+					<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'name'"></i>Username
+				</th>
+				<th ng-click="order = 'totalPoints'">
+					<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'totalPoints'"></i>Total Points
+				</th>
+				<th ng-click="order = 'cards.length'">
+					<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'cards.length'"></i>Total Cards
+				</th>
+			</tr>
+			<tr ng-repeat="user in users | orderBy:order | filter:searchTerm">
 				<td>{{user.img}}</td>
 				<td>{{user.name}}</td>
 				<td>{{user.totalPoints}}</td>

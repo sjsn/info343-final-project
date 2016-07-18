@@ -452,11 +452,15 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", function($scope, $htt
 
 // Controller for the leaderboard
 app.controller("LeaderboardsCtrl", ["$scope", function($scope) {
+	// Default ordering is total points
+	$scope.order = 'totalPoints';
 
 	// Searches for user inputted username
+	/* Haven't decided if loading all at once or pages */
 	$scope.searchFor = function(username) {
 		// Loop through total users testing each username against passed in username
 	}
+
 
 }]);
 

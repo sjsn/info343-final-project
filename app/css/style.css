@@ -149,3 +149,7 @@ body {
 	display: inline-block;
 }
 
+table.leader-table tr:hover th {
+	cursor: pointer;
+}
+
