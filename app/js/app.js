@@ -597,6 +597,7 @@ app.controller("LeaderboardsCtrl", ["$scope", function($scope) {
 
 }]);
 
+<<<<<<< HEAD
 app.factory("FirebaseService", function($fireBaseAuth, $fireBaseObject) {
 
 	var service = {};
@@ -650,3 +651,31 @@ app.factory("FirebaseService", function($fireBaseAuth, $fireBaseObject) {
 	};
 
 });
+=======
+/*
+User firebase structure
+
+[
+	{
+		"username": "",
+		"userThumbnail": "",
+		"totalPointns": "",
+		"spendablePoints": "",
+		"cards": [
+			{"id" = "",
+			 "name" = "",
+			 "thumbnail" = ""},
+			{},
+			{}	
+		]
+
+	}
+]
+
+
+
+
+
+
+*/
+>>>>>>> 84a20c55b2bc43f3e303690ebc374917e0609199
