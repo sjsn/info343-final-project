@@ -8,6 +8,9 @@
 	.hint-section {
 		margin-top: 50px;
 	}
+	#top {
+		margin-top: 18em;
+	}
 
 }
 
@@ -20,6 +23,9 @@
 
 	.hint-section {
 		margin-top: 100px;
+	}
+	#top {
+		margin-top: 2.5em;
 	}
 }
 
@@ -118,10 +124,6 @@
 	text-align: center;
 }
 
-#top {
-	margin-top: 5em;
-}
-
 .loading-icon {
 	position: relative;
 	top: 50%;
@@ -143,15 +145,3 @@
 	display: inline-block;
 }
 
-#video_box{
-    position:relative;
-}
-#video_overlays {
-    position:absolute;
-    width:160px;
-    min-height:40px;
-    background-image: url('ironman.jpg');
-    z-index:300000;
-    bottom:10px;
-    left:10px;
-}
