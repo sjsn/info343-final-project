@@ -280,22 +280,21 @@ app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', function($scop
 	}
 	$scope.thisChar = tempArray[theIndex];
 
-
 }]);
 
 var allChar;
 app.controller('StoreCtrl', ['$scope', '$http', function($scope, $http) {
 	$scope.allChars = [];
-	function getStore(){
-		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
-			+ "&limit=1&offset=" + charNum).then(function(results) {
-				allChar.push(results);
+	function getCards() {
+		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=52bc1f9f7dd809c3b85c35bc6c107953&hash=35482198cd607298376e396b611751e6"
+			+ "&limit=20&offset=0").then(function(response) {
+				var cards = response.data.data.results;
+				$scope.allChars = cards;
 		});
-		$scope.store = _.difference($scope.completeArray, $scope.allChar);
 	}
+	getCards();
 	console.log($scope.allChars);
-	console.log($scope.store);
-	//getStore();
+
 
 //rootref.update(); 
 }]);

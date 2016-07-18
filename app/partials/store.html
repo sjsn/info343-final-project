@@ -5,6 +5,12 @@
 	</header>
       
 	<section role="region" class="container" ng-controller="StoreCtrl">
-        {{char.name}}
+		<div ng-repeat="card in allChars" class="cardDispla col-lg-3 col-md-4 col-s-6 col-xs-12">
+			<a ui-sref="details( {'id':card.id} )">
+            <img src="{{card.thumbnail.path}}.jpg" style="max-width:300px" class="img-responsive">
+            <p>{{card.name}}</p>
+            </a>
+		</div>
+        
     </section>
 </main>
