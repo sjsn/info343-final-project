@@ -261,9 +261,10 @@ app.controller('CardsCtrl', ['$scope', '$http', function($scope,$http) {
 	};
 
 }]);
-
+var currentChar; 
 app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', function($scope, $http, $stateParams) {
-	$scope.completeArray = _.find(, ['id', $stateParams.id]);
+	$scope.currentChar = _.find(completeArray, ['id', $stateParams.id]);
+	
 		var name = char.name;
 		var desc = char.description;
 		var img = char.thumbnail.path + "." + char.thumbnail.extension;
