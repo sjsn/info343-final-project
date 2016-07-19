@@ -11,9 +11,14 @@
 		<header>
 			<h1>My Cards</h1>
 		</header>
-	      
+		<section role="region" class="container">
+			<div class="input-group custom-search">
+				<input type="text" ng-model="searchTerm" class="form-control" placeholder="Search my cards...">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-search" aria-hidden></i></span>
+			</div>
+		</section>
 		<section role="region" class="container" ng-controller="CardsCtrl">
-	            <div ng-repeat="char in chars" class="card col-lg-4 col-md-4 col-s-6 col-xs-12">
+	            <div ng-repeat="char in chars | filter:searchTerm" class="card col-lg-4 col-md-4 col-s-6 col-xs-12">
 	            	<a ui-sref="details( {'id':char.id} )">
 	            		<img src="{{char.img}}" class="img-responsive">
 	            		<h2>{{char.fullName}}</h2>

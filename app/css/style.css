@@ -251,3 +251,7 @@ table.leader-table tr:hover th {
 	text-decoration: none;
 	font-size: 2rem;
 }
+
+.custom-search {
+	max-width: 500px;
+}
