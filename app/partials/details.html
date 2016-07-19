@@ -2,7 +2,6 @@
 <main role="main" class="main-content container">
 	<div ng-if="loading" aria-describedby="aria-loading">
 		<p id="aria-loading">Loading card details!</p>
-		<!-- Temporary. Will change to loading gif or animation -->
 		<div class="container loading-icon">
 			<img src="img/shield.png" class="load" aria-hidden="true" />
 			<p>Revealing the secret identity!</p>
@@ -10,16 +9,21 @@
 	</div>
 	<section ng-if="!loading">
 	    <section role='region'>
-			<p><a ui-sref="cards">
-	            Go Back to My Cards
-	        </a></p>
+			<p class="back-button">
+				<a ui-sref="cards">
+	        		<i class="fa fa-angle-double-left" aria-hidden="true"></i> My Cards
+	        	</a>
+	    	</p>
 		</section>
 		<section role="region" class="container">
 			<header>
-				<h1>{{thisChar.card.fullName}}</h1>
+				<h1 class="detail-title">{{thisChar.card.fullName}}</h1>
 			</header>
-			<img ng-src="{{thisChar.card.img}}" class="img-responsive">
-	        <p>{{thisChar.card.desc}}</p>
+			<img ng-src="{{thisChar.card.img}}" class="img-responsive detail-img">
+			<div  class="detail-desc">
+				<p class="desc-title">Description:</p>
+	        	<p>{{thisChar.card.desc}}</p>
+	        </div>
 	    </section>
 	</section>
 </main>
