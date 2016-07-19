@@ -1,5 +1,5 @@
 
-<main role="main" class="main-content container" aria-live="polite">
+<main role="main" class="main-content container detail-main" aria-live="polite">
 	<div ng-if="loading" aria-describedby="aria-loading">
 		<p id="aria-loading">Loading card details!</p>
 		<div class="container loading-icon">
@@ -19,6 +19,7 @@
 			<header>
 				<h1 class="detail-title">{{thisChar.card.fullName}}</h1>
 			</header>
+			<hr />
 			<img ng-src="{{thisChar.card.img}}" class="img-responsive detail-img">
 			<div  class="detail-desc">
 				<p class="desc-title">Description:</p>

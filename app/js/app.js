@@ -90,7 +90,8 @@ app.controller("AccountCtrl", ["$scope", 'FirebaseService',
 
 }]);
 
-app.controller("CameraCtrl", ["$scope",function($scope) {
+app.controller("CameraCtrl", ["$scope", 'FirebaseService', 
+	function($scope, FirebaseService) {
 	'use strict';
 
 	//wait for document to load
@@ -149,11 +150,22 @@ app.controller("CameraCtrl", ["$scope",function($scope) {
 			
 		});
 		document.querySelector('#save').addEventListener('click',function() {
+
+			var snapshot = canvas.toBlob(function(blob) {
+				console.log(blob);
+				var image = new Image();
+				image.src = blob;
+				FirebaseService.updateThumbnail(blob);
+			})
+
+			/*
 			var snapshot = canvas.toDataURL('image/png');
+			console.log(snapshot);
 			var link = document.createElement('a');
 			link.href = snapshot;
 			link.download = 'my-selfie.png';
 			link.click();    
+			*/
 		});
 
 	};
@@ -182,14 +194,11 @@ app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', 'FirebaseServi
 		var i = 0;
 		_.forEach(cards, function(card) {
 			if (card.id == $stateParams.id) {
-				console.log(card.id);
 				theIndex = i;
-				console.log(i);
 			}
 			i++;
 		});
 		$scope.thisChar.card = cards[theIndex];
-		console.log($scope.thisChar);
 		$scope.loading = false;
 	});
 }]);
@@ -337,7 +346,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				if (_.isEqual(hint, answer)) {
 					$scope.roundWin = true;
 					// Not currently working
-					$scope.isNew = FirebaseService.updateCards(theCard);
+					FirebaseService.updateCards(theCard);
 					console.log($scope.isNew);
 					FirebaseService.updateTotalPoints(10);
 					$timeout(function() {
@@ -351,26 +360,17 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 		};
 	};
 
-	/******
-
-	TO DO:
-	- Fix for characters with spaces/dashes in name
-	- Add cursor:point for unclicked
-	- Add changecolor for clicked
-	- Fix styles for everything else
-
-	******/
 	// The Scramble game logic
 	var playScramble = function(character) {
 		// Loads the next character in advance for less transition time
 		getChar();
 
 		$scope.character = character;
+		var theCard = character;
 		// Variable tracking when board is cleared
 		$scope.clear = false;
 		$scope.roundWin = false;
 		var answer = character.name;
-		console.log("answer: " + answer);
 		var shuffled = _.shuffle(answer);
 		// Keeps special chararcters in same spot after shuffle
 		for (var i = 0; i < answer.length; i++) {
@@ -384,7 +384,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 		}
 		$scope.hint = [];
 		$scope.guessBoard = [];
-		console.log("reshuffled: " + shuffled);
 		// Produces the scrambled up hint
 		for (var i = 0; i < answer.length; i++) {
 			if (answer[i] == "-" || answer[i] == "." || answer[i] == "," || answer[i] == "/" ||  answer[i] == " ") {
@@ -392,11 +391,9 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 					// Replaces spaces with tabs for readability
 					$scope.guessBoard.push("[ ]");
 					$scope.hint.push({letter: "[ ]", index: i, guessable: false});
-					console.log("space");
 				} else {
 					$scope.guessBoard.push(answer[i]);
 					$scope.hint.push({letter: answer[i], index: i, guessable: false});
-					console.log(answer[i]);
 				}
 			} else {
 				$scope.hint.push({letter: shuffled[i], index: i, guessable: true});
@@ -447,7 +444,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				if (_.isEqual(guess, answer)) {
 					$scope.roundWin = true;
 					// Not currently working
-					$scope.isNew = FirebaseService.updateCards(theCard);
+					FirebaseService.updateCards(theCard);
 					FirebaseService.updateTotalPoints(10);
 					$scope.incorrect = false;
 					$timeout(function() {
@@ -469,9 +466,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 			// Keep answer up for one second, then redraw
 			$timeout(function() {
 				for (var i = 0; i < $scope.guessBoard.length; i++) {
-					console.log(curBoard[i]);
 					$scope.guessBoard[i] = curBoard[i];
-					console.log(curHint[i]);
 					$scope.hint[i] = curHint[i];
 				}
 				curBoard = _.cloneDeep(permBoard, 1);
@@ -499,7 +494,7 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 	// Default ordering is total points
 	$scope.order = 'totalPoints';
 
-	$scope.Utils = {
+	$scope.utils = {
 		keys: Object.keys
 	};
 
@@ -510,12 +505,6 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 		console.log(users);
 	});
 
-	// Searches for user inputted username
-	/* Haven't decided if loading all at once or pages */
-	$scope.searchFor = function(username) {
-		// Loop through total users testing each username against passed in username
-	}
-
 
 }]);
 
@@ -524,6 +513,7 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	var service = {};
 	var baseRef = firebase.database().ref();
+	var storageRef = firebase.storage().ref();
 	var userID;
 	var currUserObj;
 	var currUserRef;
@@ -567,8 +557,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	service.createUser = function(user) {
 		service.currentUser = user;
 		
-		/* Authentication */
-		
 		// Create user
 		Auth.$createUserWithEmailAndPassword(user.email, user.password)
 		.then(function(firebaseUser){ //first time log in
@@ -608,12 +596,15 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	// Takes in newThumbnail string(?) and updates it on firebase	
 	service.updateThumbnail = function(newThumbnail) {
+		var uploadTask = storageRef.child('images/' + currUserObj.handle).put(newThumbnail);
+		/*
 		currUserObj.thumbnail = newThumbnail;
 		currUserObj.$save().then(function() {
 			console.log('success');
 		}, function() {
 			console.log('error');
 		})
+		*/
 	};
 
 	// Takes in newTotal int and updates it on firebase

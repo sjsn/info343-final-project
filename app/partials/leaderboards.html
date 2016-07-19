@@ -10,7 +10,7 @@
 			<p>Finding all heroes!</p>
 		</div>
 	</div>
-	<section ng-if="!loading">
+	<section ng-if="!loading &amp;&amp; users != null">
 		<!-- Search -->
 		<section role="region" class="container">
 			<form name="searchForm" class="form-group">
@@ -41,9 +41,12 @@
 					<td>{{user.handle}}</td>
 					<td>{{user.totalPoints}}</td>
 					<!-- Use getter/setter -->
-					<td>{{Utils.keys(user.cards).length}}</td>
+					<td>{{utils.keys(user.cards).length}}</td>
 				</tr>
 			</table>
 		</section>
 	</section>
+	<div ng-if="!loading &amp;&amp; users == null" aria-live="polite">
+		<p>There are currently no leading heroes! Play a game to be the first!</p>
+	</div>
 </main>
