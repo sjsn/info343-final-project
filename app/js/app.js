@@ -507,7 +507,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 						$scope.roundWin = false;
 						playScramble(next.char);
 					}, 2000);
-					// FirebaseService.addCard();
 				} else {
 					$scope.incorrect = true;
 					clearBoard();
