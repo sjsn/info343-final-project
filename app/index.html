@@ -10,8 +10,6 @@
 	<link rel="icon" type="image/jpg" href="./img/ironman.jpg">
 	<!-- Latest minified bootstrap -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<!-- Custom CSS -->
-	<link rel="stylesheet" href="css/style.css">
 	<!-- Custom fonts -->
 	<script src="https://use.fontawesome.com/1db56cea2f.js"></script>
 
@@ -37,6 +35,8 @@
 	<script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js"></script>
 	<!-- Custom JS -->
 	<script src="js/app.js"></script>
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="css/style.css">
 
 </head>
 <body ng-app="MarvelCards">
@@ -49,17 +49,17 @@
 
 	<div class="navbar-wrapper" >
 		<nav role="navigation" class="navbar navbar-inverse navbar-static-top">
-			<div class="container-fluid">
-	    		<div class="navbar-header">
-		      		<a class="navbar-brand active" ui-sref="home">Home</a>
+	    		<div class="custom-nav pull-left">
+		      		<a class="custom-nav-brand" ui-sref="home">Home</a>
 		    	</div>
-				<ul class="list-unstyled list-inline nav navbar-nav">
-					<li><a ui-sref="cards">My Cards</a></li>
-					<li><a ui-sref="game">Game</a></li>
-					<li><a ui-sref="leaderboards">Leaderboards</a></li>
-					<li><a ui-sref="account">My Account</a></li>
-				</ul>
-			</div>
+		    	<div class="custom-nav pull-left">
+					<ul class="list-unstyled list-inline">
+						<li><a ui-sref="cards">My Cards</a></li>
+						<li><a ui-sref="game">Game</a></li>
+						<li><a ui-sref="leaderboards">Leaderboards</a></li>
+						<li><a ui-sref="account">My Account</a></li>
+					</ul>
+				</div>
 		</nav>
 	</div</header>
 
