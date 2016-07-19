@@ -219,7 +219,7 @@ var currentUser;
 var currentCards; 
 var completeArray; 
 app.controller('CardsCtrl', ['$scope', '$http', function($scope,$http) {
-	$scope.chars = [
+	$scope.chars = FirebaseService.myInventory;/*[
 	{
         "id": 1011334,
         "name": "3-D Man",
@@ -250,7 +250,7 @@ app.controller('CardsCtrl', ['$scope', '$http', function($scope,$http) {
           "path": "http://i.annihil.us/u/prod/marvel/i/mg/6/20/52602f21f29ec",
           "extension": "jpg"}
     }
-]; 
+];*/ 
 	function getUser(emailAddress){
    	fb.child('users').orderByChild('emailAddress').equalTo(emailAddress).once('value', function(snap) {
        currentUser = snap.val() 
@@ -323,12 +323,13 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				var desc = char.description;
 				var img = char.thumbnail.path + "." + char.thumbnail.extension;
 				var fullName = char.name;
+				var id = char.id;
 				$scope.charLoaded = true;
 				// Prepares a game in advance if not first game
 				if (game) {
-					gameTransition(game, {name: name, desc: desc, img: img, fullName: fullName});
+					gameTransition(game, {id: id, name: name, desc: desc, img: img, fullName: fullName});
 				} else {
-					next.char = {name: name, desc: desc, img: img, fullName:fullName};
+					next.char = {id: id, name: name, desc: desc, img: img, fullName:fullName};
 				}
 			}
 		}, function() { // runs again when promise fails to load
