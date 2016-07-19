@@ -101,7 +101,8 @@ app.controller('HomeCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$fireb
 		/* Data */
 		var usersRef = baseRef.child('users');
 		var whiteboardRef = baseRef.child('whiteboard');
-//		var chirpsRef = baseRef.child('chirps');
+		// var chirpsRef = baseRef.child('chirps');
+
 }]);
 
 app.controller("AccountCtrl", ["$scope", '$firebaseAuth', '$firebaseArray', '$firebaseObject', "$http",
@@ -421,6 +422,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 		$scope.roundWin = false;
 		var name = character.name;
 		var answer = name;
+		console.log(answer);
 		var hint = [];
 		var hints = Math.floor(name.length / 3);
 		// Guarentees at least one hint
@@ -460,6 +462,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 						$scope.roundWin = false;
 						playGuess(next.char);
 					}, 2000);
+					// FirebaseService.addCard();
 				}
 			}
 		};
@@ -565,6 +568,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 						$scope.roundWin = false;
 						playScramble(next.char);
 					}, 2000);
+					// FirebaseService.addCard();
 				} else {
 					$scope.incorrect = true;
 					clearBoard();
@@ -667,7 +671,7 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 
 	// Takes in newCard object and updates it on firebase
 	// newCard structure: {name, thumbnail, description}
-	service.updateCards = function(newCard) {
+	service.addCard = function(newCard) {
 
 	};
 
