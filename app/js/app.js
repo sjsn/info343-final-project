@@ -128,22 +128,22 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 		})
 
 		var masks = ["img/ironman.jpg", "img/batman.jpg"];
+		var maskSource;
+		document.querySelector('#iron').addEventListener('click',function() {
+			maskSource="img/ironman.jpg";
+		});
+		document.querySelector('#bat').addEventListener('click',function() {
+			"img/batman.jpg"
+		});
+
 
 		document.querySelector('#selfie').addEventListener('click',function() {
-			function buttonChoose(){	
-				var value = document.getElementById('maskChoice');
-				if(value.checked){
-					return "img/ironman.jpg";
-				} else{
-					return "img/batman.jpg";
-				}		
-			}
-
+		
 			canvas.width = 300;
 			canvas.height = 300;
 
 			var maskImage = document.getElementById("mask");
-			document.getElementById('mask').src = buttonChoose();
+			maskImage.src = maskSource;
 			console.log(maskImage);
 			brush.drawImage(video, 0, 0);
 			brush.drawImage(maskImage, 80,80);
