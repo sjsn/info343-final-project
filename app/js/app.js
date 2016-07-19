@@ -322,12 +322,13 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				var name = formatName(char.name);
 				var desc = char.description;
 				var img = char.thumbnail.path + "." + char.thumbnail.extension;
+				var fullName = char.name;
 				$scope.charLoaded = true;
 				// Prepares a game in advance if not first game
 				if (game) {
-					gameTransition(game, {name: name, desc: desc, img: img});
+					gameTransition(game, {name: name, desc: desc, img: img, fullName: fullName});
 				} else {
-					next.char = {name: name, desc: desc, img: img};
+					next.char = {name: name, desc: desc, img: img, fullName:fullName};
 				}
 			}
 		}, function() { // runs again when promise fails to load
@@ -383,7 +384,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 	var playGuess = function(character) {
 		// Loads the next character in advance for less transition time
 		getChar();
-
+		$scope.theCard = character;
 		$scope.character = character;
 		$scope.roundWin = false;
 		var name = character.name;
@@ -423,6 +424,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				$scope.hint = hint.join(" ");
 				if (_.isEqual(hint, answer)) {
 					$scope.roundWin = true;
+					FirebaseService.updateCards($scope.theCard);
 					$timeout(function() {
 						$scope.roundWin = false;
 						playGuess(next.char);
@@ -601,6 +603,7 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 			Do something to alert user that it failed
 		});
 	*/
+	service.myInventory = [];
 
 	// Takes in a user object and adds them to the firebase authorizor
 	service.createUser = function(user) {
@@ -635,7 +638,8 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 	// Takes in newCard object and updates it on firebase
 	// newCard structure: {name, thumbnail, description}
 	service.updateCards = function(newCard) {
-
+		service.myInventory.push(newCard);
+		console.log(service.myInventory);
 	};
 
 	service.getLeaders = function() {
