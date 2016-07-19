@@ -218,7 +218,7 @@ var tempArray = [
 var currentUser; 
 var currentCards; 
 var completeArray; 
-app.controller('CardsCtrl', ['$scope', '$http', function($scope,$http) {
+app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', function($scope,$http,FirebaseService) {
 	$scope.chars = FirebaseService.myInventory;/*[
 	{
         "id": 1011334,
