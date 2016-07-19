@@ -48,14 +48,14 @@
         <button id="stop" type="button" class="btn btn-default">Stop</button>
         <button id="selfie" type="button" class="btn btn-default">Selfie!</button>
         <button id="save" type="button" class="btn btn-default">Save Selfie</button>
-		<form>
-			<button  id="iron"  value="iron" class="btn"> IronMan</button>
-			<button id="bat" value="bat"> BatMan</button>
+		<form class= "space">
+			<input type="radio" name="mask" value="img/ironman.jpg" checked ng-model="theMask"> IronMan
+			<input type="radio" name="mask"" value="img/batman.jpg" ng-model="theMask"> BatMan
 		</form>
     </div>
 	
 	<video autoplay></video>
-	<img id="mask" width="125" height="130" src="" alt="Mask">
+	<img id="mask" width="125" height="130" src="{{theMask}}" alt="Mask">
 	<canvas></canvas>
 
 </div>

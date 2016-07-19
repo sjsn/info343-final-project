@@ -294,6 +294,11 @@ table.leader-table tr:hover th {
 	max-width: 500px;
 }
 
+
+.space {
+	margin-top: 10px;
+}
+
 .loading-icon p {
 	margin-top: 25px;
 	font-size: 2.5rem;
