@@ -1,3 +1,20 @@
+
+/* Colors:
+
+	"Captain America Red": #c0120b;
+	"Captain America Blue": #20346f;
+	"Iron Man Yellow": #EFCE0B;
+	"Hulk Green": #158202;
+	"Hulk Purple": #430C60;
+	"Silver": #C0C0C0;
+	"Thor Hammer Grey": #808080;
+
+*/
+
+/* @import url(https://fonts.googleapis.com/css?family=Raleway:600); */
+/*@import url(https://fonts.googleapis.com/css?family=Droid+Sans); */
+@import 'https://fonts.googleapis.com/css?family=Prompt:400,500|Secular+One';
+
 /* Styles for small screens */
 @media (max-width: 768px) {
 	.char-img {
@@ -80,6 +97,7 @@
 
 body {
 	padding-bottom: 70px;
+	font-family: "Prompt", Helvetica, sans-serif;
 }
 
 .navbar-wrapper {
@@ -88,6 +106,11 @@ body {
   left: 0;
   right: 0;
   z-index: 10;
+}
+
+.navbar {
+	background-color: #c0120b;
+	border-color: #c0120b;
 }
 
 .main-content {
@@ -124,6 +147,14 @@ body {
 
 .hint-section {
 	text-align: center;
+}
+
+#scramble-letter {
+	cursor: pointer;
+}
+
+#scramble-letter:hover {
+	color: #c0120b;
 }
 
 .img-holder {
@@ -231,10 +262,12 @@ table.leader-table tr:hover th {
 .detail-title {
 	font-size: 5rem;
 	text-align: center;
+	margin-top: 0px;
 }
 
 .detail-desc {
 	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .detail-desc p {
@@ -247,6 +280,10 @@ table.leader-table tr:hover th {
 	font-weight: bold;
 }
 
+.detail-main {
+	margin-top: 20px;
+}
+
 .back-button a {
 	color: black;
 	text-decoration: none;
@@ -255,4 +292,9 @@ table.leader-table tr:hover th {
 
 .custom-search {
 	max-width: 500px;
+}
+
+.loading-icon p {
+	margin-top: 25px;
+	font-size: 2.5rem;
 }

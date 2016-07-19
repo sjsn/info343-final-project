@@ -1,10 +1,9 @@
-
 <main role="main" class="main-content container" aria-live="polite">
 	<div ng-if="loading" aria-describedby="aria-loading">
 		<p id="aria-loading">Loading your cards!</p>
 		<div class="container loading-icon">
 			<img src="img/shield.png" class="load" aria-hidden="true" />
-			<p>Assembling the team!</p>
+			<p>Assembling your team!</p>
 		</div>
 	</div>
 	<div ng-if="!loading" class="container" aria-live="polite">
@@ -18,7 +17,7 @@
 			</div>
 		</section>
 		<section role="region" ng-controller="CardsCtrl">
-	            <div ng-repeat="char in chars | filter:searchTerm" class="card col-lg-4 col-md-4 col-s-6 col-xs-12">
+	            <div ng-repeat="char in chars | orderBy:fullName | filter:searchTerm" class="card col-lg-4 col-md-4 col-s-6 col-xs-12">
 	            	<a ui-sref="details( {'id':char.id} )">
 	            		<img ng-src="{{char.img}}" class="img-responsive">
 	            		<h2>{{char.fullName}}</h2>
