@@ -469,6 +469,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				guess = guess.toUpperCase().split("");
 				if (_.isEqual(guess, answer)) {
 					$scope.roundWin = true;
+					FirebaseService.updateCards($scope.theCard);
 					$scope.incorrect = false;
 					$timeout(function() {
 						$scope.roundWin = false;
