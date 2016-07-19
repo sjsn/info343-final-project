@@ -156,10 +156,12 @@ app.controller("CameraCtrl", ["$scope",function($scope) {
 			});
 		})
 
+		var masks = ["img/ironman.jpg", "img/batman.jpg"];
+
 		document.querySelector('#selfie').addEventListener('click',function() {
 			canvas.width = 300;
 			canvas.height = 300;
-			var ironmanImage = document.getElementById("ironman");
+			var maskImage = document.getElementById("ironman");
 			console.log(ironmanImage);
 			brush.drawImage(video, 0, 0);
 			brush.drawImage(ironmanImage, 80,80);
