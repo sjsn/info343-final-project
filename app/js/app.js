@@ -159,12 +159,17 @@ app.controller("CameraCtrl", ["$scope",function($scope) {
 		var masks = ["img/ironman.jpg", "img/batman.jpg"];
 
 		document.querySelector('#selfie').addEventListener('click',function() {
+			function buttonChoose(){				
+			}
+
 			canvas.width = 300;
 			canvas.height = 300;
-			var maskImage = document.getElementById("ironman");
-			console.log(ironmanImage);
+
+			var maskImage = document.getElementById("mask");
+			document.getElementById('mask').src = buttonChoose();
+			console.log(maskImage);
 			brush.drawImage(video, 0, 0);
-			brush.drawImage(ironmanImage, 80,80);
+			brush.drawImage(maskImage, 80,80);
 			
 		});
 		document.querySelector('#save').addEventListener('click',function() {

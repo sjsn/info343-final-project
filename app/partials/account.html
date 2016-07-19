@@ -40,7 +40,7 @@
 		<button type="submit" class="btn btn-primary" ng-click="changeAccount()" ng-disabled="changeAccountForm.$invalid" >Update</button> 
 	</div>
 </form>
-<div ng-controller="CameraCtrl">
+<div ng-controller="CameraCtrl" style="position:relative">
     <h1>Character Photobooth</h1>
     <p class="lead">Take a selfie!</p>
     <div class="controls">
@@ -60,9 +60,7 @@
     </div>
 	
 	<video autoplay></video>
-	<br>
-	<img id="ironman" width="125" height="130" src="img/ironman.jpg" alt="Ironman Mask">
-	<br>
+	<img id="mask" width="125" height="130" src="" alt="Mask">
 	<canvas></canvas>
 
 </div>
