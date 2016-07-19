@@ -60,6 +60,7 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 		$scope.signOut = function() {
 			FirebaseService.signOut();
 		};
+
 }]);
 
 app.controller("AccountCtrl", ["$scope", 'FirebaseService',
@@ -326,6 +327,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 		$scope.roundWin = false;
 		var name = character.name;
 		var answer = name;
+		console.log(answer);
 		var hint = [];
 		var hints = Math.floor(name.length / 3);
 		// Guarentees at least one hint
@@ -366,6 +368,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 						$scope.roundWin = false;
 						playGuess(next.char);
 					}, 2000);
+					// FirebaseService.addCard();
 				}
 			}
 		};
@@ -471,6 +474,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 						$scope.roundWin = false;
 						playScramble(next.char);
 					}, 2000);
+					// FirebaseService.addCard();
 				} else {
 					$scope.incorrect = true;
 					clearBoard();
