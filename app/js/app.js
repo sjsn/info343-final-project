@@ -43,73 +43,38 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 
 }]);
 
-app.controller('HomeCtrl', ['$scope', '$firebaseAuth', '$firebaseArray', '$firebaseObject', "$http",
-	function($scope, $firebaseAuth, $firebaseArray, $firebaseObject, $http) {
+app.controller('HomeCtrl', ['$scope', 'FirebaseService',
+	function($scope, FirebaseService) {
 
-		var baseRef = firebase.database().ref();
-
-		/* Authentication */
-		var Auth = $firebaseAuth();
 		$scope.newUser = {}; //for sign-in
-
 		$scope.signUp = function() {
-
-			// Create user
-			Auth.$createUserWithEmailAndPassword($scope.newUser.email, $scope.newUser.password)
-			.then(function(firebaseUser){ //first time log in
-				console.log("signing up");
-	    		$scope.userId = firebaseUser.uid; //save userId
-				console.log(firebaseUser.uid);
-
-				var userData = {handle:$scope.newUser.handle,};
-
-				var myRef = baseRef.child('users/'+firebaseUser.uid); //create new entry in object
-				myRef.set(userData); //save that data to the database;
-			})
- 			.catch(function(error) {
-          		console.log(error);
-        	});
+			var user = {name: $scope.newUser.handle, email:$scope.newUser.email, password: $scope.newUser.password};
+			console.log(user);
+			FirebaseService.createUser(user);
 		};
-
 		$scope.signIn = function() {
-			Auth.$signInWithEmailAndPassword($scope.newUser.email,$scope.newUser.password);
+			var user = {name: $scope.newUser.handle, email:$scope.newUser.email, password: $scope.newUser.password};
+			FirebaseService.authorize(user);
 		};
-
-		// any time auth state changes, add the user data to scope
-		Auth.$onAuthStateChanged(function(firebaseUser) {
-			if(firebaseUser){
-				console.log('logged in');
-				$scope.userId = firebaseUser.uid;
-			}
-			else {
-				console.log('logged out');
-				$scope.userId = undefined;
-			}
-		});
 
 		$scope.signOut = function() {
-			console.log('logging out');
-			Auth.$signOut();
+			FirebaseService.signOut();
 		};
-
-		/* Data */
-		var usersRef = baseRef.child('users');
-		var whiteboardRef = baseRef.child('whiteboard');
-		// var chirpsRef = baseRef.child('chirps');
 
 }]);
 
-app.controller("AccountCtrl", ["$scope", '$firebaseAuth', '$firebaseArray', '$firebaseObject', "$http",
-	function($scope, $firebaseAuth, $firebaseArray, $firebaseObject, $http) {
+app.controller("AccountCtrl", ["$scope", 'FirebaseService',
+	function($scope, FirebaseService) {
 
-	var baseRef = firebase.database().ref();
-	$scope.currentUser = {}; //for sign-in
-	$scope.changeUser = {}; //for sign-in
+	$scope.currentUser = FirebaseService.currentUser; 
+	$scope.changeUser = {}; 
 
 	$scope.changeAccount = function() {
+		var updateUser = {name: $scope.changeUser.newhandle, email:$scope.changeUser.email, password:$scope.changeUser.password};
 		console.log($scope.currentUser);
 		console.log($scope.changeUser);
-
+		FirebaseService.updateUsername(updateUser.name);
+/*
 		var userRef = baseRef.child($scope.currentUser.currhandle);
 		userRef.update({
 			"handle":$scope.changeUser.newhandle,
@@ -117,7 +82,9 @@ app.controller("AccountCtrl", ["$scope", '$firebaseAuth', '$firebaseArray', '$fi
 			"email":$scope.changeUser.email
 		});
 		console.log(userRef);
+*/	
 	};
+	
 
 }]);
 
@@ -502,6 +469,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				guess = guess.toUpperCase().split("");
 				if (_.isEqual(guess, answer)) {
 					$scope.roundWin = true;
+					FirebaseService.updateCards($scope.theCard);
 					$scope.incorrect = false;
 					$timeout(function() {
 						$scope.roundWin = false;
@@ -561,10 +529,15 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 }]);
 
 // Service for all interactions with Firebase
-app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($firebaseAuth, $firebaseObject) {
+app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseArray", function($firebaseAuth, $firebaseObject, $firebaseArray) {
 
 	var service = {};
-
+	var baseRef = firebase.database().ref();
+	var userID;
+	var currUserObj;
+	var currUserRef;
+	var Auth = $firebaseAuth();
+	var usersRef = baseRef.child('users');
 	/*
 		Structure:
 
@@ -578,19 +551,64 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 	*/
 	service.myInventory = [];
 
+		// any time auth state changes, add the user data to scope
+	Auth.$onAuthStateChanged(function(firebaseUser) {
+		if(firebaseUser){
+			console.log('logged in');
+			userID = firebaseUser.uid;
+			currUserRef = usersRef.child(""+userID);
+			currUserObj = $firebaseObject(currUserRef);
+
+		}
+		else {
+			console.log('logged out');
+			userID = undefined;
+		}
+	});
+
 	// Takes in a user object and adds them to the firebase authorizor
 	service.createUser = function(user) {
-
+		service.currentUser = user;
+		
+		/* Authentication */
+		
+			// Create user
+		Auth.$createUserWithEmailAndPassword(user.email, user.password)
+		.then(function(firebaseUser){ //first time log in
+			console.log("signing up");
+	    	userID = firebaseUser.uid; //save userId
+			var userData = {handle:user.name,thumbnail:"", totalPoints:0, spendablePoints:0};
+			currUserRef = baseRef.child('users/'+firebaseUser.uid); //create new entry in object
+			currUserRef.set(userData); //save that data to the database;
+			currUserObj = $firebaseObject(currUserRef);
+		})
+ 		.catch(function(error) {
+      		console.log(error);
+    	});
 	};
 
 	// Signs user in with credentials stored in passed in user object
 	service.authorize = function(user) {
+		currentUser = user;
+		console.log(user);
+		Auth.$signInWithEmailAndPassword(user.email,user.password);
+	};
 
+	service.signOut = function() {
+		service.currentUser = "";
+		console.log('logging out');
+		Auth.$signOut();
 	};
 
 	// Takes in newUsername string and updates it on firebase
 	service.updateUsername = function(newUsername) {
 
+		currUserObj.handle = newUsername;
+		currUserObj.$save().then(function() {
+			console.log('success');
+		}, function() {
+			console.log('error');
+		})
 	};
 
 	// Takes in newThumbnail string(?) and updates it on firebase	
@@ -613,6 +631,9 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 	service.updateCards = function(newCard) {
 		service.myInventory.push(newCard);
 		console.log(service.myInventory);
+		var cardsRef = currUserRef.child('cards');
+		cardsRef = $firebaseArray(cardsRef);
+		cardsRef.$add(newCard);
 	};
 
 	service.getLeaders = function() {
@@ -629,7 +650,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 
 /*
 User firebase structure
-
 [
 	{
 		"username": "",
