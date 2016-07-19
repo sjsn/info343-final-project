@@ -128,6 +128,7 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 		})
 
 		var masks = ["img/ironman.jpg", "img/batman.jpg"];
+		$scope.theMask = "img/ironman.jpg";
 		var maskSource;
 		document.querySelector('#iron').addEventListener('click',function() {
 			maskSource="img/ironman.jpg";
