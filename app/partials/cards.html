@@ -20,7 +20,7 @@
 		<section role="region" class="container" ng-controller="CardsCtrl">
 	            <div ng-repeat="char in chars | filter:searchTerm" class="card col-lg-4 col-md-4 col-s-6 col-xs-12">
 	            	<a ui-sref="details( {'id':char.id} )">
-	            		<img src="{{char.img}}" class="img-responsive">
+	            		<img ng-src="{{char.img}}" class="img-responsive">
 	            		<h2>{{char.fullName}}</h2>
 	            	</a>
 	            </div>
