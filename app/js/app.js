@@ -495,6 +495,13 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 	// Default ordering is total points
 	$scope.order = 'totalPoints';
 
+	$scope.loading = true;
+	FirebaseService.getUsers().$loaded().then(function(users) {
+		$scope.users = users;
+		$scope.loading = false;
+		console.log(users);
+	});
+
 	// Searches for user inputted username
 	/* Haven't decided if loading all at once or pages */
 	$scope.searchFor = function(username) {
@@ -593,7 +600,7 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	// Takes in newThumbnail string(?) and updates it on firebase	
 	service.updateThumbnail = function(newThumbnail) {
-		currUserObj.handle = newUsername;
+		currUserObj.thumbnail = newThumbnail;
 		currUserObj.$save().then(function() {
 			console.log('success');
 		}, function() {
@@ -631,8 +638,8 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		return cardsArray;
 	};
 
-	service.getLeaders = function() {
-
+	service.getUsers = function() {
+		return $firebaseArray(usersRef);
 	};
 
 	service.updateLeaders = function(user) {

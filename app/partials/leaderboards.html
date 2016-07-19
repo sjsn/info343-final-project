@@ -3,39 +3,46 @@
 		<h1>Leaderboards</h1>
 	</header>
 
-	<!-- Search -->
-	<section role="region" class="container">
-		<form name="searchForm" class="form-group">
-			<div class="input-group">
-				<input tpye="text" role="input" placeholder="Search by username" ng-model="search" class="form-control">
-				<div class="input-group-btn">
-					<button role="search" class="btn btn-default" ng-click="searchFor(search)"><i class="glyphicon glyphicon-search" aria-hidden></i></button>
+	<div ng-if="loading" aria-describedby="aria-loading">
+		<p id="aria-loading">Loading your cards!</p>
+		<div class="container loading-icon">
+			<img src="img/shield.png" class="load" aria-hidden="true" />
+			<p>Finding all heroes!</p>
+		</div>
+	</div>
+	<section ng-if="!loading">
+		<!-- Search -->
+		<section role="region" class="container">
+			<form name="searchForm" class="form-group">
+				<div class="input-group">
+					<input tpye="text" role="input" placeholder="Search by username" ng-model="searchTerm" class="form-control">
+					<span role="search" class="input-group-addon"><i class="glyphicon glyphicon-search" aria-hidden></i></span>
 				</div>
-			</div>
-		</form>
-	</section>
+			</form>
+		</section>
 
-	<!-- Leaderboards table -->
-	<section role="region" class="container">
-		<table role="grid" class="table table-striped leader-table" role="grid">
-			<tr role="row">
-				<th><!-- User Thumbnail --></th>
-				<th ng-click="order = 'name'">
-					<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'name'"></i>Username
-				</th>
-				<th ng-click="order = 'totalPoints'">
-					<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'totalPoints'"></i>Total Points
-				</th>
-				<th ng-click="order = 'cards.length'">
-					<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'cards.length'"></i>Total Cards
-				</th>
-			</tr>
-			<tr ng-repeat="user in users | orderBy:order | filter:searchTerm">
-				<td>{{user.img}}</td>
-				<td>{{user.name}}</td>
-				<td>{{user.totalPoints}}</td>
-				<td>{{user.cards.length}}</td>
-			</tr>
-		</table>
+		<!-- Leaderboards table -->
+		<section role="region" class="container" ng-if="!loading">
+			<table role="grid" class="table table-striped leader-table" role="grid">
+				<tr role="row">
+					<th><!-- User Thumbnail --></th>
+					<th ng-click="order = 'name'">
+						<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'name'"></i>Username
+					</th>
+					<th ng-click="order = 'totalPoints'">
+						<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'totalPoints'"></i>Total Points
+					</th>
+					<th ng-click="order = 'cards.length'">
+						<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'cards.length'"></i>Total Cards
+					</th>
+				</tr>
+				<tr ng-repeat="user in users | orderBy:order | filter:searchTerm">
+					<td>{{user.img}}</td>
+					<td>{{user.handle}}</td>
+					<td>{{user.totalPoints}}</td>
+					<td>{{_.size(user.cards)}}</td>
+				</tr>
+			</table>
+		</section>
 	</section>
 </main>
