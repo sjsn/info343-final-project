@@ -529,12 +529,13 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 }]);
 
 // Service for all interactions with Firebase
-app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($firebaseAuth, $firebaseObject) {
+app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseArray", function($firebaseAuth, $firebaseObject, $firebaseArray) {
 
 	var service = {};
 	var baseRef = firebase.database().ref();
 	var userID;
-	var currUser;
+	var currUserObj;
+	var currUserRef;
 	var Auth = $firebaseAuth();
 	var usersRef = baseRef.child('users');
 	/*
@@ -555,8 +556,8 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 		if(firebaseUser){
 			console.log('logged in');
 			userID = firebaseUser.uid;
-			currUser = usersRef.child(""+userID);
-			currUser = $firebaseObject(currUser);
+			currUserRef = usersRef.child(""+userID);
+			currUserObj = $firebaseObject(currUserRef);
 
 		}
 		else {
@@ -576,10 +577,10 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 		.then(function(firebaseUser){ //first time log in
 			console.log("signing up");
 	    	userID = firebaseUser.uid; //save userId
-			var userData = {handle:user.name,thumbnail:"", totalPoints:0, spendablePoints:0, cards:[]};
-			currUser = baseRef.child('users/'+firebaseUser.uid); //create new entry in object
-			currUser.set(userData); //save that data to the database;
-			currUser = $firebaseObject(currUser);
+			var userData = {handle:user.name,thumbnail:"", totalPoints:0, spendablePoints:0};
+			currUserRef = baseRef.child('users/'+firebaseUser.uid); //create new entry in object
+			currUserRef.set(userData); //save that data to the database;
+			currUserObj = $firebaseObject(currUserRef);
 		})
  		.catch(function(error) {
       		console.log(error);
@@ -601,20 +602,9 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 
 	// Takes in newUsername string and updates it on firebase
 	service.updateUsername = function(newUsername) {
-	/*
-		Structure:
 
-		var obj = $firebaseObject( reference to firbase database );
-		obj.thing-to-update = newValue;
-		obj.save().then( function() {
-			Do something to let user know the value successfully updated
-		}, function() {
-			Do something to alert user that it failed
-		});
-	*/
-
-		currUser.handle = newUsername;
-		currUser.$save().then(function() {
+		currUserObj.handle = newUsername;
+		currUserObj.$save().then(function() {
 			console.log('success');
 		}, function() {
 			console.log('error');
@@ -641,6 +631,9 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 	service.updateCards = function(newCard) {
 		service.myInventory.push(newCard);
 		console.log(service.myInventory);
+		var cardsRef = currUserRef.child('cards');
+		cardsRef = $firebaseArray(cardsRef);
+		cardsRef.$add(newCard);
 	};
 
 	service.getLeaders = function() {
