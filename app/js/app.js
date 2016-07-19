@@ -90,7 +90,8 @@ app.controller("AccountCtrl", ["$scope", 'FirebaseService',
 
 }]);
 
-app.controller("CameraCtrl", ["$scope",function($scope) {
+app.controller("CameraCtrl", ["$scope", 'FirebaseService', 
+	function($scope, FirebaseService) {
 	'use strict';
 
 	//wait for document to load
@@ -149,11 +150,22 @@ app.controller("CameraCtrl", ["$scope",function($scope) {
 			
 		});
 		document.querySelector('#save').addEventListener('click',function() {
+
+			var snapshot = canvas.toBlob(function(blob) {
+				console.log(blob);
+				var image = new Image();
+				image.src = blob;
+				FirebaseService.updateThumbnail(blob);
+			})
+
+			/*
 			var snapshot = canvas.toDataURL('image/png');
+			console.log(snapshot);
 			var link = document.createElement('a');
 			link.href = snapshot;
 			link.download = 'my-selfie.png';
 			link.click();    
+			*/
 		});
 
 	};
@@ -524,6 +536,7 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	var service = {};
 	var baseRef = firebase.database().ref();
+	var storageRef = firebase.storage().ref();
 	var userID;
 	var currUserObj;
 	var currUserRef;
@@ -567,8 +580,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	service.createUser = function(user) {
 		service.currentUser = user;
 		
-		/* Authentication */
-		
 		// Create user
 		Auth.$createUserWithEmailAndPassword(user.email, user.password)
 		.then(function(firebaseUser){ //first time log in
@@ -608,12 +619,15 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	// Takes in newThumbnail string(?) and updates it on firebase	
 	service.updateThumbnail = function(newThumbnail) {
+		var uploadTask = storageRef.child('images/' + currUserObj.handle).put(newThumbnail);
+		/*
 		currUserObj.thumbnail = newThumbnail;
 		currUserObj.$save().then(function() {
 			console.log('success');
 		}, function() {
 			console.log('error');
 		})
+		*/
 	};
 
 	// Takes in newTotal int and updates it on firebase
