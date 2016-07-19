@@ -199,3 +199,7 @@ table.leader-table tr:hover th {
 .guess-board {
 	font-size: 4rem;
 }
+
+.maskChoice {
+	margin-top: 1em;
+}
