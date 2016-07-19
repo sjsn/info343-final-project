@@ -49,7 +49,8 @@
 				<input type="text" name="guess" ng-model="guess.letter" ng-change="evalGuess(guess.letter)" placeholder="Type a letter to guess" maxlength="1" id="guess-letter" role="input" autofocus/>
 			</div>
 			<div ng-if="roundWin" id="win-msg-holder" aria-live="polite">
-				<p id="win-msg">Correct!</p>
+				<p id="win-msg" ng-if="!isNew">Correct!</p>
+				<p id="win-msg" ng-if="isNew"><i class="fa fa-plus-circle" aria-hidden="true"></i>New card added!</p>
 			</div>
 		</div>
 	</section>
@@ -86,6 +87,7 @@
 				<p id="invalid" ng-if="incorrect" aria-live="polite">Click on a letter to guess it</p>
 				<p id="invalid" ng-if="incorrect" aria-live="polite">Incorrect</p>
 				<p id="win-msg">Correct!</p>
+				<p id="win-msg" ng-if="isNew"><i class="fa fa-plus-circle" aria-hidden="true"></i>New card added!</p>
 			</div>
 		</div>
 	</section>

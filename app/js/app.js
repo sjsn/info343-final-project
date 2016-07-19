@@ -336,11 +336,14 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				$scope.hint = hint.join(" ");
 				if (_.isEqual(hint, answer)) {
 					$scope.roundWin = true;
-					FirebaseService.updateCards(theCard);
+					// Not currently working
+					$scope.isNew = FirebaseService.updateCards(theCard);
+					console.log($scope.isNew);
 					FirebaseService.updateTotalPoints(10);
 					$timeout(function() {
 						$scope.roundWin = false;
 						playGuess(next.char);
+						$scope.isNew = "";
 					}, 2000);
 					// FirebaseService.addCard();
 				}
@@ -443,11 +446,13 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				guess = guess.toUpperCase().split("");
 				if (_.isEqual(guess, answer)) {
 					$scope.roundWin = true;
-					FirebaseService.updateCards($scope.character);
+					// Not currently working
+					$scope.isNew = FirebaseService.updateCards(theCard);
 					FirebaseService.updateTotalPoints(10);
 					$scope.incorrect = false;
 					$timeout(function() {
 						$scope.roundWin = false;
+						$scope.isNew = "";
 						playScramble(next.char);
 					}, 2000);
 				} else {
@@ -493,6 +498,10 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope, FirebaseService) {
 	// Default ordering is total points
 	$scope.order = 'totalPoints';
+
+	$scope.Utils = {
+		keys: Object.keys
+	};
 
 	$scope.loading = true;
 	FirebaseService.getUsers().$loaded().then(function(users) {
@@ -640,6 +649,7 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 				console.log("working");
 				cardsArray.$add(newCard);
 			}
+			return isNew;
 		});
 	};
 

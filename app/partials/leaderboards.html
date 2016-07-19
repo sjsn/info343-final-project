@@ -40,7 +40,8 @@
 					<td>{{user.img}}</td>
 					<td>{{user.handle}}</td>
 					<td>{{user.totalPoints}}</td>
-					<td>{{_.size(user.cards)}}</td>
+					<!-- Use getter/setter -->
+					<td>{{Utils.keys(user.cards).length}}</td>
 				</tr>
 			</table>
 		</section>
