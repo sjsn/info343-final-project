@@ -256,3 +256,7 @@ table.leader-table tr:hover th {
 .custom-search {
 	max-width: 500px;
 }
+
+.space {
+	margin-top: 10px;
+}
