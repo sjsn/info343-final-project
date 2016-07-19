@@ -42,10 +42,6 @@
 <body ng-app="MarvelCards">
 
 <header class="container-fluid" ng-controller="HomeCtrl">
-	<div class="logout" ng-if="userId">
-		<span>{{users[userId].handle}}</span>
-		<button ng-click="signOut()" class="btn btn-warning">Sign Out</button>
-	</div>
 
 	<div class="navbar-wrapper" >
 		<nav role="navigation" class="navbar navbar-static-top">
@@ -61,7 +57,12 @@
 					</ul>
 				</div>
 		</nav>
-	</div</header>
+		<div class="logout">
+			<span>{{users[userId].handle}}</span>
+			<button ng-click="signOut()" class="btn btn-warning">Sign Out</button>
+		</div>
+	</div>
+</header>
 
 <div ui-view></div>
 

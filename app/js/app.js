@@ -63,6 +63,7 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 			FirebaseService.signOut();
 		};
 
+
 }]);
 
 app.controller("AccountCtrl", ["$scope", 'FirebaseService',
@@ -75,16 +76,7 @@ app.controller("AccountCtrl", ["$scope", 'FirebaseService',
 		var updateUser = {name: $scope.changeUser.newhandle, email:$scope.changeUser.email, password:$scope.changeUser.password};
 		console.log($scope.currentUser);
 		console.log($scope.changeUser);
-		FirebaseService.updateUsername(updateUser.name);
-/*
-		var userRef = baseRef.child($scope.currentUser.currhandle);
-		userRef.update({
-			"handle":$scope.changeUser.newhandle,
-			"password":$scope.changeUser.password,
-			"email":$scope.changeUser.email
-		});
-		console.log(userRef);
-*/	
+		FirebaseService.updateUsername(updateUser.name);	
 	};
 	
 

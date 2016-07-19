@@ -114,7 +114,7 @@ body {
 }
 
 .main-content {
-	margin-top: 55px;
+	margin-top: 80px;
 }
 
 .title {
@@ -297,4 +297,9 @@ table.leader-table tr:hover th {
 .loading-icon p {
 	margin-top: 25px;
 	font-size: 2.5rem;
+}
+
+.logout {
+	z-index: 100;
+	float: right;
 }

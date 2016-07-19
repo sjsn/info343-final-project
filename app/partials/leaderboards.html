@@ -1,8 +1,4 @@
 <main role="main" class="main-content container">
-	<header>
-		<h1>Leaderboards</h1>
-	</header>
-
 	<div ng-if="loading" aria-describedby="aria-loading" aria-live="polite">
 		<p id="aria-loading">Loading the leaderboard!</p>
 		<div class="container loading-icon">
@@ -11,6 +7,9 @@
 		</div>
 	</div>
 	<section ng-if="!loading &amp;&amp; users != null">
+		<header>
+			<h1>Leaderboards</h1>
+		</header>
 		<!-- Search -->
 		<section role="region" class="container">
 			<form name="searchForm" class="form-group">
