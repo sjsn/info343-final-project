@@ -129,7 +129,13 @@ app.controller("CameraCtrl", ["$scope",function($scope) {
 		var masks = ["img/ironman.jpg", "img/batman.jpg"];
 
 		document.querySelector('#selfie').addEventListener('click',function() {
-			function buttonChoose(){				
+			function buttonChoose(){	
+				var value = document.getElementById('maskChoice');
+				if(value.checked){
+					return "img/ironman.jpg";
+				} else{
+					return "img/batman.jpg";
+				}		
 			}
 
 			canvas.width = 300;
