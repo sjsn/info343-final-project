@@ -41,6 +41,8 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 		controller: "LeaderboardsCtrl"
 	});
 
+	$urlRouterProvider.otherwise("/");
+
 }]);
 
 app.controller('HomeCtrl', ['$scope', 'FirebaseService',
@@ -152,61 +154,38 @@ app.controller("CameraCtrl", ["$scope",function($scope) {
 	
 }])
 
-var tempArray = [
-	{
-        "id": 1011334,
-        "name": "3-D Man",
-        "description": "",
-        "modified": "2014-04-29T14:18:17-0400",
-        "thumbnail": {
-        "path": "http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784",
-        "extension": "jpg"}
-    },
-	{
-        "id": 1017100,
-        "name": "A-Bomb (HAS)",
-        "description": "Rick Jones has been Hulk's best bud since day one, but now he's more than a friend..." +
-        "he's a teammate! Transformed by a Gamma energy explosion, A-Bomb's thick, armored skin is just as strong " +
-        "and powerful as it is blue. And when he curls into action, he uses it like a giant bowling ball of destruction! ",
-        "modified": "2013-09-18T15:54:04-0400",
-        "thumbnail": {
-        "path": "http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16",
-        "extension": "jpg"}
-    },
-	 {
-        "id": 1009144,
-        "name": "A.I.M.",
-        "description": "AIM is a terrorist organization bent on destroying the world.",
-        "modified": "2013-10-17T14:41:30-0400",
-        "thumbnail": {
-          "path": "http://i.annihil.us/u/prod/marvel/i/mg/6/20/52602f21f29ec",
-          "extension": "jpg"}
-    }
-]; 
-var currentUser; 
-var currentCards; 
-var completeArray; 
-app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', function($scope,$http,FirebaseService) {
-	$scope.chars = FirebaseService.getCards(); 
-}]);
-var currentChar; 
-app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', 'FirebaseService', function($scope, $http, $stateParams, FirebaseService) {
-	console.log($stateParams.id);
-	//$scope.currentChar = _.find(tempArray, ['id', $stateParams.id]);
-	var theIndex = -1;
-	var cards = FirebaseService.getCards();
-	console.log(cards);
-	var i = 0;
-	console.log($stateParams.id);
-	for(i = 0; i < cards.length; i++) {
-		console.log(cards[i].id);
-		if (cards[i].id == $stateParams.id) {
-			theIndex = i;
-			console.log(i);
-		}
+// Controller for the cards grid
+app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', "$timeout", function($scope, $http, FirebaseService, $timeout) {
+	if (FirebaseService.getUser()) { // Loads cards immediately if webpage started somewhere else
+		$scope.chars = FirebaseService.getCards(); 
+	} else { // Gives the cards a little while to load if page starts on cards
+		$scope.loading = true;
+		$timeout(function() {
+			$scope.chars = FirebaseService.getCards();
+			$scope.loading = false;
+		}, 1000);
 	}
-	$scope.thisChar = cards[theIndex];
+}]);
 
+// Controller for the "details" section of a card
+app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', 'FirebaseService', function($scope, $http, $stateParams, FirebaseService) {
+	$scope.loading = true;
+	var theIndex = -1;
+	$scope.thisChar = {};
+	FirebaseService.getCards().$loaded().then(function(cards) {
+		var i = 0;
+		_.forEach(cards, function(card) {
+			if (card.id == $stateParams.id) {
+				console.log(card.id);
+				theIndex = i;
+				console.log(i);
+			}
+			i++;
+		});
+		$scope.thisChar.card = cards[theIndex];
+		console.log($scope.thisChar);
+		$scope.loading = false;
+	});
 }]);
 
 
@@ -540,16 +519,16 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 			Do something to alert user that it failed
 		});
 	*/
-	service.myInventory = [];
 
-		// any time auth state changes, add the user data to scope
+	// any time auth state changes, add the user data to scope
 	Auth.$onAuthStateChanged(function(firebaseUser) {
 		if(firebaseUser){
 			console.log('logged in');
 			userID = firebaseUser.uid;
 			currUserRef = usersRef.child(""+userID);
 			currUserObj = $firebaseObject(currUserRef);
-
+			cardsRef = currUserRef.child("cards");
+			cardsArray = $firebaseArray(cardsRef);
 		}
 		else {
 			console.log('logged out');
@@ -557,18 +536,22 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		}
 	});
 
+	service.getUser = function() {
+		return currUserObj;
+	};
+
 	// Takes in a user object and adds them to the firebase authorizor
 	service.createUser = function(user) {
 		service.currentUser = user;
 		
 		/* Authentication */
 		
-			// Create user
+		// Create user
 		Auth.$createUserWithEmailAndPassword(user.email, user.password)
 		.then(function(firebaseUser){ //first time log in
 			console.log("signing up");
 	    	userID = firebaseUser.uid; //save userId
-			var userData = {handle:user.name,thumbnail:"", totalPoints:0, spendablePoints:0};
+			var userData = {handle: user.name, thumbnail: "", totalPoints: 0};
 			currUserRef = baseRef.child('users/'+firebaseUser.uid); //create new entry in object
 			currUserRef.set(userData); //save that data to the database;
 			currUserObj = $firebaseObject(currUserRef);
@@ -580,11 +563,10 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	// Signs user in with credentials stored in passed in user object
 	service.authorize = function(user) {
-		currentUser = user;
-		console.log(user);
-		Auth.$signInWithEmailAndPassword(user.email,user.password);
+		Auth.$signInWithEmailAndPassword(user.email, user.password);
 	};
 
+	// Signs user out
 	service.signOut = function() {
 		service.currentUser = "";
 		console.log('logging out');
@@ -603,7 +585,12 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	// Takes in newThumbnail string(?) and updates it on firebase	
 	service.updateThumbnail = function(newThumbnail) {
-
+		currUserObj.handle = newUsername;
+		currUserObj.$save().then(function() {
+			console.log('success');
+		}, function() {
+			console.log('error');
+		})
 	};
 
 	// Takes in newTotal int and updates it on firebase
@@ -624,7 +611,9 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		cardsArray.$add(newCard);
 	};
 
+	// Returns an array of card objects
 	service.getCards = function() {
+		cardsRef = currUserRef.child("cards");
 		cardsArray = $firebaseArray(cardsRef);
 		return cardsArray;
 	};
@@ -645,16 +634,14 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 User firebase structure
 [
 	{
-		"username": "",
-		"userThumbnail": "",
+		"handle": "",
+		"thumbnail": "",
 		"totalPointns": "",
-		"spendablePoints": "",
 		"cards": [
 			{"id" = "",
 			 "name" = "",
-			 "thumbnail" = ""},
-			{},
-			{}	
+			 "thumbnail" = "",
+			 "description" = ""}
 		]
 
 	}

@@ -1,16 +1,25 @@
 
 <main role="main" class="main-content container">
-	<header>
-		<h1>My Cards</h1>
-	</header>
-      
-	<section role="region" class="container" ng-controller="CardsCtrl">
-            <div ng-repeat="char in chars" class="cardDispla col-lg-4 col-md-4 col-s-6 col-xs-12">
-            <a ui-sref="details( {'id':char.id} )">
-            <img src="{{char.img}}" style="max-width:300px" class="img-responsive">
-            <p>{{char.fullName}}</p>
-            </a>
-            </div>
-
-</section>
+	<div ng-if="loading" aria-describedby="aria-loading">
+		<p id="aria-loading">Loading your cards!</p>
+		<!-- Temporary. Will change to loading gif or animation -->
+		<div class="container loading-icon">
+			<img src="img/shield.png" class="load" aria-hidden="true" />
+			<p>Assembling the team!</p>
+		</div>
+	</div>
+	<div ng-if="!loading">
+		<header>
+			<h1>My Cards</h1>
+		</header>
+	      
+		<section role="region" class="container" ng-controller="CardsCtrl">
+	            <div ng-repeat="char in chars" class="cardDisplay col-lg-4 col-md-4 col-s-6 col-xs-12">
+	            	<a ui-sref="details( {'id':char.id} )">
+	            		<img src="{{char.img}}" style="max-width:300px" class="img-responsive">
+	            		<p>{{char.fullName}}</p>
+	            	</a>
+	            </div>
+		</section>
+	</div>
 </main>
