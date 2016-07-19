@@ -133,7 +133,7 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 			maskSource="img/ironman.jpg";
 		});
 		document.querySelector('#bat').addEventListener('click',function() {
-			"img/batman.jpg"
+			maskSource="img/batman.jpg"
 		});
 
 
