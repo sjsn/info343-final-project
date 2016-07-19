@@ -332,6 +332,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				if (_.isEqual(hint, answer)) {
 					$scope.roundWin = true;
 					FirebaseService.updateCards(theCard);
+					FirebaseService.updateTotalPoints(10);
 					$timeout(function() {
 						$scope.roundWin = false;
 						playGuess(next.char);
@@ -437,7 +438,8 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				guess = guess.toUpperCase().split("");
 				if (_.isEqual(guess, answer)) {
 					$scope.roundWin = true;
-					FirebaseService.updateCards($scope.theCard);
+					FirebaseService.updateCards($scope.character);
+					FirebaseService.updateTotalPoints(10);
 					$scope.incorrect = false;
 					$timeout(function() {
 						$scope.roundWin = false;
@@ -594,14 +596,19 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	};
 
 	// Takes in newTotal int and updates it on firebase
-	service.updateTotalPoints = function(newTotal) {
-
+	service.updateTotalPoints = function(points) {
+		currUserObj.totalPoints = currUserObj.totalPoints + points;
+		currUserObj.$save().then(function() {
+			console.log(currUserObj.totalPoints);
+			console.log("success");
+		}, function(e) {
+			console.log(e);
+		});
 	};
 
-	// Takes in newTotal int and updates it on firebase
-	service.updateWallet = function(newTotal) {
-
-	};
+	service.getTotalPoints = function() {
+		return currUserObj.totalPoints;
+	}
 
 	// Takes in newCard object and updates it on firebase
 	// newCard structure: {name, thumbnail, description}
