@@ -187,36 +187,25 @@ var currentUser;
 var currentCards; 
 var completeArray; 
 app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', function($scope,$http,FirebaseService) {
-	$scope.chars = FirebaseService.myInventory; 
-	function getUser(emailAddress){
-   	fb.child('users').orderByChild('emailAddress').equalTo(emailAddress).once('value', function(snap) {
-       currentUser = snap.val() 
-	   currentCards = currentUser.myCards});
-    };
-	
-	function getChar(){
-		_.forEach(currentCards,function(id){
-		$http.get("http://gateway.marvel.com/v1/public/characters/" + id + 
-			"?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
-		).then(function(results) {
-			$scope.completeArray.push(results.data);
-		});
-		});
-	};
-
+	$scope.chars = FirebaseService.getCards(); 
 }]);
 var currentChar; 
 app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', 'FirebaseService', function($scope, $http, $stateParams, FirebaseService) {
 	console.log($stateParams.id);
 	//$scope.currentChar = _.find(tempArray, ['id', $stateParams.id]);
 	var theIndex = -1;
+	var cards = FirebaseService.getCards();
+	console.log(cards);
 	var i = 0;
-	for(i = 0; i < FirebaseService.myInventory.length; i++) {
-		if (FirebaseService.myInventory[i].id == $stateParams.id) {
+	console.log($stateParams.id);
+	for(i = 0; i < cards.length; i++) {
+		console.log(cards[i].id);
+		if (cards[i].id == $stateParams.id) {
 			theIndex = i;
+			console.log(i);
 		}
 	}
-	$scope.thisChar = FirebaseService.myInventory[theIndex];
+	$scope.thisChar = cards[theIndex];
 
 }]);
 
@@ -322,7 +311,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 	var playGuess = function(character) {
 		// Loads the next character in advance for less transition time
 		getChar();
-		$scope.theCard = character;
+		var theCard = character;
 		$scope.character = character;
 		$scope.roundWin = false;
 		var name = character.name;
@@ -363,7 +352,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				$scope.hint = hint.join(" ");
 				if (_.isEqual(hint, answer)) {
 					$scope.roundWin = true;
-					FirebaseService.updateCards($scope.theCard);
+					FirebaseService.updateCards(theCard);
 					$timeout(function() {
 						$scope.roundWin = false;
 						playGuess(next.char);
@@ -538,6 +527,8 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	var currUserRef;
 	var Auth = $firebaseAuth();
 	var usersRef = baseRef.child('users');
+	var cardsRef;
+	var cardsArray;
 	/*
 		Structure:
 
@@ -602,7 +593,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	// Takes in newUsername string and updates it on firebase
 	service.updateUsername = function(newUsername) {
-
 		currUserObj.handle = newUsername;
 		currUserObj.$save().then(function() {
 			console.log('success');
@@ -629,11 +619,14 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	// Takes in newCard object and updates it on firebase
 	// newCard structure: {name, thumbnail, description}
 	service.updateCards = function(newCard) {
-		service.myInventory.push(newCard);
-		console.log(service.myInventory);
-		var cardsRef = currUserRef.child('cards');
-		cardsRef = $firebaseArray(cardsRef);
-		cardsRef.$add(newCard);
+		cardsRef = currUserRef.child('cards');
+		cardsArray = $firebaseArray(cardsRef);
+		cardsArray.$add(newCard);
+	};
+
+	service.getCards = function() {
+		cardsArray = $firebaseArray(cardsRef);
+		return cardsArray;
 	};
 
 	service.getLeaders = function() {
