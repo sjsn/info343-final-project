@@ -1,5 +1,5 @@
 
-<main role="main" class="main-content container">
+<main role="main" class="main-content container" aria-live="polite">
 	<div ng-if="loading" aria-describedby="aria-loading">
 		<p id="aria-loading">Loading your cards!</p>
 		<div class="container loading-icon">
@@ -7,17 +7,17 @@
 			<p>Assembling the team!</p>
 		</div>
 	</div>
-	<div ng-if="!loading">
+	<div ng-if="!loading" class="container" aria-live="polite">
 		<header>
 			<h1>My Cards</h1>
 		</header>
-		<section role="region" class="container">
+		<section role="region">
 			<div class="input-group custom-search">
 				<input type="text" ng-model="searchTerm" class="form-control" placeholder="Search my cards...">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-search" aria-hidden></i></span>
 			</div>
 		</section>
-		<section role="region" class="container" ng-controller="CardsCtrl">
+		<section role="region" ng-controller="CardsCtrl">
 	            <div ng-repeat="char in chars | filter:searchTerm" class="card col-lg-4 col-md-4 col-s-6 col-xs-12">
 	            	<a ui-sref="details( {'id':char.id} )">
 	            		<img ng-src="{{char.img}}" class="img-responsive">

@@ -54,6 +54,7 @@
 /* Styles for large screens */
 @media (min-width: 1200px) {
 	.char-img {
+		max-height: 500px;
 		height: 90%;
 		width: 90%;
 	}

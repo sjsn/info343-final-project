@@ -1,5 +1,5 @@
 
-<main role="main" class="main-content container">
+<main role="main" class="main-content container" aria-live="polite">
 	<div ng-if="loading" aria-describedby="aria-loading">
 		<p id="aria-loading">Loading card details!</p>
 		<div class="container loading-icon">
@@ -7,7 +7,7 @@
 			<p>Revealing the secret identity!</p>
 		</div>
 	</div>
-	<section ng-if="!loading">
+	<div ng-if="!loading" aria-live="polite">
 	    <section role='region'>
 			<p class="back-button">
 				<a ui-sref="cards">
@@ -25,5 +25,5 @@
 	        	<p>{{thisChar.card.desc}}</p>
 	        </div>
 	    </section>
-	</section>
+	</div>
 </main>

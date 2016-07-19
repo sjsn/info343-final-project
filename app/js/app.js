@@ -296,6 +296,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 	var playGuess = function(character) {
 		// Loads the next character in advance for less transition time
 		getChar();
+		console.log(next);
 		var theCard = character;
 		$scope.character = character;
 		$scope.roundWin = false;
@@ -326,9 +327,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 		$scope.evalGuess = function(guess) {
 			if (guess) {
 				$scope.guess.letter = guess.toUpperCase();
-				$timeout(function() {
-					$scope.guess.letter = "";
-				}, 500);
+				$scope.guess.letter = "";
 				for (var i = 0; i < answer.length; i++) {
 					if (answer[i] == guess.toUpperCase()) {
 						hint[i] = guess.toUpperCase();
@@ -627,8 +626,21 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	// newCard structure: {name, thumbnail, description}
 	service.updateCards = function(newCard) {
 		cardsRef = currUserRef.child('cards');
-		cardsArray = $firebaseArray(cardsRef);
-		cardsArray.$add(newCard);
+		$firebaseArray(cardsRef).$loaded().then(function(array) {
+			cardsArray = array;
+			console.log(cardsArray);
+			var isNew = true;
+			_(cardsArray).forEach(function(card) {
+				if (card.id == newCard.id) {
+					console.log("Not new");
+					isNew = false;
+				}
+			});
+			if (isNew) {
+				console.log("working");
+				cardsArray.$add(newCard);
+			}
+		});
 	};
 
 	// Returns an array of card objects

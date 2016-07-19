@@ -3,8 +3,8 @@
 		<h1>Leaderboards</h1>
 	</header>
 
-	<div ng-if="loading" aria-describedby="aria-loading">
-		<p id="aria-loading">Loading your cards!</p>
+	<div ng-if="loading" aria-describedby="aria-loading" aria-live="polite">
+		<p id="aria-loading">Loading the leaderboard!</p>
 		<div class="container loading-icon">
 			<img src="img/shield.png" class="load" aria-hidden="true" />
 			<p>Finding all heroes!</p>
@@ -22,7 +22,7 @@
 		</section>
 
 		<!-- Leaderboards table -->
-		<section role="region" class="container" ng-if="!loading">
+		<section role="region" class="container" ng-if="!loading" aria-live="polite">
 			<table role="grid" class="table table-striped leader-table" role="grid">
 				<tr role="row">
 					<th><!-- User Thumbnail --></th>
