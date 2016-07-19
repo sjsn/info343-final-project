@@ -1,7 +1,7 @@
 
 <main role="main" class="main-content container">
 	<header>
-		<h1>{{thisChar.name}}</h1>
+		<h1>{{thisChar.fullName}}</h1>
 	</header>
     <section role='goingBack'>
 		<h1><a ui-sref="cards"><button class="btn btn-default">
@@ -9,7 +9,7 @@
         </button></a></h1>
 	</section>
 	<section role="region" class="container">
-		<img src="{{thisChar.thumbnail.path}}.jpg" class="img-responsive">
-        {{thisChar.description}}
+		<img src="{{thisChar.img}}" class="img-responsive">
+        {{thisChar.desc}}
     </section>
 </main>

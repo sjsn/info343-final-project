@@ -40,7 +40,7 @@
 		<button type="submit" class="btn btn-primary" ng-click="changeAccount()" ng-disabled="changeAccountForm.$invalid" >Update</button> 
 	</div>
 </form>
-<div ng-controller="CameraCtrl">
+<div ng-controller="CameraCtrl" style="position:relative">
     <h1>Character Photobooth</h1>
     <p class="lead">Take a selfie!</p>
     <div class="controls">
@@ -48,12 +48,19 @@
         <button id="stop" type="button" class="btn btn-default">Stop</button>
         <button id="selfie" type="button" class="btn btn-default">Selfie!</button>
         <button id="save" type="button" class="btn btn-default">Save Selfie</button>
+		<span class= "dropdown">
+			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose your mask
+			<span class="caret"></span></button>
+			<ul class="dropdown-menu" role="mask-menu" aria-labelledby="mask-menu">
+				<li>HTML</li>
+				<li>CSS</li>
+				<li>JavaScript</li>
+			</ul>
+		</span>
     </div>
 	
 	<video autoplay></video>
-	<br>
-	<img id="ironman" width="125" height="130" src="img/ironman.jpg" alt="Ironman Mask">
-	<br>
+	<img id="mask" width="125" height="130" src="" alt="Mask">
 	<canvas></canvas>
 
 </div>

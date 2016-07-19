@@ -28,12 +28,6 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 		templateUrl: "partials/details.html",
 		controller: "DetailsCtrl"
 	})
-	// The card store page
-	.state("store", {
-		url: "/store",
-		templateUrl: "partials/store.html",
-		controller: "StoreCtrl"
-	})
 	// The game page
 	.state("game", {
 		url: "/game",
@@ -163,13 +157,20 @@ app.controller("CameraCtrl", ["$scope",function($scope) {
 			});
 		})
 
+		var masks = ["img/ironman.jpg", "img/batman.jpg"];
+
 		document.querySelector('#selfie').addEventListener('click',function() {
+			function buttonChoose(){				
+			}
+
 			canvas.width = 300;
 			canvas.height = 300;
-			var ironmanImage = document.getElementById("ironman");
-			console.log(ironmanImage);
+
+			var maskImage = document.getElementById("mask");
+			document.getElementById('mask').src = buttonChoose();
+			console.log(maskImage);
 			brush.drawImage(video, 0, 0);
-			brush.drawImage(ironmanImage, 80,80);
+			brush.drawImage(maskImage, 80,80);
 			
 		});
 		document.querySelector('#save').addEventListener('click',function() {
@@ -218,39 +219,8 @@ var tempArray = [
 var currentUser; 
 var currentCards; 
 var completeArray; 
-app.controller('CardsCtrl', ['$scope', '$http', function($scope,$http) {
-	$scope.chars = [
-	{
-        "id": 1011334,
-        "name": "3-D Man",
-        "description": "",
-        "modified": "2014-04-29T14:18:17-0400",
-        "thumbnail": {
-        "path": "http://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784",
-        "extension": "jpg"}
-    },
-	{
-        "id": 1017100,
-        "name": "A-Bomb (HAS)",
-        "description": "Rick Jones has been Hulk's best bud since day one, but now he's"+ 
-        " more than a friend...he's a teammate! Transformed by a Gamma energy explosion,"+
-        " A-Bomb's thick, armored skin is just as strong and powerful as it is blue. And "+
-        "when he curls into action, he uses it like a giant bowling ball of destruction! ",
-        "modified": "2013-09-18T15:54:04-0400",
-        "thumbnail": {
-        "path": "http://i.annihil.us/u/prod/marvel/i/mg/3/20/5232158de5b16",
-        "extension": "jpg"}
-    },
-	 {
-        "id": 1009144,
-        "name": "A.I.M.",
-        "description": "AIM is a terrorist organization bent on destroying the world.",
-        "modified": "2013-10-17T14:41:30-0400",
-        "thumbnail": {
-          "path": "http://i.annihil.us/u/prod/marvel/i/mg/6/20/52602f21f29ec",
-          "extension": "jpg"}
-    }
-]; 
+app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', function($scope,$http,FirebaseService) {
+	$scope.chars = FirebaseService.myInventory; 
 	function getUser(emailAddress){
    	fb.child('users').orderByChild('emailAddress').equalTo(emailAddress).once('value', function(snap) {
        currentUser = snap.val() 
@@ -269,52 +239,18 @@ app.controller('CardsCtrl', ['$scope', '$http', function($scope,$http) {
 
 }]);
 var currentChar; 
-app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', function($scope, $http, $stateParams) {
+app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', 'FirebaseService', function($scope, $http, $stateParams, FirebaseService) {
 	console.log($stateParams.id);
 	//$scope.currentChar = _.find(tempArray, ['id', $stateParams.id]);
 	var theIndex = -1;
 	var i = 0;
-	for(i =0; i < tempArray.length; i++) {
-		if (tempArray[i].id == $stateParams.id) {
+	for(i = 0; i < FirebaseService.myInventory.length; i++) {
+		if (FirebaseService.myInventory[i].id == $stateParams.id) {
 			theIndex = i;
 		}
 	}
-	$scope.thisChar = tempArray[theIndex];
+	$scope.thisChar = FirebaseService.myInventory[theIndex];
 
-}]);
-
-var allChar;
-app.controller('StoreCtrl', ['$scope', '$http', function($scope, $http) {
-	$scope.allChars = [];
-	function getCards() {
-		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=52bc1f9f7dd809c3b85c35bc6c107953&hash=35482198cd607298376e396b611751e6"
-			+ "&limit=50&offset=0").then(function(response) {
-				var cards = response.data.data.results;
-
-				for(var j = 0; j < cards.length; j++) {
-					if(cards[j].thumbnail.path !== "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available"
-					 || cards[j].description !== "") {
-						 //$scope.allChars.push(cards[j]);
-						 console.log(cards[j]);
-					}
-				}
-				console.log($scope.allChars);
-/*
-				_.forEach(cards,function(){
-						if (cards.thumbnail.path !== "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available" ||
-						
-						char.description == "") {
-						$scope.cards = $scope.cards.next; 
-					} else {
-						$scope.allChars.push($scope.cards);
-					}
-
-				})*/			
-	});
-	getCards();
-
-	};
-//rootref.update(); 
 }]);
 
 
@@ -356,12 +292,14 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				var name = formatName(char.name);
 				var desc = char.description;
 				var img = char.thumbnail.path + "." + char.thumbnail.extension;
+				var fullName = char.name;
+				var id = char.id;
 				$scope.charLoaded = true;
 				// Prepares a game in advance if not first game
 				if (game) {
-					gameTransition(game, {name: name, desc: desc, img: img});
+					gameTransition(game, {id: id, name: name, desc: desc, img: img, fullName: fullName});
 				} else {
-					next.char = {name: name, desc: desc, img: img};
+					next.char = {id: id, name: name, desc: desc, img: img, fullName:fullName};
 				}
 			}
 		}, function() { // runs again when promise fails to load
@@ -417,7 +355,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 	var playGuess = function(character) {
 		// Loads the next character in advance for less transition time
 		getChar();
-
+		$scope.theCard = character;
 		$scope.character = character;
 		$scope.roundWin = false;
 		var name = character.name;
@@ -458,6 +396,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				$scope.hint = hint.join(" ");
 				if (_.isEqual(hint, answer)) {
 					$scope.roundWin = true;
+					FirebaseService.updateCards($scope.theCard);
 					$timeout(function() {
 						$scope.roundWin = false;
 						playGuess(next.char);
@@ -638,6 +577,7 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 			Do something to alert user that it failed
 		});
 	*/
+	service.myInventory = [];
 
 	// Takes in a user object and adds them to the firebase authorizor
 	service.createUser = function(user) {
@@ -671,8 +611,9 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", function($fi
 
 	// Takes in newCard object and updates it on firebase
 	// newCard structure: {name, thumbnail, description}
-	service.addCard = function(newCard) {
-
+	service.updateCards = function(newCard) {
+		service.myInventory.push(newCard);
+		console.log(service.myInventory);
 	};
 
 	service.getLeaders = function() {
