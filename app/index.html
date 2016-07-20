@@ -41,16 +41,16 @@
 </head>
 <body ng-app="MarvelCards">
 
-<headerng-controller="HomeCtrl">
+<header ng-controller="HomeCtrl">
 	<nav role="navigation" class="navbar navbar-static-top">
 			<ul class="custom-nav list-unstyled list-inline">
 				<li><a class="custom-nav-brand" ui-sref="home">Home</a></li>
-				<li><a ui-sref="cards">My Cards</a></li>
+				<li ng-if="user"><a ui-sref="cards">My Cards</a></li>
 				<li><a ui-sref="game">Game</a></li>
 				<li><a ui-sref="leaderboards">Leaderboards</a></li>
 				<li><a ui-sref="account">My Account</a></li>
 				<li class="pull-right">
-					<span>{{users[userId].handle}}</span>
+					<span>{{user.handle}}</span>
 					<button ng-click="signOut()" class="btn btn-warning">Sign Out</button>
 				</li>
 			</ul>

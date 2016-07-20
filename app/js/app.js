@@ -45,8 +45,14 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 
 }]);
 
-app.controller('HomeCtrl', ['$scope', 'FirebaseService',
-	function($scope, FirebaseService) {
+app.controller('HomeCtrl', ['$scope', "$timeout", 'FirebaseService',
+	function($scope, $timeout, FirebaseService) {
+
+		$timeout(function() {
+			$scope.user = FirebaseService.getUser();
+			console.log(FirebaseService.getUser());
+		}, 1000);
+		
 
 		$scope.newUser = {}; //for sign-in
 		$scope.signUp = function() {
@@ -60,6 +66,7 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 		};
 
 		$scope.signOut = function() {
+			console.log("signout");
 			FirebaseService.signOut();
 		};
 
@@ -639,9 +646,11 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	// Returns an array of card objects
 	service.getCards = function() {
-		cardsRef = currUserRef.child("cards");
-		cardsArray = $firebaseArray(cardsRef);
-		return cardsArray;
+		if (cardsRef) {
+			cardsRef = currUserRef.child("cards");
+			cardsArray = $firebaseArray(cardsRef);
+			return cardsArray;
+		}
 	};
 
 	service.getUsers = function() {
