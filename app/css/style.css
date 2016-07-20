@@ -419,3 +419,173 @@ canvas {
 #countdown i {
 	color: black;
 }
+.centerAlign{
+	text-align:center;
+}
+.captainBlue{
+	color:#20346f;
+}
+.captainBlue:hover{
+	
+}
+.captainRed{
+	color:#c0120b;
+}
+.centerAlign p, .captainGray{
+	color:#808080;
+}
+
+
+.conteneur {
+  width:431px;
+  margin:auto;
+  position:relative;
+}
+
+
+.circle {
+  background:transparent;
+  margin:auto;
+  width:300px;
+  height:300px;
+  border:8px solid#c0120b;
+  border-radius:50%;
+  position:relative;
+  -webkit-animation:animation 12s infinite linear;
+  animation:animation 12s infinite linear;/*Safari and Chrome*/
+}
+
+.circle:hover {
+  animation-play-state:paused;
+  -webkit-animation-play-state:paused; /* Safari and Chrome */
+}
+
+.point_general {
+  width:12px;
+  height:12px;
+  position:absolute;
+  border-radius:50%;
+  background:#c0120b;
+  border:6px solid #c0120b;
+}
+
+.point_general:after {
+  width:0px;
+  height:0px;
+  position:absolute;
+  top:0px;
+  left:0px;
+  content:'';
+  background:#c0120b;
+  opacity:0;
+  border-radius:50%;
+  -webkit-transition:all .4s ease;
+  transition:all .4s ease;
+}
+
+.point_general:hover:after {
+ opacity:0.8;
+  width:200px;
+  height:200px;
+  top:-94px;
+  left:-94px;
+}
+
+.texte {
+  opacity:0;
+  position:absolute;
+  text-align:center;
+  top:-50px;
+  left:-50px;
+  width:120px;
+  height:120px;
+  overflow:hidden;
+  color:#ecf0f1;
+  font-family: 'Roboto', sans-serif;
+  z-index:10;
+  -webkit-transition:opacity .2s 0s ease;
+  transition:opacity .2s 0s ease;
+  -webkit-animation:animation2 12s infinite linear;
+  animation:animation2 12s infinite linear;/*Safari and Chrome*/
+}
+
+.point_general:hover .texte {
+  opacity:1;
+  -webkit-transition:opacity .4s .4s ease;
+  transition:opacity .4s .4s ease;
+}
+
+.circle:hover .texte {
+  animation-play-state:paused;
+  -webkit-animation-play-state:paused; /* Safari and Chrome */
+}
+
+.point1 {
+  top:30px;
+  left:30px;
+}
+
+/*.point5:after {
+  content:'Plerosque et est copia';
+  text-align:center;
+  padding:50px 0 0 0;
+}*/
+
+.point2 {
+  top:-16px;
+  left:138px;
+}
+
+.point3 {
+  top:30px;
+  right:30px;
+}
+
+.point4 {
+  top:138px;
+  right:-16px;
+}
+
+.point5 {
+  bottom:30px;
+  right:30px;
+}
+
+.point6 {
+  bottom:-16px;
+  left:138px;
+}
+
+.point7 {
+  bottom:30px;
+  left:30px;
+}
+
+.point8 {
+  top:138px;
+  left:-16px;
+}
+
+@keyframes animation
+{
+0% {transform:rotate(0deg);}
+100% {transform:rotate(360deg);}
+}
+
+@-webkit-keyframes animation /*Safari and Chrome*/
+{
+0% {-webkit-transform:rotate(0deg);}
+100% {-webkit-transform:rotate(360deg);}  
+}
+
+@keyframes animation2
+{
+0% {transform:rotate(0deg);}
+100% {transform:rotate(-360deg);}
+}
+
+@-webkit-keyframes animation2 /*Safari and Chrome*/
+{
+0% {-webkit-transform:rotate(0deg);}
+100% {-webkit-transform:rotate(-360deg);}  
+}
