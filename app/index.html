@@ -58,7 +58,7 @@
 				<li ng-if="user">
 					<a ui-sref="account">
 						<div class="account-settings" ng-if="user">
-							<span><img ng-src="{{user.thumbnail ? user.thumbnail : useShield()}}" ng-class="checkClass()"></span>
+							<span><img ng-src="{{user.thumbnail ? user.thumbnail : useShield()}}" ng-class="checkClass()" id="smallPic"></span>
 							<span>{{user.handle}}</span>
 							<br />
 							<span>{{user.totalPoints}} pts</span>
