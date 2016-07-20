@@ -20,7 +20,11 @@
             <div ng-repeat="char in chars | orderBy:fullName | filter:searchTerm" class="card col-lg-4 col-md-4 col-s-6 col-xs-12 ">
 				<div ui-sref="details( {'id':char.id} )" class="backgroundImage">
             	<a ui-sref="details( {'id':char.id} )">
+<<<<<<< HEAD
             		<img ng-src="{{char.img}}" class="img-responsive">
+=======
+            		<img ng-src="{{char.img}}" class="img-responsive" alt="{{char.fullName}}">
+>>>>>>> 7975c9e21b5821818d13ce975ce0116d5208ffbb
 					<div class="backgrounds">
             		<h2 id='cardName' style="color:#E6E4E5">{{char.fullName}}</h2>
 					</div>
