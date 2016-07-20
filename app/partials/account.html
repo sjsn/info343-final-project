@@ -51,12 +51,19 @@
 		<form class= "space">
 			<input id='iron' type="radio" name="mask" value="img/ironman.jpg" ng-model="theMask"> IronMan
 			<input id='bat' type="radio" name="mask"" value="img/batman.jpg" ng-model="theMask"> BatMan
-			<input id='me' type="radio" name="mask"" value="" ng-model="theMask"> I am a super hero
 		</form>
     </div>
-	
+	<div style="position:absolute; z-index:1">
 	<video autoplay></video>
+	</div>
+	<div style ="position:relative; z-index:2">
 	<img id="mask" width="125" height="130" src="{{theMask}}">
+	</div>
+	<br><br>
+	<br><br>
+	<br><br>
+	<br><br>
+
 	<canvas></canvas>
 
 </div>

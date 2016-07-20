@@ -140,10 +140,6 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 			$scope.putMask = true;
 			maskSource="img/batman.jpg"
 		});
-		document.querySelector('#me').addEventListener('click',function() {
-			console.log('me');
-			$scope.putMask = false;
-		});
 
 
 		document.querySelector('#selfie').addEventListener('click',function() {

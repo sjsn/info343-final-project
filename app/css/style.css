@@ -317,3 +317,8 @@ table.leader-table tr:hover th {
 img {
 	border:0;
 }
+
+#mask {
+	margin-left: 80px;
+	margin-top: 80px;
+}
