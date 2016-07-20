@@ -408,7 +408,7 @@ td.leader-det.ng-binding {
 }
 
 canvas {
-	display: none;
+	/*display: none;*/
 }
 
 #countdown {
