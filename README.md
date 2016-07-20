@@ -16,7 +16,7 @@ Character Scramble shuffles the letters in a characters name and, with help from
 Playing games and collecting cards is fun, but how do users compare to one another? With leaderboards, users can see which users have the most points and the most cards. They can search all users by their usernames to find specific people or can sort by points and number of cards.
 
 ### Cards
-Cards are a way for users to spend their hard earned points. Each card contains information about the characer displayed on it.
+Cards are a way for users to know more about the many Marvel Superheros. Each card contains information about the characer displayed on it.
 
 ## The Project
 Built on AngularJS with help from LoDash, Bootstrap, and Firebase. Marvel information comes from the Marvel API.
