@@ -1,0 +1,29 @@
+{
+  "name": "final-proj",
+  "version": "1.0.0",
+  "description": "The final project for Info343",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-watch": "^4.3.8"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.13.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjsn/info343-final-project.git"
+  },
+  "author": "Samuel San Nicolas, Rachel Paresa, Sunho Kim, Sarah Stanton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sjsn/info343-final-project/issues"
+  },
+  "homepage": "https://github.com/sjsn/info343-final-project#readme"
+}

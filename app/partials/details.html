@@ -1,0 +1,30 @@
+
+<main role="main" class="main-content container detail-main padTop" aria-live="polite">
+	<div ng-if="loading" aria-describedby="aria-loading">
+		<p id="aria-loading">Loading card details!</p>
+		<div class="container loading-icon">
+			<img src="img/shield.png" class="load" aria-hidden="true" />
+			<p>Revealing the secret identity!</p>
+		</div>
+	</div>
+	<div ng-if="!loading" aria-live="polite">
+	    <section role='region'>
+			<p class="back-button">
+				<a ui-sref="cards">
+	        		<i class="fa fa-angle-double-left" aria-hidden="true"></i> My Cards
+	        	</a>
+	    	</p>
+		</section>
+		<section role="region" class="container">
+			<header>
+				<h1 class="detail-title">{{thisChar.card.fullName}}</h1>
+			</header>
+			<hr />
+			<img ng-src="{{thisChar.card.img}}" class="img-responsive detail-img">
+			<div  class="detail-desc">
+				<p class="desc-title">Description:</p>
+	        	<p>{{thisChar.card.desc}}</p>
+	        </div>
+	    </section>
+	</div>
+</main>

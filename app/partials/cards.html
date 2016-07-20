@@ -1,0 +1,40 @@
+<main role="main" class="main-content container" aria-live="polite">
+	<div ng-if="loading" aria-describedby="aria-loading">
+		<p id="aria-loading">Loading your cards!</p>
+		<div class="container loading-icon">
+			<img src="img/shield.png" class="load" aria-hidden="true" />
+			<p>Assembling your team!</p>
+		</div>
+	</div>
+	<section ng-if="!loading &amp;&amp; chars.length" class="container" aria-live="polite">
+		<header>
+			<h1>My Cards</h1>
+		</header>
+		<section role="region">
+			<div class="input-group custom-search">
+				<input type="text" ng-model="searchTerm" class="form-control" placeholder="Search my cards...">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-search" aria-hidden></i></span>
+			</div>
+		</section>
+		<section role="region">
+            <div ng-repeat="char in chars | orderBy:fullName | filter:searchTerm" class="card col-lg-4 col-md-4 col-s-6 col-xs-12 ">
+				<div ui-sref="details( {'id':char.id} )" class="backgroundImage">
+            	<a ui-sref="details( {'id':char.id} )">
+            		<img ng-src="{{char.img}}" class="img-responsive">
+					<div class="backgrounds">
+            		<h2 id='cardName' style="color:#E6E4E5">{{char.fullName}}</h2>
+					</div>
+            	</a>
+            	</div>
+			</div>
+		</section>
+	</section>
+	<section ng-if="!loading &amp;&amp; chars.length == 0" class="container" aria-live="polite">
+		<header>
+			<h1>My Cards</h1>
+		</header>
+		<section role="region">
+			<p>It looks like all your heroes are out doing missions. Play some <a ui-sref="game">games</a> to collect them!</p>
+		</section>
+	</section>
+</main>

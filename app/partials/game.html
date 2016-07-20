@@ -1,0 +1,98 @@
+<main role="main" class="main-content">
+
+	<!-- Menu for choosing game type -->
+	<section role="region" ng-if="!gameType">
+		<header class="container" role="title">
+			<h1 class="title">Choose your game!</h1>
+		</header>
+		<div class="container" id="choose-holder">
+				<button class="btn btn-default custom-btn col-lg-6 col-md-6 col-sm-6 col-xs-12" type="button" role="button" ng-click="chooseGame('guess')">
+					<h2>Guessing Game</h2>
+					<img src="img/guess-button.jpg" alt="Captain America" />
+				</button>
+				<button class="btn btn-default custom-btn col-lg-6 col-md-6 col-sm-6 col-xs-12" type="button" role="button" ng-click="chooseGame('scramble')">
+					<h2>Name Scramble</h2>
+					<img src="img/scramble-button.jpg" alt="Iron Man" />
+				</button>
+		</div>
+	</section>
+
+	<!-- Loading message if character is not loaded -->
+	<section role="region" ng-if="gameType &amp;&amp; !charLoaded" aria-describedby="aria-loading" aria-live="polite">
+		<p id="aria-loading">Loading next character!</p>
+		<!-- Temporary. Will change to loading gif or animation -->
+		<div class="container loading-icon">
+			<img src="img/shield.png" class="load" aria-hidden="true" />
+			<p>The next character is putting on their super suit!</p>
+		</div>
+	</section>
+
+	<!-- Character guessing game -->
+	<section role="region" ng-if="gameType == 'guess' &amp;&amp; charLoaded" aria-live="polite">
+		<header>
+			<h1 class="title">Guess the Character</h1>
+		</header>
+		<div class="nav-buttons col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<p ng-click="goBack()" role="button" class="pull-left"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Exit Game</p>
+			<p ng-click="skipChar(gameType)" role="button" class="pull-right">Skip <i class="fa fa-forward" aria-hidden="true"></i></p>
+		</div>
+		<div class="container">
+			<div class="img-holder col-xs-12 col-sm-4 col-md-4 col-lg-4">
+				<!-- Disabled people play with description of character -->
+				<img ng-src="{{character.img}}" alt="Character Image" class="char-img" aria-describedby="desc"/>
+				<p id="desc">{{character.desc}}</p>
+			</div>
+			<div class="hint-section col-xs-12 col-sm-8 col-md-8 col-lg-8">
+				<p class="hint" aria-live="polite">
+					<span ng-repeat="letter in hint track by $index">{{letter}}</span>
+				</p>
+			</div>
+			<div class="container guess-section col-xs-12 col-sm-12 col-md-12 col-lg-12 input-group">
+				<input type="text" name="guess" ng-model="guess.letter" ng-change="evalGuess(guess.letter)" placeholder="Type a letter to guess" maxlength="1" id="guess-letter" role="input" autofocus/>
+			</div>
+			<div ng-if="roundWin" id="win-msg-holder" aria-live="polite">
+				<p id="win-msg" ng-if="!isNew">Correct!</p>
+				<p id="win-msg" ng-if="isNew"><i class="fa fa-plus-circle" aria-hidden="true"></i>New card added!</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Character scramble game -->
+	<section role="region" ng-if="gameType == 'scramble' &amp;&amp; charLoaded" aria-live="polite">
+		<header>
+			<h1 class="title">Name Scramble</h1>
+		</header>
+		<div class="nav-buttons col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<p ng-click="goBack()" role="button" class="pull-left"><i class="fa fa-angle-double-left" aria-hidden="true"></i> Exit Game</p>
+			<p ng-click="skipChar(gameType)" role="button" class="pull-right">Skip <i class="fa fa-forward" aria-hidden="true"></i></p>
+		</div>
+		<div class="container">
+			<div class="img-holder col-xs-12 col-sm-4 col-md-4 col-lg-4">
+				<!-- Disabled people play with description of character -->
+				<img ng-src="{{character.img}}" alt="Character Image" class="char-img" aria-describedby="desc"/>
+				<p id="desc">{{character.desc}}</p>
+			</div>
+			<div class="hint-section col-xs-12 col-sm-8 col-md-8 col-lg-8">
+				<p class="hint" aria-live="polite">
+					<span ng-repeat="letter in hint track by $index" ng-click="chooseLetter(letter.letter, letter.index)" class="clicked-letter" id="scramble-letter" ng-class="{picked: guessed}">
+						{{letter.letter}} 
+					</span>
+				</p>
+			</div>
+			<div class="guess-section col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<p class="guess-board" aria-live="polite">
+					<span ng-repeat="option in guessBoard track by $index" ng-if="!clear">{{option}} </span>
+				</p>
+			</div>
+			<div ng-if="roundWin" id="win-msg-holder" aria-live="polite">
+				<!-- Add another restrictuion to show instructions text -->
+				<p id="invalid" ng-if="incorrect" aria-live="polite">Click on a letter to guess it</p>
+				<p id="invalid" ng-if="incorrect" aria-live="polite">Incorrect</p>
+				<p id="win-msg">Correct!</p>
+				<p id="win-msg" ng-if="isNew"><i class="fa fa-plus-circle" aria-hidden="true"></i>New card added!</p>
+			</div>
+		</div>
+	</section>
+
+</main>
+

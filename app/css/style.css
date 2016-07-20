@@ -1,0 +1,626 @@
+
+/* Colors:
+
+	"Captain America Red": #c0120b;
+	"Captain America Blue": #20346f;
+	"Iron Man Yellow": #EFCE0B;
+	"Hulk Green": #158202;
+	"Hulk Purple": #430C60;
+	"Silver": #C0C0C0;
+	"Thor Hammer Grey": #808080;
+
+*/
+
+/* @import url(https://fonts.googleapis.com/css?family=Raleway:600); */
+/*@import url(https://fonts.googleapis.com/css?family=Droid+Sans); */
+@import 'https://fonts.googleapis.com/css?family=Prompt:400,500|Secular+One';
+
+/* Styles for small screens */
+@media (max-width: 768px) {
+	.char-img {
+		height: 50%;
+		width: 50%;
+	}
+
+	.hint-section {
+		margin-top: 50px;
+	}
+	#top {
+		margin-top: 18em;
+	}
+
+	.main-content {
+		margin-top: 0px;
+	}
+
+	.title {
+		margin-top: 0px;
+	}
+
+	#guess-letter {
+		height: 80px;
+		padding: 8px;
+	}
+
+	td {
+		width: 1%;
+	}
+
+	.custom-btn h2 {
+		font-size: 100%;
+	}
+
+	.account-settings {
+		width: 100%;
+	}
+
+	.relNav {
+		margin-top: 3em;
+	}
+}
+
+/* Styles for medium screens */
+@media (min-width: 768px) {
+	.char-img {
+		height: 100%;
+		width: 100%;
+	}
+
+	.hint-section {
+		margin-top: 100px;
+	}
+	#top {
+		margin-top: 2.5em;
+	}
+
+	.title {
+		margin-top: 25px;
+	}
+
+	#guess-letter {
+		height: 100px;
+		padding: 10px;
+	}
+
+	td {
+		width: 30px;
+	}
+	.account-settings {
+		width: 190px;
+	}
+}
+
+/* Styles for large screens */
+@media (min-width: 1200px) {
+	.char-img {
+		max-height: 500px;
+		height: 90%;
+		width: 90%;
+	}
+
+	.hint-section{
+		margin-top:  100px;
+	}
+
+	.nav-buttons p {
+		font-size: 2rem;
+		margin-bottom: 15px;
+	}
+
+	.title {
+		margin-top: 25px;
+	}
+
+	#guess-letter {
+		height: 100px;
+		padding: 10px;
+	}
+
+	td {
+		width: 20px;
+	}
+}
+
+body {
+	padding-bottom: 70px;
+	font-family: "Prompt", Helvetica, sans-serif;
+}
+
+.navbar-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.navbar {
+	background-color: #c0120b;
+	border-color: #c0120b;
+}
+
+.main-content {
+	margin-top: 15px;
+}
+
+.title {
+	font-size: 5rem;
+	text-align: center;
+	margin-bottom: 50px;
+}
+
+#choose-holder {
+	text-align: center;
+
+}
+
+#aria-loading {
+	display: none;
+}
+
+.char-img {
+	border: 2px solid black;
+	border-radius: 50%;
+}
+
+#desc {
+	display: none;
+}
+
+.hint {
+	letter-spacing: 2px;
+	font-size: 4rem;
+}
+
+.hint-section {
+	text-align: center;
+}
+
+#scramble-letter {
+	cursor: pointer;
+}
+
+#scramble-letter:hover {
+	color: #c0120b;
+}
+
+.img-holder {
+	text-align: center;
+}
+
+.guess-section {
+	text-align: center;
+}
+
+#guess-letter, .submit {
+	font-size: 2rem;
+	text-align: center;
+}
+
+#win-msg {
+	font-size: 3rem;
+	color: green;
+}
+
+#win-msg-holder {
+	text-align: center;
+}
+
+#invalid {
+	color: red;
+}
+
+.input-form {
+	margin-top: 40%;
+	text-align: center;
+}
+
+.loading-icon {
+	position: relative;
+	top: 50%;
+	transform: translateY(80%);
+	text-align: center;
+}
+
+.load {
+	animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform:rotate(360deg);
+	}
+} 
+
+.nav-buttons p {
+	display: inline-block;
+}
+
+table.leader-table tr:hover th {
+	cursor: pointer;
+}
+
+.custom-nav {
+	margin: 15px;
+	font-size: 20px;
+}
+
+.custom-nav a {
+	color: #E5E5E5;
+}
+
+.guess-board {
+	font-size: 4rem;
+}
+
+.maskChoice {
+	margin-top: 1em;
+}
+
+.card {
+	height: 420px;
+	width: 320px;
+	text-align: center;
+	margin: 20px;
+	background-color: #bdbdbd;
+	border-radius: 5px;
+	padding: 10px;
+	background-image:url('../img/cardpack.jpg');
+	
+}
+
+.card img {
+	border-radius: 15%;
+	border: 2px solid black;
+	max-height: 300px;
+	margin: auto;
+}
+
+
+.card a {
+	text-decoration: none;
+	color: black;
+}
+
+.detail-img {
+	max-height: 450px;
+	border: 2px solid black;
+	margin: auto;
+}
+
+.detail-title {
+	font-size: 5rem;
+	text-align: center;
+	margin-top: 0px;
+}
+
+.detail-desc {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.detail-desc p {
+	font-size: 2rem;
+	margin-bottom: 0px;
+}
+
+.desc-title {
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.detail-main {
+	margin-top: 20px;
+}
+
+.back-button a {
+	color: black;
+	text-decoration: none;
+	font-size: 2rem;
+}
+
+.custom-search {
+	max-width: 500px;
+}
+
+
+.space {
+	margin-top: 10px;
+}
+
+.loading-icon p {
+	margin-top: 25px;
+	font-size: 2.5rem;
+}
+
+.logout {
+	z-index: 100;
+	float: right;
+}
+
+.padTop{
+	padding-top:1em;
+	margin-top:2em;
+}
+
+img {
+	border:0;
+}
+
+#mask {
+	margin-left: 80px;
+	margin-top: 20px;
+}
+
+
+.user-img {
+	height: 10%;
+	width: 10%;
+	border-radius: 10%;
+}
+
+.user-info {
+	display: inline-block;
+}
+
+.backgrounds{
+	opacity: .9;
+}
+
+.camera {
+	position: absolute;
+	z-index: 1;
+	margin-bottom: 100px;
+}
+
+.mask {
+	position:relative; 
+	z-index: 2;
+}
+
+.leader-img {
+	border-radius: 20%;
+}
+
+
+tr ,tr > th {
+	text-align: center;
+}
+
+.account-settings {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	color: #FFFFFF;
+	background-color: #20346f;
+	padding: 1.5px;
+	text-align: center;
+
+}
+
+.prof-pic {
+	width: 65px;
+	border-radius: 20%;
+	margin-left: 10px;
+}
+
+.default, .prof-pic {
+	float: right;!important
+}
+
+td.leader-det.ng-binding {
+	padding-top: 20px;
+}
+
+.default {
+	height: 50px;
+	margin-right: 5px;
+}
+
+.home h1 {
+	text-align: center;
+}
+
+canvas {
+	display: none;
+}
+
+#countdown {
+	font-size: 40px;
+	color: red;
+}
+
+#countdown i {
+	color: black;
+}
+.centerAlign{
+	text-align:center;
+}
+.captainBlue{
+	color:#20346f;
+}
+.captainBlue:hover{
+	
+}
+.captainRed{
+	color:#c0120b;
+}
+.centerAlign p, .captainGray{
+	color:#808080;
+}
+
+
+.conteneur {
+  width:431px;
+  margin:auto;
+  position:relative;
+}
+
+
+.circle {
+  background:transparent;
+  margin:auto;
+  width:300px;
+  height:300px;
+  border:8px solid#c0120b;
+  border-radius:50%;
+  position:relative;
+  -webkit-animation:animation 12s infinite linear;
+  animation:animation 12s infinite linear;/*Safari and Chrome*/
+}
+
+.circle:hover {
+  animation-play-state:paused;
+  -webkit-animation-play-state:paused; /* Safari and Chrome */
+}
+
+.point_general {
+  width:12px;
+  height:12px;
+  position:absolute;
+  border-radius:50%;
+  background:#c0120b;
+  border:6px solid #c0120b;
+}
+
+.point_general:after {
+  width:0px;
+  height:0px;
+  position:absolute;
+  top:0px;
+  left:0px;
+  content:'';
+  background:#c0120b;
+  opacity:0;
+  border-radius:50%;
+  -webkit-transition:all .4s ease;
+  transition:all .4s ease;
+}
+
+.point_general:hover:after {
+ opacity:0.8;
+  width:200px;
+  height:200px;
+  top:-94px;
+  left:-94px;
+}
+
+.texte {
+  opacity:0;
+  position:absolute;
+  text-align:center;
+  top:-50px;
+  left:-50px;
+  width:120px;
+  height:120px;
+  overflow:hidden;
+  color:#ecf0f1;
+  font-family: 'Roboto', sans-serif;
+  z-index:10;
+  -webkit-transition:opacity .2s 0s ease;
+  transition:opacity .2s 0s ease;
+  -webkit-animation:animation2 12s infinite linear;
+  animation:animation2 12s infinite linear;/*Safari and Chrome*/
+}
+
+.point_general:hover .texte {
+  opacity:1;
+  -webkit-transition:opacity .4s .4s ease;
+  transition:opacity .4s .4s ease;
+}
+
+.circle:hover .texte {
+  animation-play-state:paused;
+  -webkit-animation-play-state:paused; /* Safari and Chrome */
+}
+
+.point1 {
+  top:30px;
+  left:30px;
+}
+
+/*.point5:after {
+  content:'Plerosque et est copia';
+  text-align:center;
+  padding:50px 0 0 0;
+}*/
+
+.point2 {
+  top:-16px;
+  left:138px;
+}
+
+.point3 {
+  top:30px;
+  right:30px;
+}
+
+.point4 {
+  top:138px;
+  right:-16px;
+}
+
+.point5 {
+  bottom:30px;
+  right:30px;
+}
+
+.point6 {
+  bottom:-16px;
+  left:138px;
+}
+
+.point7 {
+  bottom:30px;
+  left:30px;
+}
+
+.point8 {
+  top:138px;
+  left:-16px;
+}
+
+@keyframes animation
+{
+0% {transform:rotate(0deg);}
+100% {transform:rotate(360deg);}
+}
+
+@-webkit-keyframes animation /*Safari and Chrome*/
+{
+0% {-webkit-transform:rotate(0deg);}
+100% {-webkit-transform:rotate(360deg);}  
+}
+
+@keyframes animation2
+{
+0% {transform:rotate(0deg);}
+100% {transform:rotate(-360deg);}
+}
+
+@-webkit-keyframes animation2 /*Safari and Chrome*/
+{
+0% {-webkit-transform:rotate(0deg);}
+100% {-webkit-transform:rotate(-360deg);}  
+}
+
+.custom-btn {
+	width: 50%;
+	height: 100%;
+	background-color: #C0C0C0;
+	border-radius: 0px;
+}
+
+.custom-btn img {
+	width: 100%;
+	vertical-align: bottom;
+}
+
+.blue-back {
+	background-color: #20346f;
+}
+
+.guessed {
+	color: red;
+}
