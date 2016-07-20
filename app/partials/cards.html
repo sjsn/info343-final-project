@@ -22,8 +22,9 @@
 					<div ui-sref="details( {'id':char.id} )" class="backgroundImage">
 	            	<a ui-sref="details( {'id':char.id} )">
 	            		<img ng-src="{{char.img}}" class="img-responsive">
-						
-	            		<h2>{{char.fullName}}</h2>
+						<div class="backgrounds">
+	            		<h2 id='cardName' style="color:#E6E4E5">{{char.fullName}}</h2>
+						</div>
 	            	</a>
 				
 	            </div>

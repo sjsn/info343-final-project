@@ -240,6 +240,7 @@ table.leader-table tr:hover th {
 	border-radius: 5px;
 	padding: 10px;
 	background-image:url('../img/cardpack.jpg');
+	
 }
 
 .card img {
@@ -323,4 +324,8 @@ img {
 #mask {
 	margin-left: 80px;
 	margin-top: 80px;
+}
+
+.backgrounds{
+	opacity: .9;
 }
