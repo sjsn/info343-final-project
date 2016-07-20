@@ -28,19 +28,19 @@
 					<th ng-click="order = 'name'">
 						<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'name'"></i>Username
 					</th>
-					<th ng-click="order = 'totalPoints'">
-						<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'totalPoints'"></i>Total Points
+					<th ng-click="order = '-totalPoints'">
+						<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == '-totalPoints'"></i>Total Points
 					</th>
 					<th ng-click="order = 'cards.length'">
 						<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'cards.length'"></i>Total Cards
 					</th>
 				</tr>
 				<tr ng-repeat="user in users | orderBy:order | filter:searchTerm">
-					<td><img ng-src="{{user.thumbnail}}" alt="Profile Pic" class="leaderboard-pic"></td>
-					<td>{{user.handle}}</td>
-					<td>{{user.totalPoints}}</td>
+					<td><img ng-src="{{user.thumbnail}}" alt="Profile Pic" class="img-responsive leader-img" ng-if="user.thumbnail != ''"></td>
+					<td class="leader-det">{{user.handle}}</td>
+					<td class="leader-det">{{user.totalPoints}}</td>
 					<!-- Use getter/setter -->
-					<td>{{utils.keys(user.cards).length}}</td>
+					<td class="leader-det">{{hasCards(user.cards) ? 0 : utils.keys(user.cards).length}}</td>
 				</tr>
 			</table>
 		</section>

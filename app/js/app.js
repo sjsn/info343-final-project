@@ -11,6 +11,11 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 		templateUrl: "partials/home.html",
 		controller: "HomeCtrl"
 	})
+	.state("signin", {
+		url: "/signin",
+		templateUrl: "partials/signin.html",
+		controller: "SigninCtrl"
+	})
 	.state("account", {
 		url: "/account",
 		templateUrl: "partials/account.html",
@@ -45,8 +50,19 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 
 }]);
 
-app.controller('HomeCtrl', ['$scope', "$timeout", 'FirebaseService',
-	function($scope, $timeout, FirebaseService) {
+app.controller('HomeCtrl', ['$scope', 'FirebaseService',
+	function($scope, FirebaseService) {
+
+		$scope.auth = FirebaseService.auth();
+		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
+			var uid = firebaseUser.uid;
+			$scope.user = FirebaseService.obj(FirebaseService.users(uid));
+		});
+
+}]);
+
+app.controller("SigninCtrl", ["$scope", "FirebaseService", 
+	function($scope, FirebaseService) {
 
 		$scope.auth = FirebaseService.auth();
 		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
@@ -65,27 +81,30 @@ app.controller('HomeCtrl', ['$scope', "$timeout", 'FirebaseService',
 			FirebaseService.authorize(user);
 		};
 
-		$scope.signOut = function() {
-			console.log("signout");
-			FirebaseService.signOut();
-		};
-
-
 }]);
 
 app.controller("AccountCtrl", ["$scope", 'FirebaseService',
 	function($scope, FirebaseService) {
 
+	// Gets the current user
 	$scope.currentUser = FirebaseService.currentUser; 
 	$scope.changeUser = {}; 
 
+	// Alters the account settings
 	$scope.changeAccount = function() {
 		var updateUser = {name: $scope.changeUser.newhandle, email:$scope.changeUser.email, password:$scope.changeUser.password};
 		console.log($scope.currentUser);
 		console.log($scope.changeUser);
 		FirebaseService.updateUsername(updateUser.name);	
 	};
-	
+
+	// Signs the user out on button click
+	$scope.signOut = function() {
+		console.log("signout");
+		FirebaseService.signOut();
+		// Redirects the user to homepage
+		$state.go("home");
+	};
 
 }]);
 
@@ -500,10 +519,12 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 	// Default ordering is total points
 	$scope.order = 'totalPoints';
 
+	// Helper object that allows for getting # of cards since Firebase stores arrays as objects in objects
 	$scope.utils = {
 		keys: Object.keys
 	};
 
+	// Gets list of all users as an array
 	$scope.loading = true;
 	FirebaseService.getUsers().$loaded().then(function(users) {
 		$scope.users = users;
@@ -511,11 +532,17 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 		console.log(users);
 	});
 
+	// Gets the users pic taking in their handle
 	$scope.userImg = function(handle) {
 		console.log(handle);
 		FirebaseService.getUsersThumbnails(handle).$loaded().then(function(url) {
 			return url;
 		});
+	};
+
+	// Helper function to determine if user has any cards or not
+	$scope.hasCards = function(cards) {
+		return cards === undefined;
 	};
 
 
@@ -576,9 +603,13 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	};
 
 	// Takes in newThumbnail img, pushes it to FirebaseStorage and saves its URL to the user in the database
+	// Only need to call this when a new image is added, otherwise we get image from user object
 	service.updateThumbnail = function(newThumbnail) {
+		// Adds the newThumbnail to Firebase Storage
 		var storeImg = storageRef.child('images/' + currUserObj.handle).put(newThumbnail).then(function() {
+			// Then gets the URL of that new image
 			storageRef.child("images/" + currUserObj.handle).getDownloadURL().then(
+				// Then puts that URL into the user object in the database to be referenced later
 				function(url) {
 					currUserObj.thumbnail = url;
 					console.log(currUserObj.thumbnail);
@@ -594,15 +625,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 			);
 		});
 	};
-
-	// service.getThumbnail = function() {
-	// 	var imgRef = storageRef.child("images/" + currUserObj.handle)
-	// 	return imgRef.getDownloadURL();
-	// };
-
-	// service.getUsersThumbnails = function(handle) {
-	// 	return storageRef.child("images/" + handle).getDownloadURL();
-	// };
 
 	// Takes in a user object and adds them to the firebase authorizor
 	service.createUser = function(user) {
