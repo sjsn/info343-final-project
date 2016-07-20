@@ -6,7 +6,7 @@ Marvel Cards is made by Samuel San Nicolas, Sarah Stanton, Sunho Kim, and Rachel
 Create an account to keep track of your points and your cards. Choose a custom username and thumbnail that other players can find you with. You can also take a picture as your favorite character, then save that picture to use as your avatar.
 
 ### Games
-Play games to earn points. *Spend* those points to unlock cards which give information about the marvel characters.
+Play games to earn points and climb the leaderboard. If you win, you can unlock cards which give information about the marvel characters.
 #### Guessing game
 Guessing Game is a fill in the blank style game. The user is given a character image and a hint, and based off that hint they guess which character it is. The more guesses it takes, the less points you get.
 #### Character Scramble
