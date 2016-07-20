@@ -484,6 +484,8 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 
 		var boardIndex = 0;
 		$scope.chooseLetter = function(letter, index) {
+			$scope.guessed = letter;
+			console.log($scope.guessed);
 			if ($scope.hint[index].guessable) {
 				if ($scope.guessBoard[boardIndex] == "-" || 
 					$scope.guessBoard[boardIndex] == "." || 
@@ -506,7 +508,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 		// Check to see if shuffled guess matches answer index
 		function evalGuess(guess) {
 			if (guess) {
-				console.log("checkWin");
 				$scope.guess.word = guess.toUpperCase();
 				$timeout(function() {
 					$scope.guess.word = "";
