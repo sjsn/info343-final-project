@@ -313,3 +313,7 @@ table.leader-table tr:hover th {
 	padding-top:1em;
 	margin-top:2em;
 }
+
+img {
+	border:0;
+}
