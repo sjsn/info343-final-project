@@ -5,17 +5,19 @@ var app = angular.module("MarvelCards", ["ui.router", "ui.bootstrap", "firebase"
 app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
 
 	$stateProvider
-	// The home page where the user signs in or signs up
+	// The home page with the nav bar
 	.state("home", {
 		url: "/",
 		templateUrl: "partials/home.html",
 		controller: "HomeCtrl"
 	})
+	// The sign in/sign up page
 	.state("signin", {
 		url: "/signin",
 		templateUrl: "partials/signin.html",
 		controller: "SigninCtrl"
 	})
+	// The account details page
 	.state("account", {
 		url: "/account",
 		templateUrl: "partials/account.html",
@@ -50,9 +52,11 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 
 }]);
 
+// controller for the index page
+// includes FirebaseService
 app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 	function($scope, FirebaseService) {
-
+		// get authorization for firebase
 		$scope.auth = FirebaseService.auth();
 		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
 			if (firebaseUser) {
@@ -60,17 +64,19 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 				$scope.user = FirebaseService.obj(FirebaseService.users(uid));
 			}
 		});
-
+		// set default profile picture
 		$scope.useShield = function() {
 			$scope.user.thumbnail = "img/small-shield.png";
 			$scope.default = true;
 		};
-
+		// set user profile picture
 		$scope.checkClass = function() {
 			if ($scope.user.thumbnail != "img/small-shield.png") {
 				document.getElementById("smallPic").height = "55";
+				// to profile picture in storage
 				return "prof-pic";
 			} else {
+				// to default picture
 				return "default";
 			}
 		};
@@ -79,10 +85,12 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 
 app.controller("SigninCtrl", ["$scope", "FirebaseService", "$state",
 	function($scope, FirebaseService, $state) {
-
+		// get firebase auth info
 		$scope.auth = FirebaseService.auth();
+		// when the user state changes
 		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
 			if (firebaseUser) {
+				// set the userID 
 				var uid = firebaseUser.uid;
 				$scope.user = FirebaseService.obj(FirebaseService.users(uid));
 			}
@@ -90,14 +98,22 @@ app.controller("SigninCtrl", ["$scope", "FirebaseService", "$state",
 		
 
 		$scope.newUser = {}; //for sign-in
+		// sign up a new user
 		$scope.signUp = function() {
+			// save input information
 			var user = {name: $scope.newUser.handle, email:$scope.newUser.email, password: $scope.newUser.password};
+			// create a new user
 			FirebaseService.createUser(user);
+			// go to home page
 			$state.go("home")
 		};
+		// existing user sign in
 		$scope.signIn = function() {
+			// save input information
 			var user = {name: $scope.newUser.handle, email:$scope.newUser.email, password: $scope.newUser.password};
+			// sign in user
 			FirebaseService.authorize(user);
+			// go to home page
 			$state.go("home");
 		};
 
@@ -165,18 +181,32 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 
 		})
 
+<<<<<<< HEAD
+		$scope.theMask; //The variable used to toggle between masks 
+		//Ironman mask option clicked
+=======
 		$scope.theMask = {};
+>>>>>>> e4fa37a80c0a87a9f62096be1737e37b9ec57f21
 		document.querySelector('#iron').addEventListener('click',function() {
 			$scope.theMask.mask = "img/ironman.jpg";
 		});
+		//Batman mask option clicked 
 		document.querySelector('#bat').addEventListener('click',function() {
 			$scope.theMask.mask = "img/batman.jpg"
 		});
+<<<<<<< HEAD
+		//Spiderman mask option clicked 
+		document.querySelector('#spider').addEventListener('click',function() {
+			$scope.theMask = "img/spiderman.jpg"
+		});
+		//Used to delete picture
+=======
 		document.querySelector('#spider').addEventListener('click',function() {
 			$scope.theMask.mask = "img/spiderman.jpg"
 		});
 		
 
+>>>>>>> e4fa37a80c0a87a9f62096be1737e37b9ec57f21
 		$scope.delete = function() {
 			brush.fillStyle = "#FFFFFF";
 			brush.clearRect(0, 0, canvas.width, canvas.height);
@@ -190,6 +220,7 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 				// brush.drawImage($scope.theMask, 80, 80);
 			}, 20);
 
+			//Used to access the camera 
 			navigator.getUserMedia({video:{mandatory:{
 				maxWidth:300, maxHeight:300}}}, 
 				function(mediaStream) {
@@ -224,8 +255,8 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 			}, 1000);
 		};
 
+		//Used to save the image captured to firebase 
 		$scope.save = function() {
-
 			var snapshot = canvas.toBlob(function(blob) {
 				var image = new Image();
 				image.src = blob;
@@ -239,12 +270,14 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 }])
 
 // Controller for the cards grid
+// gets the cards user has from the cloud
 app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', "$timeout", function($scope, $http, FirebaseService, $timeout) {
 	// Instantiates the loading bar to true
 	$scope.loading = true;
  	// Gets the users card collection when Firebase verifies that they're signed in
 	$scope.auth = FirebaseService.auth();
 	$scope.auth.$onAuthStateChanged(function(firebaseUser) {
+		// calls array of cards which the user has
 		if (firebaseUser) {
 			$scope.chars = FirebaseService.arr(FirebaseService.getCards());
 			$scope.loading = false; // Turns off loading icon when everything is good
@@ -253,7 +286,9 @@ app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', "$timeout", f
 
 }]);
 
+
 // Controller for the "details" section of a card
+// takes the id of chosen card as a parameter and chooses the card from cards that user has
 app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', 'FirebaseService', function($scope, $http, $stateParams, FirebaseService) {
 	// Instantiates the page with load icon on
 	$scope.loading = true;
@@ -263,12 +298,14 @@ app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', 'FirebaseServi
 	$scope.thisChar = {};
 	FirebaseService.arr(FirebaseService.getCards()).$loaded().then(function(cards) {
 		var i = 0;
+		// finds index of the card in cards array
 		_.forEach(cards, function(card) {
 			if (card.id == $stateParams.id) {
 				theIndex = i;
 			}
 			i++;
 		});
+		// chooses the card chosen from cards user has
 		$scope.thisChar.card = cards[theIndex];
 		$scope.loading = false; // Turns off the loading icon
 	});
@@ -585,6 +622,7 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 	$scope.hasCards = function(cards) {
 		return cards === undefined;
 	};
+
 
 
 }]);
