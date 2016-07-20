@@ -55,9 +55,24 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 
 		$scope.auth = FirebaseService.auth();
 		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
-			var uid = firebaseUser.uid;
-			$scope.user = FirebaseService.obj(FirebaseService.users(uid));
+			if (firebaseUser) {
+				var uid = firebaseUser.uid;
+				$scope.user = FirebaseService.obj(FirebaseService.users(uid));
+			}
 		});
+
+		$scope.useShield = function() {
+			$scope.user.thumbnail = "img/small-shield.png";
+			$scope.default = true;
+		};
+
+		$scope.checkClass = function() {
+			if ($scope.user.thumbnail != "img/small-shield.png") {
+				return "prof-pic";
+			} else {
+				return "default";
+			}
+		};
 
 }]);
 
@@ -66,8 +81,10 @@ app.controller("SigninCtrl", ["$scope", "FirebaseService",
 
 		$scope.auth = FirebaseService.auth();
 		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
-			var uid = firebaseUser.uid;
-			$scope.user = FirebaseService.obj(FirebaseService.users(uid));
+			if (firebaseUser) {
+				var uid = firebaseUser.uid;
+				$scope.user = FirebaseService.obj(FirebaseService.users(uid));
+			}
 		});
 		
 
@@ -83,8 +100,8 @@ app.controller("SigninCtrl", ["$scope", "FirebaseService",
 
 }]);
 
-app.controller("AccountCtrl", ["$scope", 'FirebaseService',
-	function($scope, FirebaseService) {
+app.controller("AccountCtrl", ["$scope", 'FirebaseService', "$state",
+	function($scope, FirebaseService, $state) {
 
 	// Gets the current user
 	$scope.currentUser = FirebaseService.currentUser; 
@@ -517,7 +534,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 // Controller for the leaderboard
 app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope, FirebaseService) {
 	// Default ordering is total points
-	$scope.order = 'totalPoints';
+	$scope.order = '-totalPoints';
 
 	// Helper object that allows for getting # of cards since Firebase stores arrays as objects in objects
 	$scope.utils = {
@@ -529,7 +546,6 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 	FirebaseService.getUsers().$loaded().then(function(users) {
 		$scope.users = users;
 		$scope.loading = false;
-		console.log(users);
 	});
 
 	// Gets the users pic taking in their handle

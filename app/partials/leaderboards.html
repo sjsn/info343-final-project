@@ -31,8 +31,8 @@
 					<th ng-click="order = '-totalPoints'">
 						<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == '-totalPoints'"></i>Total Points
 					</th>
-					<th ng-click="order = 'cards.length'">
-						<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == 'cards.length'"></i>Total Cards
+					<th ng-click="order = '-cards.length'">
+						<i class="fa fa-caret-down" aria-hidden="true" ng-if="order == '-cards.length'"></i>Total Cards
 					</th>
 				</tr>
 				<tr ng-repeat="user in users | orderBy:order | filter:searchTerm">

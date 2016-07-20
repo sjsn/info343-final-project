@@ -45,12 +45,13 @@
     <h1>Character Photobooth</h1>
     <p class="lead">Take a profile picture</p>
     <div class="controls">
-        <button id="record" type="button" class="btn btn-default">Open Camera</button>
-        <button id="stop" type="button" class="btn btn-default" ng-show="cameraOn" aria-live="polite">Close Camera</button>
+        <button id="record" type="button" class="btn btn-default" ng-show="!cameraOn"><i class="fa fa-camera" aria-hidden="true"></i> Open Camera</button>
+        <button id="stop" type="button" class="btn btn-default" ng-show="cameraOn" aria-live="polite"><i class="fa fa-times" aria-hidden="true"></i> Close Camera</button>
         <button id="selfie" type="button" class="btn btn-default" ng-show="cameraOn" aria-live="polite">Take Photo</button>
-        <button id="save" type="button" class="btn btn-default" ng-show="cameraOn" aria-live="polite">Set Profile Picture</button>
-        <button id="del" type="button" class="btn btn-default" ng-show="cameraOn" ng-click="delete()" aria-live="polite">Delete</button>
+        <button id="save" type="button" class="btn btn-default" ng-show="cameraOn" aria-live="polite"><i class="fa fa-floppy-o" aria-hidden="true"></i> Set Profile Picture</button>
+        <button id="del" type="button" class="btn btn-default" ng-show="cameraOn" ng-click="delete()" aria-live="polite"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
 		<form class= "space" ng-show="cameraOn">
+			<h3>Apply a mask</h3>
 			<label>
 				<input id='iron' type="radio" name="mask" value="img/ironman.jpg" ng-model="theMask"> IronMan
 			</lavel>

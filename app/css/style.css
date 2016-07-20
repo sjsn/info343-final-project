@@ -390,6 +390,18 @@ tr ,tr > th {
 	margin-left: 10px;
 }
 
+.default, .prof-pic {
+	float: right;!important
+}
+
 td.leader-det.ng-binding {
 	padding-top: 20px;
+}
+
+.default {
+	height: 50px;
+}
+
+.home h1 {
+	text-align: center;
 }

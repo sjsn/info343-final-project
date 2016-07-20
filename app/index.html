@@ -51,14 +51,14 @@
 <header ng-controller="HomeCtrl">
 	<nav role="navigation" class="navbar navbar-static-top">
 			<ul class="custom-nav list-unstyled list-inline">
-				<li><a class="custom-nav-brand" ui-sref="home">Marvel Cards</a></li>
+				<li><a class="custom-nav-brand" ui-sref="home"><i class="fa fa-home" aria-hidden="true"></i> Marvel Cards</a></li>
 				<li ng-if="user"><a ui-sref="game">Game</a></li>
 				<li><a ui-sref="leaderboards">Leaderboards</a></li>
 				<li ng-if="user"><a ui-sref="cards">My Cards</a></li>
 				<li ng-if="user">
 					<a ui-sref="account">
 						<div class="account-settings" ng-if="user">
-							<span><img ng-src="{{user.thumbnail}}" class="prof-pic pull-right" ng-if="user.thumbnail"></span>
+							<span><img ng-src="{{user.thumbnail ? user.thumbnail : useShield()}}" ng-class="checkClass()"></span>
 							<span>{{user.handle}}</span>
 							<br />
 							<span>{{user.totalPoints}} pts</span>
