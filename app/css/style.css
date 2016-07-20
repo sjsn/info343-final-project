@@ -335,7 +335,7 @@ img {
 
 #mask {
 	margin-left: 80px;
-	margin-top: 80px;
+	margin-top: 20px;
 }
 
 
@@ -404,4 +404,17 @@ td.leader-det.ng-binding {
 
 .home h1 {
 	text-align: center;
+}
+
+canvas {
+	display: none;
+}
+
+#countdown {
+	font-size: 40px;
+	color: red;
+}
+
+#countdown i {
+	color: black;
 }

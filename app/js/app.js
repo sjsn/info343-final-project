@@ -76,8 +76,8 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 
 }]);
 
-app.controller("SigninCtrl", ["$scope", "FirebaseService", 
-	function($scope, FirebaseService) {
+app.controller("SigninCtrl", ["$scope", "FirebaseService", "$state",
+	function($scope, FirebaseService, $state) {
 
 		$scope.auth = FirebaseService.auth();
 		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
@@ -92,10 +92,12 @@ app.controller("SigninCtrl", ["$scope", "FirebaseService",
 		$scope.signUp = function() {
 			var user = {name: $scope.newUser.handle, email:$scope.newUser.email, password: $scope.newUser.password};
 			FirebaseService.createUser(user);
+			$state.go("home")
 		};
 		$scope.signIn = function() {
 			var user = {name: $scope.newUser.handle, email:$scope.newUser.email, password: $scope.newUser.password};
 			FirebaseService.authorize(user);
+			$state.go("home");
 		};
 
 }]);
@@ -110,8 +112,6 @@ app.controller("AccountCtrl", ["$scope", 'FirebaseService', "$state",
 	// Alters the account settings
 	$scope.changeAccount = function() {
 		var updateUser = {name: $scope.changeUser.newhandle, email:$scope.changeUser.email, password:$scope.changeUser.password};
-		console.log($scope.currentUser);
-		console.log($scope.changeUser);
 		FirebaseService.updateUsername(updateUser.name);	
 	};
 
@@ -125,8 +125,8 @@ app.controller("AccountCtrl", ["$scope", 'FirebaseService', "$state",
 
 }]);
 
-app.controller("CameraCtrl", ["$scope", 'FirebaseService', 
-	function($scope, FirebaseService) {
+app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval", 
+	function($scope, FirebaseService, $interval) {
 
 	//wait for document to load
 	
@@ -153,54 +153,77 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 				console.log(err)
 			});
 
+			// Redraws the canvas every 20 milliseconds to keep it "live" with what the user
+			// sees on the video stream. Illiminates the need for 2 views of the same thing
+			$interval(function() {
+				canvas.width = video.clientWidth;
+				canvas.height = video.clientHeight;
+				brush.drawImage(video, 0, 0);
+				// brush.drawImage($scope.theMask, 80, 80);
+			}, 20);
+
 		})
-
-		document.querySelector('#stop').addEventListener('click',function() {
-			video.pause();
-
-		//get all tracks from the stream
-			var tracks = localMediaStream.getTracks();
-			tracks.forEach(function(track){
-				track.stop(); //stop each track
-			});
-			video.src = "";
-			$scope.$apply(function() {
-				$scope.cameraOn = false;
-			});
-		});
 
 		var masks = ["img/ironman.jpg", "img/batman.jpg"];
 		$scope.theMask;
-		var maskSource;
 		document.querySelector('#iron').addEventListener('click',function() {
-			maskSource="img/ironman.jpg";
+			$scope.theMask = "img/ironman.jpg";
 		});
 		document.querySelector('#bat').addEventListener('click',function() {
-			maskSource="img/batman.jpg"
+			$scope.theMask = "img/batman.jpg"
 		});
 			document.querySelector('#spider').addEventListener('click',function() {
-			maskSource="img/spiderman.jpg"
+			$scope.theMask = "img/spiderman.jpg"
 		});
 
 		$scope.delete = function() {
 			brush.fillStyle = "#FFFFFF";
 			brush.clearRect(0, 0, canvas.width, canvas.height);
+
+			// Redraws the canvas every 20 milliseconds to keep it "live" with what the user
+			// sees on the video stream. Illiminates the need for 2 views of the same thing
+			$interval(function() {
+				canvas.width = video.clientWidth;
+				canvas.height = video.clientHeight;
+				brush.drawImage(video, 0, 0);
+				// brush.drawImage($scope.theMask, 80, 80);
+			}, 20);
+
+			navigator.getUserMedia({video:{mandatory:{
+				maxWidth:300, maxHeight:300}}}, 
+				function(mediaStream) {
+					localMediaStream = mediaStream;
+					video.src = window.URL.createObjectURL(mediaStream);
+					$scope.$apply(function() {
+						$scope.cameraOn = true;
+					});
+				}, function(err) {
+				console.log(err)
+			});
+
 		}
 
 
+		// Initiates a countdown to let the user know when the picture is taken
+		// Stops video feed when picture is taken
+		$scope.countDown = function() {
+			$scope.count = 3;
+			var timer = $interval(function() {
+				$scope.count--;
+				if ($scope.count == -1) {
+					var tracks = localMediaStream.getTracks();
+					video.pause();
+					tracks.forEach(function(track){
+						track.stop(); //stop each track
+					});
+					$interval.cancel(timer);
+					timer = null;
+					$scope.count = null;
+				}
+			}, 1000);
+		};
 
-		document.querySelector('#selfie').addEventListener('click',function() {
-		
-			canvas.width = video.clientWidth;
-   			canvas.height = video.clientHeight;
-
-			var maskImage = document.getElementById("mask");
-			maskImage.src = maskSource;
-			brush.drawImage(video, 0, 0);
-			brush.drawImage(maskImage, 80,80);
-			
-		});
-		document.querySelector('#save').addEventListener('click',function() {
+		$scope.save = function() {
 
 			var snapshot = canvas.toBlob(function(blob) {
 				var image = new Image();
@@ -208,7 +231,7 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 				FirebaseService.updateThumbnail(blob);
 			});
 
-		});
+		};
 
 	};
 	
@@ -216,23 +239,29 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 
 // Controller for the cards grid
 app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', "$timeout", function($scope, $http, FirebaseService, $timeout) {
-	if (FirebaseService.getUser()) { // Loads cards immediately if webpage started somewhere else
-		$scope.chars = FirebaseService.getCards(); 
-	} else { // Gives the cards a little while to load if page starts on cards
-		$scope.loading = true;
-		$timeout(function() {
-			$scope.chars = FirebaseService.getCards();
-			$scope.loading = false;
-		}, 1000);
-	}
+	// Instantiates the loading bar to true
+	$scope.loading = true;
+
+	// Gets the users card collection when Firebase verifies that they're signed in
+	$scope.auth = FirebaseService.auth();
+	$scope.auth.$onAuthStateChanged(function(firebaseUser) {
+		if (firebaseUser) {
+			$scope.chars = FirebaseService.arr(FirebaseService.getCards());
+			$scope.loading = false; // Turns off loading icon when everything is good
+		}
+	});
+
 }]);
 
 // Controller for the "details" section of a card
 app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', 'FirebaseService', function($scope, $http, $stateParams, FirebaseService) {
+	// Instantiates the page with load icon on
 	$scope.loading = true;
+
+	// Gets the id of the current card to reference
 	var theIndex = -1;
 	$scope.thisChar = {};
-	FirebaseService.getCards().$loaded().then(function(cards) {
+	FirebaseService.arr(FirebaseService.getCards()).$loaded().then(function(cards) {
 		var i = 0;
 		_.forEach(cards, function(card) {
 			if (card.id == $stateParams.id) {
@@ -241,7 +270,7 @@ app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', 'FirebaseServi
 			i++;
 		});
 		$scope.thisChar.card = cards[theIndex];
-		$scope.loading = false;
+		$scope.loading = false; // Turns off the loading icon
 	});
 }]);
 
@@ -550,7 +579,6 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 
 	// Gets the users pic taking in their handle
 	$scope.userImg = function(handle) {
-		console.log(handle);
 		FirebaseService.getUsersThumbnails(handle).$loaded().then(function(url) {
 			return url;
 		});
@@ -594,26 +622,33 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		}
 	});
 
+	// Gives access to firebase authorization to determine if a user is signed in or
+	// not from any page
 	service.auth = function() {
 		return $firebaseAuth();
 	};
 
+	// Gives acces to reference to the user on firebase
 	service.users = function(uid) {
 		return usersRef.child(""+uid);
 	};
 
+	// Converts the passed in reference to a usable firebase object
 	service.obj = function(ref) {
 		return $firebaseObject(ref);
 	};
 
+	// Converts the passed in reference to a usable firebase array
 	service.arr = function(ref) {
 		return $firebaseArray(ref);
 	};
 
+	// Returns a usable object version of the user
 	service.getUser = function() {
 		return currUserObj;
 	};
 
+	// Returns firebase array (object of objects) containing all the registered users
 	service.getUsers = function() {
 		return $firebaseArray(usersRef);
 	};
@@ -628,7 +663,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 				// Then puts that URL into the user object in the database to be referenced later
 				function(url) {
 					currUserObj.thumbnail = url;
-					console.log(currUserObj.thumbnail);
 					currUserObj.$save().then(
 						function() {
 							console.log("success");
@@ -697,9 +731,10 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		});
 	};
 
+	// Returns the total number of points a user has
 	service.getTotalPoints = function() {
 		return currUserObj.totalPoints;
-	}
+	};
 
 	// Takes in newCard object and updates it on firebase
 	// newCard structure: {name, thumbnail, description}
@@ -707,33 +742,22 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		cardsRef = currUserRef.child('cards');
 		$firebaseArray(cardsRef).$loaded().then(function(array) {
 			cardsArray = array;
-			console.log(cardsArray);
 			var isNew = true;
 			_(cardsArray).forEach(function(card) {
 				if (card.id == newCard.id) {
-					console.log("Not new");
 					isNew = false;
 				}
 			});
 			if (isNew) {
-				console.log("working");
 				cardsArray.$add(newCard);
 			}
 			return isNew;
 		});
 	};
 
-	// Returns an array of card objects
+	// Returns a reference to the users card
 	service.getCards = function() {
-		if (cardsRef) {
-			cardsRef = currUserRef.child("cards");
-			cardsArray = $firebaseArray(cardsRef);
-			return cardsArray;
-		}
-	};
-
-	service.updateLeaders = function(user) {
-
+		return currUserRef.child("cards");
 	};
 
 	return service;
