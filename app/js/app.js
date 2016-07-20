@@ -132,8 +132,8 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 
 		document.querySelector('#selfie').addEventListener('click',function() {
 		
-			canvas.width = 300;
-			canvas.height = 300;
+			canvas.width = video.clientWidth;
+   			canvas.height = video.clientHeight;
 
 			var maskImage = document.getElementById("mask");
 			maskImage.src = maskSource;

@@ -308,3 +308,8 @@ table.leader-table tr:hover th {
 	z-index: 100;
 	float: right;
 }
+
+.padTop{
+	padding-top:1em;
+	margin-top:2em;
+}
