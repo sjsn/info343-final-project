@@ -241,12 +241,14 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 }])
 
 // Controller for the cards grid
+// gets the cards user has from the cloud
 app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', "$timeout", function($scope, $http, FirebaseService, $timeout) {
 	// Instantiates the loading bar to true
 	$scope.loading = true;
  	// Gets the users card collection when Firebase verifies that they're signed in
 	$scope.auth = FirebaseService.auth();
 	$scope.auth.$onAuthStateChanged(function(firebaseUser) {
+		// calls array of cards which the user has
 		if (firebaseUser) {
 			$scope.chars = FirebaseService.arr(FirebaseService.getCards());
 			$scope.loading = false; // Turns off loading icon when everything is good
@@ -255,7 +257,9 @@ app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', "$timeout", f
 
 }]);
 
+
 // Controller for the "details" section of a card
+// takes the id of chosen card as a parameter and chooses the card from cards that user has
 app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', 'FirebaseService', function($scope, $http, $stateParams, FirebaseService) {
 	// Instantiates the page with load icon on
 	$scope.loading = true;
@@ -265,12 +269,14 @@ app.controller('DetailsCtrl', ['$scope', '$http', '$stateParams', 'FirebaseServi
 	$scope.thisChar = {};
 	FirebaseService.arr(FirebaseService.getCards()).$loaded().then(function(cards) {
 		var i = 0;
+		// finds index of the card in cards array
 		_.forEach(cards, function(card) {
 			if (card.id == $stateParams.id) {
 				theIndex = i;
 			}
 			i++;
 		});
+		// chooses the card chosen from cards user has
 		$scope.thisChar.card = cards[theIndex];
 		$scope.loading = false; // Turns off the loading icon
 	});
@@ -591,6 +597,7 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 	$scope.hasCards = function(cards) {
 		return cards === undefined;
 	};
+
 
 
 }]);
