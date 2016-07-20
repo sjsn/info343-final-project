@@ -74,7 +74,7 @@
 			</div>
 			<div class="hint-section col-xs-12 col-sm-8 col-md-8 col-lg-8">
 				<p class="hint" aria-live="polite">
-					<span ng-repeat="letter in hint track by $index" ng-click="chooseLetter(letter.letter, letter.index)" class="clicked-letter" id="scramble-letter">
+					<span ng-repeat="letter in hint track by $index" ng-click="chooseLetter(letter.letter, letter.index)" class="clicked-letter" id="scramble-letter" ng-class="{picked: guessed}">
 						{{letter.letter}} 
 					</span>
 				</p>

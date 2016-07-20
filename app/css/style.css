@@ -46,6 +46,10 @@
 		width: 1%;
 	}
 
+	.custom-btn h2 {
+		font-size: 100%;
+	}
+
 	.account-settings {
 		width: 100%;
 	}
@@ -615,4 +619,8 @@ canvas {
 
 .blue-back {
 	background-color: #20346f;
+}
+
+.guessed {
+	color: red;
 }
