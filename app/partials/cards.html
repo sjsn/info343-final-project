@@ -17,12 +17,17 @@
 			</div>
 		</section>
 		<section role="region" ng-controller="CardsCtrl">
-	            <div ng-repeat="char in chars | orderBy:fullName | filter:searchTerm" class="card col-lg-4 col-md-4 col-s-6 col-xs-12">
+			
+	            <div ng-repeat="char in chars | orderBy:fullName | filter:searchTerm" class="card col-lg-4 col-md-4 col-s-6 col-xs-12 ">
+					<div ui-sref="details( {'id':char.id} )" class="backgroundImage">
 	            	<a ui-sref="details( {'id':char.id} )">
 	            		<img ng-src="{{char.img}}" class="img-responsive">
+						
 	            		<h2>{{char.fullName}}</h2>
 	            	</a>
+				
 	            </div>
+				</div>
 		</section>
-	</div>
+	
 </main>
