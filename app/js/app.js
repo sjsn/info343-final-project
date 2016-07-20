@@ -138,6 +138,7 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 		var canvas = document.querySelector('canvas');
 		var brush = canvas.getContext('2d');
 		$scope.cameraOn = false;
+		
 
 		document.querySelector('#record').addEventListener('click',function(){
 
@@ -152,14 +153,15 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 				}, function(err) {
 				console.log(err)
 			});
-
+			console.log($scope.theMask);
 			// Redraws the canvas every 20 milliseconds to keep it "live" with what the user
 			// sees on the video stream. Illiminates the need for 2 views of the same thing
 			$interval(function() {
 				canvas.width = video.clientWidth;
 				canvas.height = video.clientHeight;
 				brush.drawImage(video, 0, 0);
-				brush.drawImage($scope.theMask.mask, 80, 80);
+				var drawMask = document.getElementById('mask');
+				brush.drawImage(drawMask, 75, 25);
 			}, 20);
 
 		})
@@ -167,16 +169,14 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 		$scope.theMask = {};
 		document.querySelector('#iron').addEventListener('click',function() {
 			$scope.theMask.mask = "img/ironman.jpg";
-			console.log($scope.theMask.mask);
 		});
 		document.querySelector('#bat').addEventListener('click',function() {
 			$scope.theMask.mask = "img/batman.jpg"
-			console.log($scope.theMask.mask);
 		});
-			document.querySelector('#spider').addEventListener('click',function() {
+		document.querySelector('#spider').addEventListener('click',function() {
 			$scope.theMask.mask = "img/spiderman.jpg"
-			console.log($scope.theMask.mask);
 		});
+		
 
 		$scope.delete = function() {
 			brush.fillStyle = "#FFFFFF";
