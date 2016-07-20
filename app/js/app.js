@@ -129,20 +129,16 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 		var masks = ["img/ironman.jpg", "img/batman.jpg"];
 		$scope.theMask;
 		var maskSource;
-		$scope.putMask = false;
 		document.querySelector('#iron').addEventListener('click',function() {
 			console.log('iron');
-			$scope.putMask = true;
 			maskSource="img/ironman.jpg";
 		});
 		document.querySelector('#bat').addEventListener('click',function() {
 			console.log('bat');
-			$scope.putMask = true;
 			maskSource="img/batman.jpg"
 		});
 			document.querySelector('#spider').addEventListener('click',function() {
 			console.log('spider');
-			$scope.putMask = true;
 			maskSource="img/spiderman.jpg"
 		});
 
