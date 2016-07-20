@@ -93,7 +93,6 @@ app.controller("AccountCtrl", ["$scope", 'FirebaseService',
 
 app.controller("CameraCtrl", ["$scope", 'FirebaseService', 
 	function($scope, FirebaseService) {
-	'use strict';
 
 	//wait for document to load
 	
@@ -104,6 +103,7 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 		var video = document.querySelector('video');
 		var canvas = document.querySelector('canvas');
 		var brush = canvas.getContext('2d');
+		$scope.cameraOn = false;
 
 		document.querySelector('#record').addEventListener('click',function(){
 
@@ -112,6 +112,9 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 				function(mediaStream) {
 					localMediaStream = mediaStream;
 					video.src = window.URL.createObjectURL(mediaStream);
+					$scope.$apply(function() {
+						$scope.cameraOn = true;
+					});
 				}, function(err) {
 				console.log(err)
 			});
@@ -126,23 +129,29 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 			tracks.forEach(function(track){
 				track.stop(); //stop each track
 			});
-		})
+			video.src = "";
+			$scope.$apply(function() {
+				$scope.cameraOn = false;
+			});
+		});
 
 		var masks = ["img/ironman.jpg", "img/batman.jpg"];
 		$scope.theMask;
 		var maskSource;
 		document.querySelector('#iron').addEventListener('click',function() {
-			console.log('iron');
 			maskSource="img/ironman.jpg";
 		});
 		document.querySelector('#bat').addEventListener('click',function() {
-			console.log('bat');
 			maskSource="img/batman.jpg"
 		});
 			document.querySelector('#spider').addEventListener('click',function() {
-			console.log('spider');
 			maskSource="img/spiderman.jpg"
 		});
+
+		$scope.delete = function() {
+			brush.fillStyle = "#FFFFFF";
+			brush.clearRect(0, 0, canvas.width, canvas.height);
+		}
 
 
 
@@ -560,15 +569,34 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	service.users = function(uid) {
 		return usersRef.child(""+uid);
-	}
+	};
 
 	service.obj = function(ref) {
 		return $firebaseObject(ref);
-	}
+	};
 
 	service.arr = function(ref) {
 		return $firebaseArray(ref);
-	}
+	};
+
+	service.getUsers = function() {
+		return $firebaseArray(usersRef);
+	};
+
+	// Takes in newThumbnail img, pushes it to FirebaseStorage and saves its URL to the user in the database
+	service.updateThumbnail = function(newThumbnail) {
+		var uploadTask = storageRef.child('images/' + currUserObj.handle).put(newThumbnail);
+		currUserObj.thumbnail = storageRef.child("images/" + currUserObj.handle).getDownloadURL();
+	};
+
+	// service.getThumbnail = function() {
+	// 	var imgRef = storageRef.child("images/" + currUserObj.handle)
+	// 	return imgRef.getDownloadURL();
+	// };
+
+	// service.getUsersThumbnails = function(handle) {
+	// 	return storageRef.child("images/" + handle).getDownloadURL();
+	// };
 
 	// Takes in a user object and adds them to the firebase authorizor
 	service.createUser = function(user) {
@@ -612,20 +640,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		}, function() {
 			console.log('error');
 		})
-	};
-
-	// Takes in newThumbnail string(?) and updates it on firebase	
-	service.updateThumbnail = function(newThumbnail) {
-		var uploadTask = storageRef.child('images/' + currUserObj.handle).put(newThumbnail);
-	};
-
-	service.getThumbnail = function() {
-		var imgRef = storageRef.child("images/" + currUserObj.handle)
-		return imgRef.getDownloadURL();
-	};
-
-	service.getUsersThumbnails = function(handle) {
-		return storageRef.child("images/" + handle).getDownloadURL();
 	};
 
 	// Takes in newTotal int and updates it on firebase
@@ -672,10 +686,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 			cardsArray = $firebaseArray(cardsRef);
 			return cardsArray;
 		}
-	};
-
-	service.getUsers = function() {
-		return $firebaseArray(usersRef);
 	};
 
 	service.updateLeaders = function(user) {

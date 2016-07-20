@@ -340,3 +340,14 @@ img {
 .backgrounds{
 	opacity: .9;
 }
+
+.camera {
+	position: absolute;
+	z-index: 1;
+	margin-bottom: 100px;
+}
+
+.mask {
+	position:relative; 
+	z-index: 2;
+}

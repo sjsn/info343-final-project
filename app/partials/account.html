@@ -42,30 +42,32 @@
 </form>
 <div ng-controller="CameraCtrl" style="position:relative">
     <h1>Character Photobooth</h1>
-    <p class="lead">Take a selfie!</p>
+    <p class="lead">Take a profile picture</p>
     <div class="controls">
-        <button id="record" type="button" class="btn btn-default">Record</button>
-        <button id="stop" type="button" class="btn btn-default">Stop</button>
-        <button id="selfie" type="button" class="btn btn-default">Selfie!</button>
-        <button id="save" type="button" class="btn btn-default">Save Selfie</button>
-		<form class= "space">
-			<input id='iron' type="radio" name="mask" value="img/ironman.jpg" ng-model="theMask"> IronMan
-			<input id='bat' type="radio" name="mask"" value="img/batman.jpg" ng-model="theMask"> BatMan
-			<input id='spider' type="radio" name="mask"" value="img/spiderman.jpg" ng-model="theMask"> SpiderMan
+        <button id="record" type="button" class="btn btn-default">Open Camera</button>
+        <button id="stop" type="button" class="btn btn-default" ng-show="cameraOn" aria-live="polite">Close Camera</button>
+        <button id="selfie" type="button" class="btn btn-default" ng-show="cameraOn" aria-live="polite">Take Photo</button>
+        <button id="save" type="button" class="btn btn-default" ng-show="cameraOn" aria-live="polite">Set Profile Picture</button>
+        <button id="del" type="button" class="btn btn-default" ng-show="cameraOn" ng-click="delete()" aria-live="polite">Delete</button>
+		<form class= "space" ng-show="cameraOn">
+			<label>
+				<input id='iron' type="radio" name="mask" value="img/ironman.jpg" ng-model="theMask"> IronMan
+			</lavel>
+			<label>
+				<input id='bat' type="radio" name="mask" value="img/batman.jpg" ng-model="theMask"> BatMan
+			</label>
+			<label>
+				<input id='spider' type="radio" name="mask" value="img/spiderman.jpg" ng-model="theMask"> SpiderMan
+			</label>
 		</form>
     </div>
-	<div style="position:absolute; z-index:1">
-	<video autoplay></video>
+	<div class="camera col-lg-6 col-md-6 col-sm-12 col-xs-12">
+		<video autoplay></video>
 	</div>
-	<div style ="position:relative; z-index:2">
-	<img id="mask" width="125" height="130" src="{{theMask}}">
+	<div class="mask col-lg-6 col-md-6 col-sm-12 col-xs-12" ng-show="cameraOn" aria-live="polite">
+		<img id="mask" width="125" height="130" src="{{theMask}}">
 	</div>
-	<br><br>
-	<br><br>
-	<br><br>
-	<br><br>
-
-	<canvas></canvas>
+	<canvas class="canvas col-lg-6 col-md-6 col-sm-12 col-xs-12"></canvas>
 
 </div>
 </div>
