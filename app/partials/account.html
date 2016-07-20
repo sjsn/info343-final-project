@@ -49,13 +49,14 @@
         <button id="selfie" type="button" class="btn btn-default">Selfie!</button>
         <button id="save" type="button" class="btn btn-default">Save Selfie</button>
 		<form class= "space">
-			<input type="radio" name="mask" value="img/ironman.jpg" checked ng-model="theMask"> IronMan
-			<input type="radio" name="mask"" value="img/batman.jpg" ng-model="theMask"> BatMan
+			<input id='iron' type="radio" name="mask" value="img/ironman.jpg" ng-model="theMask"> IronMan
+			<input id='bat' type="radio" name="mask"" value="img/batman.jpg" ng-model="theMask"> BatMan
+			<input id='me' type="radio" name="mask"" value="" ng-model="theMask"> I am a super hero
 		</form>
     </div>
 	
 	<video autoplay></video>
-	<img id="mask" width="125" height="130" src="{{theMask}}" alt="Mask">
+	<img id="mask" width="125" height="130" src="{{theMask}}">
 	<canvas></canvas>
 
 </div>
