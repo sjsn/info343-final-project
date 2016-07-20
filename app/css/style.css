@@ -50,6 +50,13 @@
 		font-size: 100%;
 	}
 
+	.account-settings {
+		width: 100%;
+	}
+
+	.relNav {
+		margin-top: 3em;
+	}
 }
 
 /* Styles for medium screens */
@@ -77,6 +84,9 @@
 
 	td {
 		width: 30px;
+	}
+	.account-settings {
+		width: 190px;
 	}
 }
 
@@ -382,7 +392,6 @@ tr ,tr > th {
 	position: absolute;
 	top: 0px;
 	right: 0px;
-	width: 190px;
 	color: #FFFFFF;
 	background-color: #20346f;
 	padding: 1.5px;
