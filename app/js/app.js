@@ -68,6 +68,7 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 
 		$scope.checkClass = function() {
 			if ($scope.user.thumbnail != "img/small-shield.png") {
+				document.getElementById("smallPic").height = "55";
 				return "prof-pic";
 			} else {
 				return "default";
