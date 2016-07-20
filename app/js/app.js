@@ -710,6 +710,7 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		service.currentUser = "";
 		console.log('logging out');
 		Auth.$signOut();
+		window.location.reload(true);
 	};
 
 	// Takes in newUsername string and updates it on firebase
