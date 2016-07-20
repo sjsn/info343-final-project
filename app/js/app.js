@@ -320,7 +320,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 
 		// Index of current character in Marvel API (1483 max)
 		var charNum = Math.floor((Math.random() * 1483)) + 1;
-		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=52bc1f9f7dd809c3b85c35bc6c107953&hash=35482198cd607298376e396b611751e6"
+		$http.get("http://gateway.marvel.com/v1/public/characters?ts=1&apikey=fef7d5ab447d43d61cbb442f9c76073f&hash=0151cc0f29d81edd53d5bc5e4ee1122b"
 			+ "&limit=1&offset=" + charNum).then(function(results) {
 			// Not a valid character without a name & description
 			var char = results.data.data.results[0];
