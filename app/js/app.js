@@ -5,17 +5,19 @@ var app = angular.module("MarvelCards", ["ui.router", "ui.bootstrap", "firebase"
 app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
 
 	$stateProvider
-	// The home page where the user signs in or signs up
+	// The home page with the nav bar
 	.state("home", {
 		url: "/",
 		templateUrl: "partials/home.html",
 		controller: "HomeCtrl"
 	})
+	// The sign in/sign up page
 	.state("signin", {
 		url: "/signin",
 		templateUrl: "partials/signin.html",
 		controller: "SigninCtrl"
 	})
+	// The account details page
 	.state("account", {
 		url: "/account",
 		templateUrl: "partials/account.html",
@@ -50,9 +52,11 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 
 }]);
 
+// controller for the index page
+// includes FirebaseService
 app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 	function($scope, FirebaseService) {
-
+		// get authorization for firebase
 		$scope.auth = FirebaseService.auth();
 		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
 			if (firebaseUser) {
@@ -60,17 +64,19 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 				$scope.user = FirebaseService.obj(FirebaseService.users(uid));
 			}
 		});
-
+		// set default profile picture
 		$scope.useShield = function() {
 			$scope.user.thumbnail = "img/small-shield.png";
 			$scope.default = true;
 		};
-
+		// set user profile picture
 		$scope.checkClass = function() {
 			if ($scope.user.thumbnail != "img/small-shield.png") {
 				document.getElementById("smallPic").height = "55";
+				// to profile picture in storage
 				return "prof-pic";
 			} else {
+				// to default picture
 				return "default";
 			}
 		};
@@ -79,10 +85,12 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 
 app.controller("SigninCtrl", ["$scope", "FirebaseService", "$state",
 	function($scope, FirebaseService, $state) {
-
+		// get firebase auth info
 		$scope.auth = FirebaseService.auth();
+		// when the user state changes
 		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
 			if (firebaseUser) {
+				// set the userID 
 				var uid = firebaseUser.uid;
 				$scope.user = FirebaseService.obj(FirebaseService.users(uid));
 			}
@@ -90,14 +98,22 @@ app.controller("SigninCtrl", ["$scope", "FirebaseService", "$state",
 		
 
 		$scope.newUser = {}; //for sign-in
+		// sign up a new user
 		$scope.signUp = function() {
+			// save input information
 			var user = {name: $scope.newUser.handle, email:$scope.newUser.email, password: $scope.newUser.password};
+			// create a new user
 			FirebaseService.createUser(user);
+			// go to home page
 			$state.go("home")
 		};
+		// existing user sign in
 		$scope.signIn = function() {
+			// save input information
 			var user = {name: $scope.newUser.handle, email:$scope.newUser.email, password: $scope.newUser.password};
+			// sign in user
 			FirebaseService.authorize(user);
+			// go to home page
 			$state.go("home");
 		};
 
