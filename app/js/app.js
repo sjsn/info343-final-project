@@ -134,7 +134,6 @@ app.controller("AccountCtrl", ["$scope", 'FirebaseService', "$state",
 
 	// Signs the user out on button click
 	$scope.signOut = function() {
-		console.log("signout");
 		FirebaseService.signOut();
 		// Redirects the user to homepage
 		$state.go("home");
@@ -170,7 +169,6 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 				}, function(err) {
 				console.log(err)
 			});
-			console.log($scope.theMask);
 			// Redraws the canvas every 20 milliseconds to keep it "live" with what the user
 			// sees on the video stream. Illiminates the need for 2 views of the same thing
 			$interval(function() {
@@ -342,7 +340,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				}
 			}
 		}, function() { // runs again when promise fails to load
-			console.log("fail");
 			if (game) {
 				getChar(game);
 			} else {
@@ -400,7 +397,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 		$scope.roundWin = false;
 		var name = character.name;
 		var answer = name;
-		console.log(answer);
 		var hint = [];
 		var hints = Math.floor(name.length / 3);
 		// Guarentees at least one hint
@@ -500,7 +496,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 		var boardIndex = 0;
 		$scope.chooseLetter = function(letter, index) {
 			$scope.guessed = letter;
-			console.log($scope.guessed);
 			if ($scope.hint[index].guessable) {
 				if ($scope.guessBoard[boardIndex] == "-" || 
 					$scope.guessBoard[boardIndex] == "." || 
@@ -627,7 +622,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	// any time auth state changes, add the user data to scope
 	Auth.$onAuthStateChanged(function(firebaseUser) {
 		if(firebaseUser){
-			console.log('logged in');
 			userID = firebaseUser.uid;
 			currUserRef = usersRef.child(""+userID);
 			currUserObj = $firebaseObject(currUserRef);
@@ -635,7 +629,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 			cardsArray = $firebaseArray(cardsRef);
 		}
 		else {
-			console.log('logged out');
 			userID = undefined;
 		}
 	});
@@ -701,7 +694,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		// Create user
 		Auth.$createUserWithEmailAndPassword(user.email, user.password)
 		.then(function(firebaseUser) { //first time log in
-			console.log("signing up");
 	    	userID = firebaseUser.uid; //save userId
 			var userData = {handle: user.name, thumbnail: "", totalPoints: 0, cards: {}};
 			currUserRef = baseRef.child('users/'+firebaseUser.uid); //create new entry in object
@@ -724,7 +716,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	// Signs user out
 	service.signOut = function() {
 		service.currentUser = "";
-		console.log('logging out');
 		Auth.$signOut();
 		window.location.reload(true);
 	};
@@ -743,7 +734,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	service.updateTotalPoints = function(points) {
 		currUserObj.totalPoints = currUserObj.totalPoints + points;
 		currUserObj.$save().then(function() {
-			console.log(currUserObj.totalPoints);
 			console.log("success");
 		}, function(e) {
 			console.log(e);
