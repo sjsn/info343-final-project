@@ -164,18 +164,20 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 
 		})
 
-		var masks = ["img/ironman.jpg", "img/batman.jpg"];
-		$scope.theMask;
+		$scope.theMask; //The variable used to toggle between masks 
+		//Ironman mask option clicked
 		document.querySelector('#iron').addEventListener('click',function() {
 			$scope.theMask = "img/ironman.jpg";
 		});
+		//Batman mask option clicked 
 		document.querySelector('#bat').addEventListener('click',function() {
 			$scope.theMask = "img/batman.jpg"
 		});
-			document.querySelector('#spider').addEventListener('click',function() {
+		//Spiderman mask option clicked 
+		document.querySelector('#spider').addEventListener('click',function() {
 			$scope.theMask = "img/spiderman.jpg"
 		});
-
+		//Used to delete picture
 		$scope.delete = function() {
 			brush.fillStyle = "#FFFFFF";
 			brush.clearRect(0, 0, canvas.width, canvas.height);
@@ -189,6 +191,7 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 				// brush.drawImage($scope.theMask, 80, 80);
 			}, 20);
 
+			//Used to access the camera 
 			navigator.getUserMedia({video:{mandatory:{
 				maxWidth:300, maxHeight:300}}}, 
 				function(mediaStream) {
@@ -223,8 +226,8 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 			}, 1000);
 		};
 
+		//Used to save the image captured to firebase 
 		$scope.save = function() {
-
 			var snapshot = canvas.toBlob(function(blob) {
 				var image = new Image();
 				image.src = blob;
