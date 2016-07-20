@@ -36,7 +36,7 @@
 					</th>
 				</tr>
 				<tr ng-repeat="user in users | orderBy:order | filter:searchTerm">
-					<td>{{userImg(user.handle)}}</td>
+					<td><img ng-src="{{user.thumbnail}}" alt="Profile Pic" class="leaderboard-pic"></td>
 					<td>{{user.handle}}</td>
 					<td>{{user.totalPoints}}</td>
 					<!-- Use getter/setter -->

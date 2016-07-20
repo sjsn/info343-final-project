@@ -52,14 +52,12 @@ app.controller('HomeCtrl', ['$scope', "$timeout", 'FirebaseService',
 		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
 			var uid = firebaseUser.uid;
 			$scope.user = FirebaseService.obj(FirebaseService.users(uid));
-			console.log($scope.user);
 		});
 		
 
 		$scope.newUser = {}; //for sign-in
 		$scope.signUp = function() {
 			var user = {name: $scope.newUser.handle, email:$scope.newUser.email, password: $scope.newUser.password};
-			console.log(user);
 			FirebaseService.createUser(user);
 		};
 		$scope.signIn = function() {
@@ -162,7 +160,6 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 
 			var maskImage = document.getElementById("mask");
 			maskImage.src = maskSource;
-			console.log(maskImage);
 			brush.drawImage(video, 0, 0);
 			brush.drawImage(maskImage, 80,80);
 			
@@ -170,20 +167,11 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService',
 		document.querySelector('#save').addEventListener('click',function() {
 
 			var snapshot = canvas.toBlob(function(blob) {
-				console.log(blob);
 				var image = new Image();
 				image.src = blob;
 				FirebaseService.updateThumbnail(blob);
-			})
+			});
 
-			/*
-			var snapshot = canvas.toDataURL('image/png');
-			console.log(snapshot);
-			var link = document.createElement('a');
-			link.href = snapshot;
-			link.download = 'my-selfie.png';
-			link.click();    
-			*/
 		});
 
 	};
@@ -579,14 +567,32 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		return $firebaseArray(ref);
 	};
 
+	service.getUser = function() {
+		return currUserObj;
+	};
+
 	service.getUsers = function() {
 		return $firebaseArray(usersRef);
 	};
 
 	// Takes in newThumbnail img, pushes it to FirebaseStorage and saves its URL to the user in the database
 	service.updateThumbnail = function(newThumbnail) {
-		var uploadTask = storageRef.child('images/' + currUserObj.handle).put(newThumbnail);
-		currUserObj.thumbnail = storageRef.child("images/" + currUserObj.handle).getDownloadURL();
+		var storeImg = storageRef.child('images/' + currUserObj.handle).put(newThumbnail).then(function() {
+			storageRef.child("images/" + currUserObj.handle).getDownloadURL().then(
+				function(url) {
+					currUserObj.thumbnail = url;
+					console.log(currUserObj.thumbnail);
+					currUserObj.$save().then(
+						function() {
+							console.log("success");
+						},
+						function(e) {
+							console.log(e);
+						}
+					);	
+				}
+			);
+		});
 	};
 
 	// service.getThumbnail = function() {
@@ -607,7 +613,7 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		.then(function(firebaseUser){ //first time log in
 			console.log("signing up");
 	    	userID = firebaseUser.uid; //save userId
-			var userData = {handle: user.name, thumbnail: "", totalPoints: 0};
+			var userData = {handle: user.name, thumbnail: "", totalPoints: 0, cards: {}};
 			currUserRef = baseRef.child('users/'+firebaseUser.uid); //create new entry in object
 			currUserRef.set(userData); //save that data to the database;
 			currUserObj = $firebaseObject(currUserRef);
@@ -695,22 +701,3 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	return service;
 
 }]);
-
-/*
-User firebase structure
-[
-	{
-		"handle": "",
-		"thumbnail": "",
-		"totalPointns": "",
-		"cards": [
-			{"id" = "",
-			 "name" = "",
-			 "thumbnail" = "",
-			 "description" = ""}
-		]
-
-	}
-]
-
-*/

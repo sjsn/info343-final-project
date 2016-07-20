@@ -23,11 +23,18 @@
 	<script src="https://cdn.firebase.com/libs/angularfire/2.0.1/angularfire.min.js"></script>
 	<script>
 	// Initialize Firebase
+	// var config = {
+	// 	apiKey: "AIzaSyAqgiO3CzHTAblHMh5nPBOgsUnms8d6G1c",
+	// 	authDomain: "info343final-3da5e.firebaseapp.com",
+	// 	databaseURL: "https://info343final-3da5e.firebaseio.com",
+	// 	storageBucket: "gs://info343final-3da5e.appspot.com",
+	// };
+	// Test server
 	var config = {
-		apiKey: "AIzaSyAqgiO3CzHTAblHMh5nPBOgsUnms8d6G1c",
-		authDomain: "info343final-3da5e.firebaseapp.com",
-		databaseURL: "https://info343final-3da5e.firebaseio.com",
-		storageBucket: "gs://info343final-3da5e.appspot.com",
+    	apiKey: "AIzaSyCpEMymhVXpRaFB_CkSLB8C4i6cEAxviwc",
+    	authDomain: "marvel-cards.firebaseapp.com",
+    	databaseURL: "https://marvel-cards.firebaseio.com",
+    	storageBucket: "marvel-cards.appspot.com",
 	};
 	firebase.initializeApp(config);
 	</script>
@@ -50,6 +57,7 @@
 				<li><a ui-sref="leaderboards">Leaderboards</a></li>
 				<li><a ui-sref="account">My Account</a></li>
 				<li class="pull-right user-info">
+					<img ng-src="{{user.thumbnail}}" alt="Profile Picture" class="prof-pic">
 					<span>{{user.handle}}</span>
 					<button ng-click="signOut()" class="btn btn-warning">Sign Out</button>
 				</li>
