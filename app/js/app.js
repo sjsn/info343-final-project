@@ -575,7 +575,7 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 			currUserObj = $firebaseObject(currUserRef);
 		})
  		.catch(function(error) {
-      		console.log(error);
+      		alert(error.message);
     	});
 	};
 
