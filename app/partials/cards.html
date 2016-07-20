@@ -6,7 +6,7 @@
 			<p>Assembling your team!</p>
 		</div>
 	</div>
-	<section ng-if="!loading &amp;&amp; chars" class="container" aria-live="polite">
+	<section ng-if="!loading &amp;&amp; chars.length" class="container" aria-live="polite">
 		<header>
 			<h1>My Cards</h1>
 		</header>
@@ -29,7 +29,7 @@
 			</div>
 		</section>
 	</section>
-	<section ng-if="!loading &amp;&amp; !chars" class="container" aria-live="polite">
+	<section ng-if="!loading &amp;&amp; chars.length == 0" class="container" aria-live="polite">
 		<header>
 			<h1>My Cards</h1>
 		</header>

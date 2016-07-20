@@ -46,6 +46,17 @@
 		width: 1%;
 	}
 
+	.custom-btn h2 {
+		font-size: 100%;
+	}
+
+	.account-settings {
+		width: 100%;
+	}
+
+	.relNav {
+		margin-top: 3em;
+	}
 }
 
 /* Styles for medium screens */
@@ -73,6 +84,9 @@
 
 	td {
 		width: 30px;
+	}
+	.account-settings {
+		width: 190px;
 	}
 }
 
@@ -137,6 +151,7 @@ body {
 
 #choose-holder {
 	text-align: center;
+
 }
 
 #aria-loading {
@@ -377,11 +392,11 @@ tr ,tr > th {
 	position: absolute;
 	top: 0px;
 	right: 0px;
-	width: 190px;
 	color: #FFFFFF;
 	background-color: #20346f;
 	padding: 1.5px;
 	text-align: center;
+
 }
 
 .prof-pic {
@@ -588,4 +603,24 @@ canvas {
 {
 0% {-webkit-transform:rotate(0deg);}
 100% {-webkit-transform:rotate(-360deg);}  
+}
+
+.custom-btn {
+	width: 50%;
+	height: 100%;
+	background-color: #C0C0C0;
+	border-radius: 0px;
+}
+
+.custom-btn img {
+	width: 100%;
+	vertical-align: bottom;
+}
+
+.blue-back {
+	background-color: #20346f;
+}
+
+.guessed {
+	color: red;
 }

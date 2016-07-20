@@ -5,10 +5,10 @@
 	<!-- Bind model "handle" to this input -->
 	<div class="form-group">
         <label for="currhandle">Enter Your User Name:</label>
-		<input id="currhandle" name="currhandle" class="form-control" ng-model="currentUser.currhandle" ng-minlength="3" required>
+		<input id="currhandle" name="currhandle" class="form-control" role="input" ng-model="currentUser.currhandle" ng-minlength="3" required>
 
 		<label for="newhandle">Change User Name:</label>
-		<input id="newhandle" name="newhandle" class="form-control" ng-model="changeUser.newhandle" ng-minlength="3"  required>
+		<input id="newhandle" name="newhandle" class="form-control" role="input" ng-model="changeUser.newhandle" ng-minlength="3"  required>
 		<!-- Show error messages if the length is too short -->	
 		<p class="help-block" ng-if="changeAccountForm.newhandle.$error.minlength">Too short!</p>
 	</div>	
@@ -16,10 +16,10 @@
 	<!-- Bind model "email" to this input -->
 	<div class="form-group">
         <label for="curremail">Enter Your Email:</label>
-		<input id="curremail" name="curremail" class="form-control" ng-model="currentUser.curremail" required>
+		<input id="curremail" name="curremail" class="form-control" role="input" ng-model="currentUser.curremail" required>
 
 		<label for="email">Change Email:</label>
-		<input type="email" id="email" name="email" class="form-control" ng-model="changeUser.email" required>
+		<input type="email" id="email" name="email" class="form-control" role="input" ng-model="changeUser.email" required>
 		<!-- Show error messages if the email is not valid -->	
 		<p class="help-block" ng-if="changeAccountForm.email.$error.email">Not an email!</p>
 	</div>
@@ -27,50 +27,50 @@
 	<!-- Bind model "password" to this input -->
 	<div class="form-group">
         <label for="currpw">Enter Your Password:</label>
-		<input id="currpw" name="currpassword" type="password" class="form-control" ng-model="currentUser.currpassword" ng-minlength="6" required>
+		<input id="currpw" name="currpassword" type="password" class="form-control" role="input" ng-model="currentUser.currpassword" ng-minlength="6" required>
 
 		<label for="pw">Change Password:</label>
-		<input id="pw" name="password" type="password" class="form-control" ng-model="changeUser.password" ng-minlength="6" required>
+		<input id="pw" name="password" type="password" class="form-control" role="input" ng-model="changeUser.password" ng-minlength="6" required>
 		<!-- Show error messages if the password is invalid -->	
 		<p class="help-block" ng-if="changeAccountForm.password.$error.minlength">Must be at least 6 characters.</p>
 	</div>
 
 	<!-- Submit buttons -->
 	<div class="form-group">
-		<button type="submit" class="btn btn-primary" ng-click="changeAccount()" ng-disabled="changeAccountForm.$invalid" >Update</button> 
-		<button type="button" class="btn btn-default" ng-click="signOut()">Sign Out</button>
+		<button type="submit" class="btn btn-primary" role="button" ng-click="changeAccount()" ng-disabled="changeAccountForm.$invalid" >Update</button> 
+		<button type="button" class="btn btn-default" role="button" ng-click="signOut()">Sign Out</button>
 	</div>
 </form>
 <div ng-controller="CameraCtrl" style="position:relative">
     <h1>Character Photobooth</h1>
     <p class="lead">Take a profile picture</p>
     <div class="controls">
-        <button id="record" type="button" class="btn btn-default" ng-show="!cameraOn"><i class="fa fa-camera" aria-hidden="true"></i> Open Camera</button>
-        <button id="stop" type="button" class="btn btn-default" ng-show="cameraOn" aria-live="polite"><i class="fa fa-times" aria-hidden="true"></i> Close Camera</button>
-        <button id="selfie" type="button" class="btn btn-default" ng-show="cameraOn" ng-click="countDown()" aria-live="polite">Take Photo</button>
-        <button type="button" class="btn btn-default" ng-show="cameraOn" ng-click="save()" aria-live="polite"><i class="fa fa-floppy-o" aria-hidden="true"></i> Set Profile Picture</button>
-        <button id="del" type="button" class="btn btn-default" ng-show="cameraOn" ng-click="delete()" aria-live="polite"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+        <button id="record" type="button" class="btn btn-default" role="button" ng-show="!cameraOn"><i class="fa fa-camera" aria-hidden="true"></i> Open Camera</button>
+        <button id="stop" type="button" class="btn btn-default" role="button" ng-show="cameraOn" aria-live="polite"><i class="fa fa-times" aria-hidden="true"></i> Close Camera</button>
+        <button id="selfie" type="button" class="btn btn-default" role="button" ng-show="cameraOn" ng-click="countDown()" aria-live="polite">Take Photo</button>
+        <button type="button" class="btn btn-default" role="button" ng-show="cameraOn" ng-click="save()" aria-live="polite"><i class="fa fa-floppy-o" aria-hidden="true"></i> Set Profile Picture</button>
+        <button id="del" type="button" class="btn btn-default" role="button" ng-show="cameraOn" ng-click="delete()" aria-live="polite"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
 		<form class= "space" ng-show="cameraOn">
 			<h3>Apply a mask</h3>
 			<label>
-				<input id='iron' type="radio" name="mask" value="img/ironman.jpg" ng-model="theMask"> IronMan
+				<input id='iron' type="radio" name="mask" value="img/ironman.jpg" role="input" ng-model="theMask.mask"> IronMan
 			</lavel>
 			<label>
-				<input id='bat' type="radio" name="mask" value="img/batman.jpg" ng-model="theMask"> BatMan
+				<input id='bat' type="radio" name="mask" value="img/batman.jpg" role="input" ng-model="theMask.mask"> BatMan
 			</label>
 			<label>
-				<input id='spider' type="radio" name="mask" value="img/spiderman.jpg" ng-model="theMask"> SpiderMan
+				<input id='spider' type="radio" name="mask" value="img/spiderman.jpg" role="input" ng-model="theMask.mask"> SpiderMan
 			</label>
 		</form>
     </div>
 	<div class="camera col-lg-6 col-md-6 col-sm-12 col-xs-12">
-		<video autoplay></video>
+		<video aria-label="video" autoplay></video>
 		<p ng-show="count > -1" aria-live="polite" id="countdown">{{count}}<span ng-if="count == 0"> <i class="fa fa-camera" aria-hidden="true"></i></span></p>
 	</div>
 	<div class="mask col-lg-6 col-md-6 col-sm-12 col-xs-12" ng-show="cameraOn" aria-live="polite">
-		<img id="mask" width="125" height="130" ng-src="{{theMask}}">
+		<img id="mask" width="125" height="130" ng-src="{{theMask.mask}}">
 	</div>
-	<canvas class="canvas col-lg-6 col-md-6 col-sm-12 col-xs-12"></canvas>
+	<canvas aria-hidden="true" class="canvas col-lg-6 col-md-6 col-sm-12 col-xs-12"></canvas>
 
 </div>
 </div>

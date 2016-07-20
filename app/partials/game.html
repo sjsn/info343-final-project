@@ -1,4 +1,4 @@
-<main role="main" class="main-content container">
+<main role="main" class="main-content">
 
 	<!-- Menu for choosing game type -->
 	<section role="region" ng-if="!gameType">
@@ -6,11 +6,13 @@
 			<h1 class="title">Choose your game!</h1>
 		</header>
 		<div class="container" id="choose-holder">
-				<button class="btn btn-default" type="button" role="button" ng-click="chooseGame('guess')">
-					Guess the Character
+				<button class="btn btn-default custom-btn col-lg-6 col-md-6 col-sm-6 col-xs-12" type="button" role="button" ng-click="chooseGame('guess')">
+					<h2>Guessing Game</h2>
+					<img src="img/guess-button.jpg" alt="Captain America" />
 				</button>
-				<button class="btn btn-default" type="button" role="butotn" ng-click="chooseGame('scramble')">
-					Name Scramble
+				<button class="btn btn-default custom-btn col-lg-6 col-md-6 col-sm-6 col-xs-12" type="button" role="button" ng-click="chooseGame('scramble')">
+					<h2>Name Scramble</h2>
+					<img src="img/scramble-button.jpg" alt="Iron Man" />
 				</button>
 		</div>
 	</section>
@@ -72,7 +74,7 @@
 			</div>
 			<div class="hint-section col-xs-12 col-sm-8 col-md-8 col-lg-8">
 				<p class="hint" aria-live="polite">
-					<span ng-repeat="letter in hint track by $index" ng-click="chooseLetter(letter.letter, letter.index)" class="clicked-letter" id="scramble-letter">
+					<span ng-repeat="letter in hint track by $index" ng-click="chooseLetter(letter.letter, letter.index)" class="clicked-letter" id="scramble-letter" ng-class="{picked: guessed}">
 						{{letter.letter}} 
 					</span>
 				</p>

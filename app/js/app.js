@@ -5,17 +5,19 @@ var app = angular.module("MarvelCards", ["ui.router", "ui.bootstrap", "firebase"
 app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
 
 	$stateProvider
-	// The home page where the user signs in or signs up
+	// The home page with the nav bar
 	.state("home", {
 		url: "/",
 		templateUrl: "partials/home.html",
 		controller: "HomeCtrl"
 	})
+	// The sign in/sign up page
 	.state("signin", {
 		url: "/signin",
 		templateUrl: "partials/signin.html",
 		controller: "SigninCtrl"
 	})
+	// The account details page
 	.state("account", {
 		url: "/account",
 		templateUrl: "partials/account.html",
@@ -50,9 +52,11 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 
 }]);
 
+// controller for the index page
+// includes FirebaseService
 app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 	function($scope, FirebaseService) {
-
+		// get authorization for firebase
 		$scope.auth = FirebaseService.auth();
 		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
 			if (firebaseUser) {
@@ -60,16 +64,19 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 				$scope.user = FirebaseService.obj(FirebaseService.users(uid));
 			}
 		});
-
+		// set default profile picture
 		$scope.useShield = function() {
 			$scope.user.thumbnail = "img/small-shield.png";
 			$scope.default = true;
 		};
-
+		// set user profile picture
 		$scope.checkClass = function() {
 			if ($scope.user.thumbnail != "img/small-shield.png") {
+				document.getElementById("smallPic").height = "55";
+				// to profile picture in storage
 				return "prof-pic";
 			} else {
+				// to default picture
 				return "default";
 			}
 		};
@@ -78,10 +85,12 @@ app.controller('HomeCtrl', ['$scope', 'FirebaseService',
 
 app.controller("SigninCtrl", ["$scope", "FirebaseService", "$state",
 	function($scope, FirebaseService, $state) {
-
+		// get firebase auth info
 		$scope.auth = FirebaseService.auth();
+		// when the user state changes
 		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
 			if (firebaseUser) {
+				// set the userID 
 				var uid = firebaseUser.uid;
 				$scope.user = FirebaseService.obj(FirebaseService.users(uid));
 			}
@@ -89,14 +98,22 @@ app.controller("SigninCtrl", ["$scope", "FirebaseService", "$state",
 		
 
 		$scope.newUser = {}; //for sign-in
+		// sign up a new user
 		$scope.signUp = function() {
+			// save input information
 			var user = {name: $scope.newUser.handle, email:$scope.newUser.email, password: $scope.newUser.password};
+			// create a new user
 			FirebaseService.createUser(user);
+			// go to home page
 			$state.go("home")
 		};
+		// existing user sign in
 		$scope.signIn = function() {
+			// save input information
 			var user = {name: $scope.newUser.handle, email:$scope.newUser.email, password: $scope.newUser.password};
+			// sign in user
 			FirebaseService.authorize(user);
+			// go to home page
 			$state.go("home");
 		};
 
@@ -117,7 +134,6 @@ app.controller("AccountCtrl", ["$scope", 'FirebaseService', "$state",
 
 	// Signs the user out on button click
 	$scope.signOut = function() {
-		console.log("signout");
 		FirebaseService.signOut();
 		// Redirects the user to homepage
 		$state.go("home");
@@ -138,6 +154,7 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 		var canvas = document.querySelector('canvas');
 		var brush = canvas.getContext('2d');
 		$scope.cameraOn = false;
+		
 
 		document.querySelector('#record').addEventListener('click',function(){
 
@@ -152,32 +169,44 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 				}, function(err) {
 				console.log(err)
 			});
-
 			// Redraws the canvas every 20 milliseconds to keep it "live" with what the user
 			// sees on the video stream. Illiminates the need for 2 views of the same thing
 			$interval(function() {
 				canvas.width = video.clientWidth;
 				canvas.height = video.clientHeight;
 				brush.drawImage(video, 0, 0);
-				// brush.drawImage($scope.theMask, 80, 80);
+				var drawMask = document.getElementById('mask');
+				brush.drawImage(drawMask, 75, 25);
 			}, 20);
 
 		})
 
+<<<<<<< HEAD
 		$scope.theMask; //The variable used to toggle between masks 
 		//Ironman mask option clicked
+=======
+		$scope.theMask = {};
+>>>>>>> e4fa37a80c0a87a9f62096be1737e37b9ec57f21
 		document.querySelector('#iron').addEventListener('click',function() {
-			$scope.theMask = "img/ironman.jpg";
+			$scope.theMask.mask = "img/ironman.jpg";
 		});
 		//Batman mask option clicked 
 		document.querySelector('#bat').addEventListener('click',function() {
-			$scope.theMask = "img/batman.jpg"
+			$scope.theMask.mask = "img/batman.jpg"
 		});
+<<<<<<< HEAD
 		//Spiderman mask option clicked 
 		document.querySelector('#spider').addEventListener('click',function() {
 			$scope.theMask = "img/spiderman.jpg"
 		});
 		//Used to delete picture
+=======
+		document.querySelector('#spider').addEventListener('click',function() {
+			$scope.theMask.mask = "img/spiderman.jpg"
+		});
+		
+
+>>>>>>> e4fa37a80c0a87a9f62096be1737e37b9ec57f21
 		$scope.delete = function() {
 			brush.fillStyle = "#FFFFFF";
 			brush.clearRect(0, 0, canvas.width, canvas.height);
@@ -244,8 +273,7 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', "$timeout", function($scope, $http, FirebaseService, $timeout) {
 	// Instantiates the loading bar to true
 	$scope.loading = true;
-
-	// Gets the users card collection when Firebase verifies that they're signed in
+ 	// Gets the users card collection when Firebase verifies that they're signed in
 	$scope.auth = FirebaseService.auth();
 	$scope.auth.$onAuthStateChanged(function(firebaseUser) {
 		if (firebaseUser) {
@@ -327,7 +355,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				}
 			}
 		}, function() { // runs again when promise fails to load
-			console.log("fail");
 			if (game) {
 				getChar(game);
 			} else {
@@ -354,7 +381,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 		// Returns an array of letters of the name
 		return name.join("").toUpperCase().split("");
 	}
-	
+
 	// Takes in passed in game type and activates the selected game
 	$scope.chooseGame = function(game) {
 		if (game == "guess") {
@@ -379,13 +406,12 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 	var playGuess = function(character) {
 		// Loads the next character in advance for less transition time
 		getChar();
-		console.log(next);
+
 		var theCard = character;
 		$scope.character = character;
 		$scope.roundWin = false;
 		var name = character.name;
 		var answer = name;
-		console.log(answer);
 		var hint = [];
 		var hints = Math.floor(name.length / 3);
 		// Guarentees at least one hint
@@ -417,18 +443,16 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 					}
 				}
 				$scope.hint = hint.join(" ");
-				if (_.isEqual(hint, answer)) {
+				if (_.isEqual(hint, answer) && !$scope.roundWin) {
 					$scope.roundWin = true;
-					// Not currently working
+					// Adds current cards and updates number of points
 					FirebaseService.updateCards(theCard);
-					console.log($scope.isNew);
 					FirebaseService.updateTotalPoints(10);
 					$timeout(function() {
 						$scope.roundWin = false;
 						playGuess(next.char);
 						$scope.isNew = "";
 					}, 2000);
-					// FirebaseService.addCard();
 				}
 			}
 		};
@@ -486,6 +510,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 
 		var boardIndex = 0;
 		$scope.chooseLetter = function(letter, index) {
+			$scope.guessed = letter;
 			if ($scope.hint[index].guessable) {
 				if ($scope.guessBoard[boardIndex] == "-" || 
 					$scope.guessBoard[boardIndex] == "." || 
@@ -508,7 +533,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 		// Check to see if shuffled guess matches answer index
 		function evalGuess(guess) {
 			if (guess) {
-				console.log("checkWin");
 				$scope.guess.word = guess.toUpperCase();
 				$timeout(function() {
 					$scope.guess.word = "";
@@ -517,7 +541,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				guess = guess.toUpperCase().split("");
 				if (_.isEqual(guess, answer)) {
 					$scope.roundWin = true;
-					// Not currently working
+					// Adds current card to firebase and updates number of points
 					FirebaseService.updateCards(theCard);
 					FirebaseService.updateTotalPoints(10);
 					$scope.incorrect = false;
@@ -528,6 +552,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 					}, 2000);
 				} else {
 					$scope.incorrect = true;
+					$scope.$apply();
 					clearBoard();
 					boardIndex = 0;
 				}
@@ -612,7 +637,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	// any time auth state changes, add the user data to scope
 	Auth.$onAuthStateChanged(function(firebaseUser) {
 		if(firebaseUser){
-			console.log('logged in');
 			userID = firebaseUser.uid;
 			currUserRef = usersRef.child(""+userID);
 			currUserObj = $firebaseObject(currUserRef);
@@ -620,7 +644,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 			cardsArray = $firebaseArray(cardsRef);
 		}
 		else {
-			console.log('logged out');
 			userID = undefined;
 		}
 	});
@@ -685,13 +708,12 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		
 		// Create user
 		Auth.$createUserWithEmailAndPassword(user.email, user.password)
-		.then(function(firebaseUser){ //first time log in
-			console.log("signing up");
+		.then(function(firebaseUser) { //first time log in
 	    	userID = firebaseUser.uid; //save userId
 			var userData = {handle: user.name, thumbnail: "", totalPoints: 0, cards: {}};
 			currUserRef = baseRef.child('users/'+firebaseUser.uid); //create new entry in object
-			currUserRef.set(userData); //save that data to the database;
-			currUserObj = $firebaseObject(currUserRef);
+			currUserRef.set(userData); //save that data to the database
+			currUserObj = $firebaseObject(currUserRef); // get that object for later use
 		})
  		.catch(function(error) {
       		alert(error.message);
@@ -709,8 +731,8 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	// Signs user out
 	service.signOut = function() {
 		service.currentUser = "";
-		console.log('logging out');
 		Auth.$signOut();
+		window.location.reload(true);
 	};
 
 	// Takes in newUsername string and updates it on firebase
@@ -727,7 +749,6 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	service.updateTotalPoints = function(points) {
 		currUserObj.totalPoints = currUserObj.totalPoints + points;
 		currUserObj.$save().then(function() {
-			console.log(currUserObj.totalPoints);
 			console.log("success");
 		}, function(e) {
 			console.log(e);
