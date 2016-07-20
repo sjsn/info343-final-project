@@ -377,7 +377,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 	var playGuess = function(character) {
 		// Loads the next character in advance for less transition time
 		getChar();
-		console.log(next);
+
 		var theCard = character;
 		$scope.character = character;
 		$scope.roundWin = false;
@@ -415,18 +415,16 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 					}
 				}
 				$scope.hint = hint.join(" ");
-				if (_.isEqual(hint, answer)) {
+				if (_.isEqual(hint, answer) && !$scope.roundWin) {
 					$scope.roundWin = true;
-					// Not currently working
+					// Adds current cards and updates number of points
 					FirebaseService.updateCards(theCard);
-					console.log($scope.isNew);
 					FirebaseService.updateTotalPoints(10);
 					$timeout(function() {
 						$scope.roundWin = false;
 						playGuess(next.char);
 						$scope.isNew = "";
 					}, 2000);
-					// FirebaseService.addCard();
 				}
 			}
 		};
@@ -516,7 +514,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 				guess = guess.toUpperCase().split("");
 				if (_.isEqual(guess, answer)) {
 					$scope.roundWin = true;
-					// Not currently working
+					// Adds current card to firebase and updates number of points
 					FirebaseService.updateCards(theCard);
 					FirebaseService.updateTotalPoints(10);
 					$scope.incorrect = false;
@@ -527,6 +525,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 					}, 2000);
 				} else {
 					$scope.incorrect = true;
+					$scope.$apply();
 					clearBoard();
 					boardIndex = 0;
 				}
