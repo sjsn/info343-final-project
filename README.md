@@ -3,7 +3,7 @@ Marvel Cards is made by Samuel San Nicolas, Sarah Stanton, Sunho Kim, and Rachel
 
 ## About Marvel Cards
 ### Accounts
-Create an account to keep track of your points and your cards. Choose a custom username and thumbnail that other players can find you with.
+Create an account to keep track of your points and your cards. Choose a custom username and thumbnail that other players can find you with. You can also take a picture as your favorite character, then save that picture to use as your avatar.
 
 ### Games
 Play games to earn points. *Spend* those points to unlock cards which give information about the marvel characters.
@@ -17,8 +17,6 @@ Playing games and collecting cards is fun, but how do users compare to one anoth
 
 ### Cards
 Cards are a way for users to spend their hard earned points. Each card contains information about the characer displayed on it.
-#### Store
-*Spend* points to *purchase* cards. Each card costs a fixed number of points, so users can be sure to *buy* their favorite characters.
 
 ## The Project
 Built on AngularJS with help from LoDash, Bootstrap, and Firebase. Marvel information comes from the Marvel API.
