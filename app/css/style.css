@@ -239,14 +239,17 @@ table.leader-table tr:hover th {
 	background-color: #bdbdbd;
 	border-radius: 5px;
 	padding: 10px;
+	background-image:url('../img/cardpack.jpg');
+	
 }
 
 .card img {
-	border-radius: 50%;
+	border-radius: 15%;
 	border: 2px solid black;
 	max-height: 300px;
 	margin: auto;
 }
+
 
 .card a {
 	text-decoration: none;
@@ -323,6 +326,7 @@ img {
 	margin-top: 80px;
 }
 
+
 .user-img {
 	height: 10%;
 	width: 10%;
@@ -331,4 +335,8 @@ img {
 
 .user-info {
 	display: inline-block;
+}
+
+.backgrounds{
+	opacity: .9;
 }
