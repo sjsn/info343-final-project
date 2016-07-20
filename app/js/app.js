@@ -544,7 +544,6 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 					}, 2000);
 				} else {
 					$scope.incorrect = true;
-					$scope.$apply();
 					clearBoard();
 					boardIndex = 0;
 				}
