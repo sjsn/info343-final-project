@@ -617,3 +617,7 @@ canvas {
 .cool-people:hover {
 	text-decoration: none;
 }
+
+#cardName {
+	color: #E6E4E5;
+}
