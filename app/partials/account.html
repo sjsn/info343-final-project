@@ -53,13 +53,13 @@
 		<form class= "space" ng-show="cameraOn">
 			<h3>Apply a mask</h3>
 			<label>
-				<input id='iron' type="radio" name="mask" value="img/ironman.jpg" ng-model="theMask"> IronMan
+				<input id='iron' type="radio" name="mask" value="img/ironman.jpg" ng-model="theMask.mask"> IronMan
 			</lavel>
 			<label>
-				<input id='bat' type="radio" name="mask" value="img/batman.jpg" ng-model="theMask"> BatMan
+				<input id='bat' type="radio" name="mask" value="img/batman.jpg" ng-model="theMask.mask"> BatMan
 			</label>
 			<label>
-				<input id='spider' type="radio" name="mask" value="img/spiderman.jpg" ng-model="theMask"> SpiderMan
+				<input id='spider' type="radio" name="mask" value="img/spiderman.jpg" ng-model="theMask.mask"> SpiderMan
 			</label>
 		</form>
     </div>
@@ -68,7 +68,7 @@
 		<p ng-show="count > -1" aria-live="polite" id="countdown">{{count}}<span ng-if="count == 0"> <i class="fa fa-camera" aria-hidden="true"></i></span></p>
 	</div>
 	<div class="mask col-lg-6 col-md-6 col-sm-12 col-xs-12" ng-show="cameraOn" aria-live="polite">
-		<img id="mask" width="125" height="130" ng-src="{{theMask}}">
+		<img id="mask" width="125" height="130" ng-src="{{theMask.mask}}">
 	</div>
 	<canvas class="canvas col-lg-6 col-md-6 col-sm-12 col-xs-12"></canvas>
 

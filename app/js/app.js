@@ -159,21 +159,23 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 				canvas.width = video.clientWidth;
 				canvas.height = video.clientHeight;
 				brush.drawImage(video, 0, 0);
-				// brush.drawImage($scope.theMask, 80, 80);
+				brush.drawImage($scope.theMask.mask, 80, 80);
 			}, 20);
 
 		})
 
-		var masks = ["img/ironman.jpg", "img/batman.jpg"];
-		$scope.theMask;
+		$scope.theMask = {};
 		document.querySelector('#iron').addEventListener('click',function() {
-			$scope.theMask = "img/ironman.jpg";
+			$scope.theMask.mask = "img/ironman.jpg";
+			console.log($scope.theMask.mask);
 		});
 		document.querySelector('#bat').addEventListener('click',function() {
-			$scope.theMask = "img/batman.jpg"
+			$scope.theMask.mask = "img/batman.jpg"
+			console.log($scope.theMask.mask);
 		});
 			document.querySelector('#spider').addEventListener('click',function() {
-			$scope.theMask = "img/spiderman.jpg"
+			$scope.theMask.mask = "img/spiderman.jpg"
+			console.log($scope.theMask.mask);
 		});
 
 		$scope.delete = function() {
