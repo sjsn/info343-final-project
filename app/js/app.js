@@ -581,7 +581,10 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	// Signs user in with credentials stored in passed in user object
 	service.authorize = function(user) {
-		Auth.$signInWithEmailAndPassword(user.email, user.password);
+		Auth.$signInWithEmailAndPassword(user.email, user.password)
+		.catch(function(error) {
+			alert(error.message);
+		});
 	};
 
 	// Signs user out
