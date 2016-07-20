@@ -241,7 +241,6 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', "$timeout", function($scope, $http, FirebaseService, $timeout) {
 	// Instantiates the loading bar to true
 	$scope.loading = true;
-
 	// Gets the users card collection when Firebase verifies that they're signed in
 	$scope.auth = FirebaseService.auth();
 	$scope.auth.$onAuthStateChanged(function(firebaseUser) {
