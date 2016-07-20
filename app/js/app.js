@@ -48,10 +48,12 @@ app.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $ur
 app.controller('HomeCtrl', ['$scope', "$timeout", 'FirebaseService',
 	function($scope, $timeout, FirebaseService) {
 
-		$timeout(function() {
-			$scope.user = FirebaseService.getUser();
-			console.log(FirebaseService.getUser());
-		}, 1000);
+		$scope.auth = FirebaseService.auth();
+		$scope.auth.$onAuthStateChanged(function(firebaseUser) {
+			var uid = firebaseUser.uid;
+			$scope.user = FirebaseService.obj(FirebaseService.users(uid));
+			console.log($scope.user);
+		});
 		
 
 		$scope.newUser = {}; //for sign-in
@@ -512,6 +514,13 @@ app.controller("LeaderboardsCtrl", ["$scope", "FirebaseService", function($scope
 		console.log(users);
 	});
 
+	$scope.userImg = function(handle) {
+		console.log(handle);
+		FirebaseService.getUsersThumbnails(handle).$loaded().then(function(url) {
+			return url;
+		});
+	};
+
 
 }]);
 
@@ -520,25 +529,14 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 
 	var service = {};
 	var baseRef = firebase.database().ref();
+	var usersRef = baseRef.child('users');
 	var storageRef = firebase.storage().ref();
 	var userID;
 	var currUserObj;
 	var currUserRef;
 	var Auth = $firebaseAuth();
-	var usersRef = baseRef.child('users');
 	var cardsRef;
 	var cardsArray;
-	/*
-		Structure:
-
-		var obj = $firebaseObject( reference to firbase database );
-		obj.thing-to-update = newValue;
-		obj.save().then( function() {
-			Do something to let user know the value successfully updated
-		}, function() {
-			Do something to alert user that it failed
-		});
-	*/
 
 	// any time auth state changes, add the user data to scope
 	Auth.$onAuthStateChanged(function(firebaseUser) {
@@ -556,9 +554,21 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		}
 	});
 
-	service.getUser = function() {
-		return currUserObj;
+	service.auth = function() {
+		return $firebaseAuth();
 	};
+
+	service.users = function(uid) {
+		return usersRef.child(""+uid);
+	}
+
+	service.obj = function(ref) {
+		return $firebaseObject(ref);
+	}
+
+	service.arr = function(ref) {
+		return $firebaseArray(ref);
+	}
 
 	// Takes in a user object and adds them to the firebase authorizor
 	service.createUser = function(user) {
@@ -604,14 +614,15 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 	// Takes in newThumbnail string(?) and updates it on firebase	
 	service.updateThumbnail = function(newThumbnail) {
 		var uploadTask = storageRef.child('images/' + currUserObj.handle).put(newThumbnail);
-		/*
-		currUserObj.thumbnail = newThumbnail;
-		currUserObj.$save().then(function() {
-			console.log('success');
-		}, function() {
-			console.log('error');
-		})
-		*/
+	};
+
+	service.getThumbnail = function() {
+		var imgRef = storageRef.child("images/" + currUserObj.handle)
+		return imgRef.getDownloadURL();
+	};
+
+	service.getUsersThumbnails = function(handle) {
+		return storageRef.child("images/" + handle).getDownloadURL();
 	};
 
 	// Takes in newTotal int and updates it on firebase

@@ -36,7 +36,7 @@
 					</th>
 				</tr>
 				<tr ng-repeat="user in users | orderBy:order | filter:searchTerm">
-					<td>{{user.img}}</td>
+					<td>{{userImg(user.handle)}}</td>
 					<td>{{user.handle}}</td>
 					<td>{{user.totalPoints}}</td>
 					<!-- Use getter/setter -->

@@ -49,10 +49,11 @@
 				<li><a ui-sref="game">Game</a></li>
 				<li><a ui-sref="leaderboards">Leaderboards</a></li>
 				<li><a ui-sref="account">My Account</a></li>
-				<li class="pull-right">
+				<li class="pull-right user-info">
 					<span>{{user.handle}}</span>
 					<button ng-click="signOut()" class="btn btn-warning">Sign Out</button>
 				</li>
+				<li class="pull-right"><img ng-src="{{userImg}}" class="user-img"></li>
 			</ul>
 	</nav>
 </header>
