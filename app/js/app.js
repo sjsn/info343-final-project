@@ -181,12 +181,7 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 
 		})
 
-<<<<<<< HEAD
-		$scope.theMask; //The variable used to toggle between masks 
-		//Ironman mask option clicked
-=======
 		$scope.theMask = {};
->>>>>>> e4fa37a80c0a87a9f62096be1737e37b9ec57f21
 		document.querySelector('#iron').addEventListener('click',function() {
 			$scope.theMask.mask = "img/ironman.jpg";
 		});
@@ -194,19 +189,10 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 		document.querySelector('#bat').addEventListener('click',function() {
 			$scope.theMask.mask = "img/batman.jpg"
 		});
-<<<<<<< HEAD
-		//Spiderman mask option clicked 
-		document.querySelector('#spider').addEventListener('click',function() {
-			$scope.theMask = "img/spiderman.jpg"
-		});
-		//Used to delete picture
-=======
 		document.querySelector('#spider').addEventListener('click',function() {
 			$scope.theMask.mask = "img/spiderman.jpg"
 		});
 		
-
->>>>>>> e4fa37a80c0a87a9f62096be1737e37b9ec57f21
 		$scope.delete = function() {
 			brush.fillStyle = "#FFFFFF";
 			brush.clearRect(0, 0, canvas.width, canvas.height);
