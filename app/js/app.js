@@ -241,7 +241,7 @@ app.controller("CameraCtrl", ["$scope", 'FirebaseService', "$interval",
 app.controller('CardsCtrl', ['$scope', '$http', 'FirebaseService', "$timeout", function($scope, $http, FirebaseService, $timeout) {
 	// Instantiates the loading bar to true
 	$scope.loading = true;
-	// Gets the users card collection when Firebase verifies that they're signed in
+ 	// Gets the users card collection when Firebase verifies that they're signed in
 	$scope.auth = FirebaseService.auth();
 	$scope.auth.$onAuthStateChanged(function(firebaseUser) {
 		if (firebaseUser) {
@@ -350,7 +350,7 @@ app.controller("GameCtrl", ["$scope", "$http", "$timeout", "FirebaseService", fu
 		// Returns an array of letters of the name
 		return name.join("").toUpperCase().split("");
 	}
-	
+
 	// Takes in passed in game type and activates the selected game
 	$scope.chooseGame = function(game) {
 		if (game == "guess") {
@@ -681,13 +681,13 @@ app.factory("FirebaseService", ["$firebaseAuth", "$firebaseObject", "$firebaseAr
 		
 		// Create user
 		Auth.$createUserWithEmailAndPassword(user.email, user.password)
-		.then(function(firebaseUser){ //first time log in
+		.then(function(firebaseUser) { //first time log in
 			console.log("signing up");
 	    	userID = firebaseUser.uid; //save userId
 			var userData = {handle: user.name, thumbnail: "", totalPoints: 0, cards: {}};
 			currUserRef = baseRef.child('users/'+firebaseUser.uid); //create new entry in object
-			currUserRef.set(userData); //save that data to the database;
-			currUserObj = $firebaseObject(currUserRef);
+			currUserRef.set(userData); //save that data to the database
+			currUserObj = $firebaseObject(currUserRef); // get that object for later use
 		})
  		.catch(function(error) {
       		alert(error.message);
